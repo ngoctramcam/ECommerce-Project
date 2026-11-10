@@ -124,3 +124,21 @@ Link commit/PR: https://github.com/ngoctramcam/ECommerce-Project/commit/b8ff1dcf
 ```
 
 ```
+
+## AI-02 – <Đặc tả usecase>
+
+- Ngày / Người dùng: [2026-11-10] / Trần Quang Vinh
+- Công cụ: [Copilot]
+- Giai đoạn: Lập kế hoạch
+- Task / Commit / PR: [DOC] Đề cương / [17e7cfa] / [PR1]
+- Mục đích: [Hướng dẫn form viết đặc tả]
+- Prompt chính (nguyên văn hoặc link chia sẻ hội thoại): [Bây giờ hãy hướng dẫn tôi viết đặc tả cho tôi Đặc tả 3 use case chính: Đặt hàng, Quản lý sản phẩm, Đăng nhập (tác nhân, tiền điềukiện, luồng chính, luồng phụ)]
+- Kết quả AI trả về (tóm tắt): [Use case Tác nhân Tiền điều kiện Luồng chính Luồng phụ
+  UC-01 Đăng nhập (TM-04) Khách vãng lai (đã có tài khoản), Quản trị Có tài khoản, không bị khóa, chưa đăng nhập 7 bước: nhập email/mật khẩu, kiểm tra dữ liệu ở server, so khớp bcrypt, kiểm tra tài khoản, tạo phiên, điều hướng theo vai trò A1 chưa có tài khoản, A2 quay lại trang đang xem, A3 đăng xuất, E1 → E5 (sai dữ liệu, sai mật khẩu, bị khóa, nhập sai nhiều lần, lỗi hệ thống)
+  UC-02 Quản lý sản phẩm (TM-12) Quản trị Đã đăng nhập với vai trò admin, có ít nhất 1 danh mục 6 bước thêm sản phẩm (form, ảnh jpg/png ≤ 2 MB, kiểm tra ở server, lưu) A1 → A5 (tìm kiếm, sửa, ẩn/hiện, xóa, xóa mềm), E1 → E5 (dữ liệu sai, ảnh sai, không phải admin, phiên hết hạn, lỗi lưu)
+  UC-03 Đặt hàng COD (TM-06) Khách hàng Đã đăng nhập, giỏ hàng có sản phẩm 8 bước, trong một transaction: tạo đơn “Chờ xác nhận”, lưu giá lúc mua, trừ tồn kho, xóa giỏ A1 → A2 và 12 ngoại lệ E1 → E12 (chưa đăng nhập, giỏ trống, hết hàng, không đủ số lượng, hai người mua cuốn cuối, sản phẩm bị ẩn, giá đổi, thông tin sai, phiên hết hạn, bấm 2 lần, lỗi CSDL, đổi ID trên URL)]
+- Đánh giá: [Đúng 1 phần vì AI không hiểu rõ nghiệp vụ thực sự của đặc tả nên có vài chỗ vẫn tự bịa ra]
+- Đã chỉnh sửa gì: [Lấy form viết đặc tả và lọc những ý về luồng phụ]
+- Cách kiểm chứng: [Giữ lại những chức khớp với đặc tả]
+- Tỷ lệ nội dung AI còn giữ lại (ước lượng): [45%]
+- Điều học được: [Prompt cần truyền đầy đủ đặc tả , dữ liệu cần thiết thì AI nó mới hiểu và cho kết quả chuẩn]
