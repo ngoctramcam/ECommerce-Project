@@ -1,5 +1,5 @@
 <?php
-
+// AI-assisted [AI-01]
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
