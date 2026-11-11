@@ -19,11 +19,12 @@
 - **Thẻ Trello / Nhánh Git liên quan:** [BD] Khung dự án
 
 ### 1. Mục đích
-
-Sử dụng AI viết model để tối ưu thời gian viết mã
+- Sử dụng AI dể sinh mã trong model để tối ưu thời gian viết mã
 
 ### 2. Prompt đã dùng
-> Hãy giúp mình cấu hình Eloquent cho các bản 
+> [Ảnh đính kèm](https://github.com/ngoctramcam/ECommerce-Project/blob/docs/Database/erd-v2.png?raw=true)
+> 
+> Hãy giúp mình cấu hình Eloquent cho các bảng của lược đồ ERD mình đã đính kèm
 
 ### 3. Kết quả AI trả về (tóm tắt)
 > Cấu hình đủ 7 bảng trong Database
@@ -37,10 +38,10 @@ Sử dụng AI viết model để tối ưu thời gian viết mã
 
 
 ### 6. AI sai hoặc chưa chắc chắn ở đâu
-AI thêm các trường có id vào $fillable
+- AI thêm các trường có id vào $fillable
 
 ### 7. Cách kiểm chứng
-Rà soát lại với lược đồ ERD
+- Rà soát lại với lược đồ ERD
 
 ### 8. Sản phẩm cuối cùng
 [Pull Request](https://github.com/ngoctramcam/ECommerce-Project/pull/3)
