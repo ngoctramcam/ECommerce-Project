@@ -69,3 +69,35 @@ AI đưa ra bản mẫu về trình bày mô tả một csdl
 ### 8. Sản phẩm cuối cùng
 
 Link commit/PR: [...](https://github.com/ngoctramcam/ECommerce-Project/tree/docs/Database)
+
+## AI-03 – <Tạo dữ liệu, kiêmr tra dữ liệu và ràng buộc>
+
+- **Ngày / Người dùng AI:** 11/11/2026 – TV4
+- **Công cụ AI:** Copilot
+- **Thẻ Trello / Nhánh Git liên quan:** [DB] Migration & seed
+
+### 1. Mục đích
+
+Nhờ AI tạo dữ liệu giùm
+
+### 2. Prompt đã dùng
+
+Từ Migration của tui hãy chi tui dữ liệu của 5 danh mục, 30 sách, 10 khách hàng, 1 admin, 10 đơn hàng mẫu nhiều trạng thái.
+
+### 3. Kết quả AI trả về (tóm tắt)
+
+AI đưa ra lệnh để tạo dữ liệu của các file php trong seeders
+
+### 4. Phần giữ lại
+
+- Dữ lại hầu như gần hết dữ liệu của ai đưa
+
+### 5. Phần loại bỏ / chỉnh sửa và lý do
+
+### 6. AI sai hoặc chưa chắc chắn ở đâu
+
+### 7. Cách kiểm chứng
+
+### 8. Sản phẩm cuối cùng
+
+Link commit/PR: [...](https://github.com/ngoctramcam/ECommerce-Project/tree/feat/database)
