@@ -35,24 +35,20 @@
 
 Dự án triển khai các chức năng theo tài liệu đặc tả yêu cầu, từ TM-01 đến TM-16.
 
-| Mã    | Tên chức năng     | Phụ trách      |
-| ----- | ----------------- | -------------- |
-| TM-01 | [Tên theo đặc tả] | TV3            |
-| TM-02 | [Tên theo đặc tả] | TV3            |
-| TM-03 | [Tên theo đặc tả] | TV3            |
-| TM-04 | [Tên theo đặc tả] | TV2            |
-| TM-05 | [Tên theo đặc tả] | TV5            |
-| TM-06 | [Tên theo đặc tả] | TV2            |
-| TM-07 | [Tên theo đặc tả] | TV5            |
-| TM-08 | [Tên theo đặc tả] | TV1            |
-| TM-09 | [Tên theo đặc tả] | Chưa phân công |
-| TM-10 | [Tên theo đặc tả] | Chưa phân công |
-| TM-11 | [Tên theo đặc tả] | TV4            |
-| TM-12 | [Tên theo đặc tả] | TV4            |
-| TM-13 | [Tên theo đặc tả] | TV5            |
-| TM-14 | [Tên theo đặc tả] | TV1            |
-| TM-15 | [Tên theo đặc tả] | Chưa phân công |
-| TM-16 | [Tên theo đặc tả] | Chưa phân công |
+| Mã    | Tên chức năng           | Phụ trách |
+| ----- | ----------------------- | --------- |
+| TM-01 | [Trang chủ]             | TV3       |
+| TM-02 | [Tìm kiếm,lọc sản phẩm] | TV3       |
+| TM-03 | [Xem chi tiết sản phẩm] | TV3       |
+| TM-04 | [Đăng ký,đăng nhập]     | TV2       |
+| TM-05 | [Giỏ hàng]              | TV5       |
+| TM-06 | [Đặt hàng COD]          | TV2       |
+| TM-07 | [Đơn hàng của tôi]      | TV5       |
+| TM-08 | [Hồ sơ cá nhân]         | TV1       |
+| TM-11 | [Quản lý danh mục]      | TV4       |
+| TM-12 | [Quản lý sản phẩm]      | TV4       |
+| TM-13 | [Quản lý đơn hàng]      | TV5       |
+| TM-14 | [Quản lý người dùng]    | TV1       |
 
 Các chức năng được quản lý trên Trello, phân loại mức độ ưu tiên Must/Could và triển khai theo kế hoạch Sprint.
 
