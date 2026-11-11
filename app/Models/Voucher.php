@@ -15,7 +15,7 @@ class Voucher extends Model
 
     protected $fillable = [
         'code',
-        'disbound_amount', // Khớp chính tả trên ERD
+        'discount_amount',
         'expired_date',
     ];
 
