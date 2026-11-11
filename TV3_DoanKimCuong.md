@@ -163,4 +163,89 @@ AI gợi giải thích ý nghĩa của yêu cầu và hướng dẫn cách thự
 
 ### 8. Sản phẩm cuối cùng
 
+## Link commit/PR:https://github.com/ngoctramcam/ECommerce-Project/tree/feature/resources
+
+## AI-05 – <Dựng trang chủ trên layout: khối “Sách mới”, khối theo danh mục (dữ liệu giả).>
+
+- **Ngày / Người dùng AI:** 11/11/2026 – TV3
+- **Công cụ AI:** Gemini
+- **Thẻ Trello / Nhánh Git liên quan:** TM-01: Trang chủ – feature
+
+### 1. Mục đích
+
+Nhờ AI giải thích ý nghĩa yêu câu 1 và hướng dẫn Dựng trang chủ trên layout: khối “Sách mới”, khối theo danh mục (dữ liệu giả).
+
+### 2. Prompt đã dùng
+
+> Cho biet y nghia va huong dan lai cach lam yeu cauDựng trang chủ trên layout: khối “Sách mới”, khối theo danh mục (dữ liệu giả).
+
+### 3. Kết quả AI trả về (tóm tắt)
+
+Bước 2: Làm Yêu cầu 2 — Tạo Component Thẻ sản phẩm (BookCard.jsx)
+(Phải tạo BookCard.jsx trước thì Yêu cầu 1 mới có cái để đưa lên trang chủ)
+Bước 3: Làm Yêu cầu 1 — Dựng Trang chủ tĩnh với Dữ liệu giả (HomePage.jsx)
+
+### 4. Phần giữ lại
+
+- Giữ lại code file BookCard.jsx
+
+### 5. Phần loại bỏ / chỉnh sửa và lý do
+
+- Loại bỏ file code HomePage.jsx
+  -Chỉnh sửa : xóa phần code banner và giá trước và sau khi giảm giá ở các thẻ sách
+  -Lý do : trang web không dùng banner và phần giảm giá không đúng theo CSDL
+
+### 6. AI sai hoặc chưa chắc chắn ở đâu
+
+### 7. Cách kiểm chứng
+
+### 8. Sản phẩm cuối cùng
+
+Link commit/PR:https://github.com/ngoctramcam/ECommerce-Project/tree/feature/resources
+
+---
+
+## AI-06 – <Tạo component/partial “thẻ sản phẩm” (ảnh, tên, giá) để TM-02, TM-03 dùng lại.>
+
+- **Ngày / Người dùng AI:** 11/11/2026 – TV3
+- **Công cụ AI:** Gemini
+- **Thẻ Trello / Nhánh Git liên quan:** TM-01: Trang chủ – feature
+
+### 1. Mục đích
+
+Nhờ AI giải thích ý nghĩa yêu cầu 2 và hướng dẫn Tạo component/partial “thẻ sản phẩm” (ảnh, tên, giá) để TM-02, TM-03 dùng lại..
+
+### 2. Prompt đã dùng
+
+> Cho biet y nghia va huong dan lai cach lam yeu cau Tạo component/partial “thẻ sản phẩm” (ảnh, tên, giá) để TM-02, TM-03 dùng lại.
+
+### 3. Kết quả AI trả về (tóm tắt)
+
+Ý nghĩa:
+
+- Tái sử dụng code (Reusability),Đồng nhất giao diện (UI/UX Consistency): Đảm bảo tất cả các trang trên toàn hệ thống đều hiển thị khung sách chuẩn như nhau,
+  -Tiết kiệm thời gian cho nhóm (Teamwork Efficiency): Các thành viên phụ trách TM-02 và TM-03 không cần tốn thời gian tự dựng lại giao diện thẻ sản phẩm mà có thể sử dụng ngay component bạn đã đóng gói sẵn để tập trung viết logic trang của họ.
+  -Tối ưu bảo trì (Maintainability): Khi dự án cần thay đổi giao diện thẻ sách (ví dụ: đổi màu giá tiền, đổi icon giỏ hàng), bạn chỉ cần chỉnh sửa đúng 1 tệp BookCard.jsx duy nhất thay vì phải đi tìm và sửa ở tất cả các trang.
+  -Chuẩn hóa dữ liệu ERD: Giúp toàn nhóm thống nhất cách đặt tên biến (product_name / title, price, author) khớp 100% với cơ sở dữ liệu backend, tránh lỗi lệch dữ liệu khi kết nối API về sau.
+
+Hướng dẫn thực hiện:
+Bước 1: Kiểm tra đúng vị trí tệp Component
+Đảm bảo tệp BookCard.jsx nằm đúng thư mục components:
+📂 resources/js/components/BookCard.jsx
+Bước 2: Viết mã nguồn cho Component BookCard.jsx
+Mở tệp resources/js/components/BookCard.jsx và dán đoạn mã chuẩn hóa theo bảng dữ liệu ERD:
+Bước 3: Cách bàn giao cho thành viên làm TM-02 và TM-03 sử dụng
+
+### 4. Phần giữ lại
+
+Giữ lại toàn bộ
+
+### 5. Phần loại bỏ / chỉnh sửa và lý do
+
+### 6. AI sai hoặc chưa chắc chắn ở đâu
+
+### 7. Cách kiểm chứng
+
+### 8. Sản phẩm cuối cùng
+
 Link commit/PR:https://github.com/ngoctramcam/ECommerce-Project/tree/feature/resources
