@@ -1,5 +1,5 @@
 <?php
-
+// AI-assisted [AI-02]
 namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;

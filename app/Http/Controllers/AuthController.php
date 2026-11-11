@@ -1,5 +1,5 @@
 <?php
-
+// AI-assisted [AI-02]
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
