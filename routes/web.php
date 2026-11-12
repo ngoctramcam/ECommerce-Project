@@ -2,23 +2,39 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\AuthController;
+use App\Http\Middleware\AdminAuthMiddleware;
 
+// Route trang chủ
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('home');
 
-//Test kết nối CSDL
 Route::get('/test-db', function () {
     try {
-        DB::connection()->getPdo(); // Thực hiện gọi kết nối thử đến PDO
+        DB::connection()->getPdo();
         $dbName = DB::connection()->getDatabaseName();
-        return 'Kết nối CSDL thành công';
+        return 'Kết nối CSDL thành công: ' . $dbName;
     } catch (Exception $e) {
-        return 'Kết nối thất bại';
+        return 'Kết nối thất bại: ' . $e->getMessage();
     }
 });
 
-// 👇 Dán thêm đoạn này ở dưới cùng để các đường dẫn React (/login, /register...) không bị lỗi 404 khi F5
+// [(TV3)]: Bổ sung route POST /register vì TV2 đã viết sẵn hàm register() trong AuthController nhưng chưa khai báo đường dẫn ở đây
+Route::post('/register', [AuthController::class, 'register']);
+
+
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+
+Route::middleware([AdminAuthMiddleware::class])->group(function () {
+    Route::get('/admin', function () {
+        return view('welcome');
+    })->name('admin.dashboard');
+});
+
+// [(TV3) ]: Route hứng toàn bộ đường dẫn phía React (/login, /register...) đặt ở cuối cùng để khi bấm F5 không bị lỗi 404
 Route::get('/{any}', function () {
     return view('welcome');
 })->where('any', '.*');

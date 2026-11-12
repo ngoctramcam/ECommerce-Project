@@ -6,6 +6,20 @@ import HomePage from "./pages/HomePage";
 //////////////////////////////////////////
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
+//s Khai báo axios dùng chung và tự động đính kèm CSRF Token + chuẩn JSON cho toàn bộ trang
+import axios from "axios";
+
+window.axios = axios;
+window.axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
+window.axios.defaults.headers.common["Accept"] = "application/json";
+
+const csrfToken = document
+    .querySelector('meta[name="csrf-token"]')
+    ?.getAttribute("content");
+
+if (csrfToken) {
+    window.axios.defaults.headers.common["X-CSRF-TOKEN"] = csrfToken;
+}
 
 function Home() {
     return (

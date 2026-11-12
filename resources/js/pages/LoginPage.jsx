@@ -2,22 +2,22 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 export default function LoginPage() {
+    // [CODE GỐC CỦA TV3]: State lưu email và mật khẩu người dùng nhập
     const [formData, setFormData] = useState({
         email: "",
         password: "",
     });
 
-    // State lưu lỗi từng trường từ Server trả về
+    //  State lưu lỗi từng trường (422) và lỗi chung (401) từ Server trả về
     const [errors, setErrors] = useState({});
-    // State lưu lỗi chung từ Server (ví dụ: sai mật khẩu, tài khoản bị khóa)
     const [generalError, setGeneralError] = useState("");
     const [isLoading, setIsLoading] = useState(false);
 
+    //Cập nhật dữ liệu khi gõ và tự động xóa thông báo lỗi cũ
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
 
-        // Xóa lỗi ngay khi người dùng nhập lại vào ô đó
         if (errors[name]) {
             setErrors((prev) => ({ ...prev, [name]: "" }));
         }
@@ -33,62 +33,23 @@ export default function LoginPage() {
         setGeneralError("");
 
         try {
-            // =========================================================================
-            // ⚠️ GHI CHÚ KHI TV2 XONG API ĐĂNG NHẬP:
-            // Xóa toàn bộ đoạn từ đây đến "KẾT THÚC GIẢ LẬP" và thay bằng:
-            //
-            // const response = await axios.post("/api/login", formData);
-            // localStorage.setItem("user", JSON.stringify(response.data.user));
-            // window.location.href = response.data.user.role === "admin" ? "/admin" : "/";
-            // =========================================================================
+            // Gửi email và password sang route POST /login -> gọi hàm login() trong AuthController của TV2
+            const response = await window.axios.post("/login", formData);
 
-            // --- BẮT ĐẦU GIẢ LẬP ---
-            await new Promise((resolve) => setTimeout(resolve, 400));
-            const serverErrors = {};
+            // NHẬN DỮ LIỆU USER THẬT TỪ BACKEND TV2:
+            // Lưu object user thật từ MySQL (gồm id, name, email, role) do TV2 trả về vào localStorage để Header hiển thị tên thật
+            localStorage.setItem("user", JSON.stringify(response.data.user));
 
-            if (!formData.email.trim()) {
-                serverErrors.email = "Vui lòng nhập địa chỉ email.";
-            }
-            if (!formData.password) {
-                serverErrors.password = "Vui lòng nhập mật khẩu.";
-            }
-
-            if (Object.keys(serverErrors).length > 0) {
-                setErrors(serverErrors);
-                setIsLoading(false);
-                return;
-            }
-
-            if (formData.email === "locked@mocsach.vn") {
-                setGeneralError(
-                    "Tài khoản của bạn đã bị khóa. Vui lòng liên hệ quản trị viên.",
-                );
-                setIsLoading(false);
-                return;
-            }
-
-            if (formData.password !== "123456") {
-                setGeneralError("Email hoặc mật khẩu không chính xác.");
-                setIsLoading(false);
-                return;
-            }
-
-            // 👉 THÊM MỚI TẠI ĐÂY (Thay thế cho dòng alert cũ):
-            // Lưu tạm thông tin user vào trình duyệt để Header đọc và hiển thị tên
-            const fakeUserData = {
-                name: formData.email.split("@")[0], // Tạm lấy phần trước @ làm tên
-                email: formData.email,
-                role: "customer",
-            };
-            localStorage.setItem("user", JSON.stringify(fakeUserData));
-
-            alert("Đăng nhập thành công!");
-            // Chuyển về trang chủ để Header cập nhật lại giao diện mới
-            window.location.href = "/";
-            // --- KẾT THÚC GIẢ LẬP ---
+            // ĐIỀU HƯỚNG THEO PHÂN QUYỀN CỦA TV2]:
+            // Chuyển trang theo đường dẫn redirect mà TV2 trả về (nếu role === 'admin' thì vào '/admin', khách hàng thì về '/')
+            window.location.href = response.data.redirect || "/";
         } catch (error) {
             if (error.response?.status === 422) {
+                // Hứng lỗi validate từ hàm $request->validate() của TV2 (bỏ trống email/mật khẩu, sai định dạng email)
                 setErrors(error.response.data.errors || {});
+            } else if (error.response?.status === 401) {
+                // Hứng lỗi từ AuthService của TV2 (sai email, sai mật khẩu hoặc tài khoản bị khóa) -> hiện lên khung cảnh báo đỏ
+                setGeneralError(error.response.data.message);
             } else {
                 setGeneralError(
                     error.response?.data?.message ||

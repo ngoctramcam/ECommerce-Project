@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function RegisterPage() {
+    const navigate = useNavigate();
+
     const [formData, setFormData] = useState({
-        name: "",
+        full_name: "",
         email: "",
         password: "",
         password_confirmation: "",
@@ -32,38 +34,14 @@ export default function RegisterPage() {
         setGeneralError("");
 
         try {
-            // --- GIẢ LẬP KIỂM TRA DỮ LIỆU TỪ SERVER ---
-            await new Promise((resolve) => setTimeout(resolve, 400));
-            const serverErrors = {};
-
-            if (!formData.name.trim()) {
-                serverErrors.name = "Họ và tên không được để trống.";
-            }
-            if (!formData.email.trim()) {
-                serverErrors.email = "Email không được để trống.";
-            } else if (formData.email === "admin@mocsach.vn") {
-                serverErrors.email =
-                    "Email này đã được đăng ký trong hệ thống.";
-            }
-            if (formData.password.length < 6) {
-                serverErrors.password = "Mật khẩu phải có ít nhất 6 ký tự.";
-            }
-            if (formData.password !== formData.password_confirmation) {
-                serverErrors.password_confirmation =
-                    "Mật khẩu xác nhận không khớp.";
-            }
-
-            if (Object.keys(serverErrors).length > 0) {
-                setErrors(serverErrors);
-                setIsLoading(false);
-                return;
-            }
-
-            alert("Đăng ký tài khoản thành công!");
-            // --- KẾT THÚC GIẢ LẬP ---
+            const response = await window.axios.post("/register", formData);
+            alert(response.data.message || "Đăng ký tài khoản thành công!");
+            navigate("/login");
         } catch (error) {
             if (error.response?.status === 422) {
                 setErrors(error.response.data.errors || {});
+            } else if (error.response?.data?.message) {
+                setGeneralError(error.response.data.message);
             } else {
                 setGeneralError("Có lỗi xảy ra từ máy chủ. Vui lòng thử lại.");
             }
@@ -97,28 +75,28 @@ export default function RegisterPage() {
                     {/* Họ và tên */}
                     <div>
                         <label
-                            htmlFor="register-name"
+                            htmlFor="register-full-name"
                             className="block text-sm font-medium text-gray-700 mb-1"
                         >
                             Họ và tên <span className="text-red-500">*</span>
                         </label>
                         <input
-                            id="register-name"
-                            name="name"
+                            id="register-full-name"
+                            name="full_name"
                             type="text"
                             autoComplete="name"
                             placeholder="Nguyễn Văn A"
-                            value={formData.name}
+                            value={formData.full_name}
                             onChange={handleChange}
                             className={`w-full px-3.5 py-2.5 rounded-xl border text-sm outline-none transition ${
-                                errors.name
+                                errors.full_name
                                     ? "border-red-500 bg-red-50/30 focus:ring-2 focus:ring-red-200"
                                     : "border-gray-300 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100"
                             }`}
                         />
-                        {errors.name && (
+                        {errors.full_name && (
                             <p className="mt-1 text-xs text-red-600">
-                                {errors.name}
+                                {errors.full_name}
                             </p>
                         )}
                     </div>
@@ -165,7 +143,7 @@ export default function RegisterPage() {
                             name="password"
                             type="password"
                             autoComplete="new-password"
-                            placeholder="Tối thiểu 6 ký tự"
+                            placeholder="Tối thiểu 8 ký tự"
                             value={formData.password}
                             onChange={handleChange}
                             className={`w-full px-3.5 py-2.5 rounded-xl border text-sm outline-none transition ${
