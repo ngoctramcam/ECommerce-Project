@@ -34,3 +34,70 @@ AI đề xuất 6 bảng với các thuộc tính thường có của các bản
 ### 8. Sản phẩm cuối cùng
 
 Link commit/PR: [...](https://github.com/ngoctramcam/ECommerce-Project/tree/docs/Database)
+
+## AI-02 – <Mô tả erd-v2>>
+
+- **Ngày / Người dùng AI:** 10/11/2026 – TV4
+- **Công cụ AI:** Copilot
+- **Thẻ Trello / Nhánh Git liên quan:** [DOC] ERD - docs/Database/erd_v2.png
+
+### 1. Mục đích
+
+Nhờ AI gợi ý cách trình bày mô tả erd
+
+### 2. Prompt đã dùng
+
+cách trình bày mô tả Erd
+
+### 3. Kết quả AI trả về (tóm tắt)
+
+AI đưa ra bản mẫu về trình bày mô tả một csdl
+
+### 4. Phần giữ lại
+
+- Mô tả về từng thuộc tính, khóa, kiểu dữ liệu
+
+### 5. Phần loại bỏ / chỉnh sửa và lý do
+
+- Bỏ: Tổng quan về ERD
+- Sửa: sữa lại nội dung, mô tả các mối quan hệ
+
+### 6. AI sai hoặc chưa chắc chắn ở đâu
+
+### 7. Cách kiểm chứng
+
+### 8. Sản phẩm cuối cùng
+
+Link commit/PR: [...](https://github.com/ngoctramcam/ECommerce-Project/tree/docs/Database)
+
+## AI-03 – <Tạo dữ liệu, kiêmr tra dữ liệu và ràng buộc>
+
+- **Ngày / Người dùng AI:** 11/11/2026 – TV4
+- **Công cụ AI:** Copilot
+- **Thẻ Trello / Nhánh Git liên quan:** [DB] Migration & seed
+
+### 1. Mục đích
+
+Nhờ AI tạo dữ liệu giùm
+
+### 2. Prompt đã dùng
+
+Từ Migration của tui hãy chi tui dữ liệu của 5 danh mục, 30 sách, 10 khách hàng, 1 admin, 10 đơn hàng mẫu nhiều trạng thái.
+
+### 3. Kết quả AI trả về (tóm tắt)
+
+AI đưa ra lệnh để tạo dữ liệu của các file php trong seeders
+
+### 4. Phần giữ lại
+
+- Dữ lại hầu như gần hết dữ liệu của ai đưa
+
+### 5. Phần loại bỏ / chỉnh sửa và lý do
+
+### 6. AI sai hoặc chưa chắc chắn ở đâu
+
+### 7. Cách kiểm chứng
+
+### 8. Sản phẩm cuối cùng
+
+Link commit/PR: [...](https://github.com/ngoctramcam/ECommerce-Project/tree/feat/database)
