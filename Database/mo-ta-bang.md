@@ -65,6 +65,16 @@ users
 - updated_at - timestamp - default CURRENT_TIMESTAMP, not null
 - deleted_at - timestamp - default null
 
+carts_items
+
+- cart_id - int - PrimaryKey, not null
+- user_id - int - not null, ForeignKey -> users.user_idi
+- product_id - int - not null, ForeignKey -> products.product_id
+- quantity - int - not null, >= 1
+- created_at - timestamp - default CURRENT_TIMESTAMP, not null
+- updated_at - timestamp - default CURRENT_TIMESTAMP, not null
+- deleted_at - timestamp - default null
+
 vouchers
 
 - voucher_id - int - PrimaryKey, not null
