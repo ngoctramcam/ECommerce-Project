@@ -115,26 +115,27 @@ E10. CSRF token sai hoặc hết hạn: từ chối, tải lại form, giữ d�
 
 #### Hậu điều kiện:
 
--Thành công:tạo đơn trạng thái "Chờ xác nhận";order_items lưu giá lúc mua;thông tin nhận
+-Thành công:tạo đơn trạng thái "Chờ xác nhận" (lưu họ tên người nhận,số điện thoại,địa chỉ giao hàng,phương thức thanh toán COD,tổng tiền tính ở server);order_items lưu số lượng,đơn giá lúc mua và thành tiền;tồn kho các sách được trừ;giỏ hàng được xóa;tất cả nằm trong một transaction.
+-Thất bại:không tạo đơn,tồn kho và giỏ hàng giữ nguyên.
 
 #### Luồng chính:
 
 1.Khách hàng mở giỏ hàng và bấm "Đặt hàng"
 2.Hệ thống kiểm tra phiên đăng nhập và tài khoản không bị khóa
-3.Hệ thống đọc giỏ hàng từ CSDL,kiểm tra sơ sơ từng sản phẩm(còn hiển thị,còn hàng),tính tổng tiền theo giá hiện tại và hiển thị trang đặt hàng kèm form,CSRF token và mã chống gửi trùng
+3.Hệ thống đọc giỏ hàng từ CSDL (đọc thường,không khóa),kiểm tra sơ bộ từng sản phẩm(còn hiển thị,còn hàng) chỉ để báo sớm,tính tổng tiền tạm theo giá hiện tại,tạo mã chống gửi trùng và mã nhận diện giỏ (cartHash),rồi hiển thị trang đặt hàng kèm form
 4.Khách hàng nhập họ tên,số điện thoại,địa chỉ nhận hàng
 5.Khách hàng chọn phương thức thanh toán COD
-6.Khách hàng bấm "Xác nhận đặt hàng"(Thanh toán khi nhận hàng). Giao diện vô hiệu hóa nút sau khi bấm
-7.Hệ thống kiểm tra phía server:CSRF token,mã chống gửi trùng,họ tên,số điện thoại,địa chỉ hợp lệ
-8.Hệ thống mở transaction, đọc giỏ hàng của chính khách và khóa các dòng sản phẩm theo thứ tự id tăng dần
-9.Hệ thống kiểm tra lại trong transaction:giỏ không trống;từng sản phẩm còn hiển thị,chưa xóa mềm,tồn kho đủ số lượng;giá hiện tại khớp với giá khách đã thấy
-10.Hệ thống tạo đơn (trạng thái"Chờ xác nhận",thông tin nhận hàng,tổng tiền tính ở server) và order_items (lưu giá lúc mua),trừ tồn kho,xóa các sản phẩm trong giỏ. Nếu mọi thao tác thành công thì commit transaction
+6.Khách hàng bấm "Xác nhận đặt hàng"(Thanh toán khi nhận hàng). Giao diện vô hiệu hóa nút sau khi bấm và gửi kèm CSRF token,mã chống gửi trùng,cartHash (không gửi giá hay tổng tiền)
+7.Hệ thống kiểm tra phía server (trước khi mở transaction):CSRF token,đăng nhập và tài khoản không bị khóa,họ tên,số điện thoại,địa chỉ,phương thức thanh toán hợp lệ;rồi kiểm tra mã chống gửi trùng lần 1 (đã có đơn với mã này thì trả về đơn đó)
+8.Hệ thống mở transaction,khóa các dòng giỏ hàng của chính khách,kiểm tra lại mã chống gửi trùng lần 2 (sau khi giữ khóa giỏ),rồi khóa các dòng sản phẩm theo thứ tự id tăng dần
+9.Hệ thống kiểm tra lại trong transaction và gom tất cả lỗi để báo một lần:giỏ không trống;giỏ và giá khớp với tóm tắt khách đã xem (so bằng cartHash);từng sản phẩm còn hiển thị,chưa xóa mềm,tồn kho đủ số lượng
+10.Hệ thống tạo đơn (trạng thái"Chờ xác nhận",thông tin nhận hàng,tổng tiền tính ở server,mã chống gửi trùng) và order_items (lưu giá lúc mua),trừ tồn kho (chỉ khi còn đủ hàng,đồng thời tăng version của sản phẩm),xóa các sản phẩm trong giỏ. Nếu mọi thao tác thành công thì commit transaction
 11.Hệ thống hiển thị "Đặt hàng thành công" kèm mã đơn hàng và liên kết đến "Đơn hàng của tôi"
 
 #### Luồng phụ:
 
 A1. Đổi số lượng hoặc xóa sách ở trang đặt hàng: quay về giỏ hàng , cập nhật lại tổng tiền.
-A2. Áp dụng mã giảm giá: trước bước 6 khách nhập mã. Hệ thống kiểm tra mã (tồn tại, còn hạn, còn lượt dùng, đạt điều kiện áp dụng), tính số tiền giảm và hiển thị tổng mới. Mã được kiểm tra lại trong transaction ở bước 9, mã và số tiền giảm được lưu vào đơn.
+A2. Áp dụng mã giảm giá: trước bước 6 khách nhập mã. Hệ thống kiểm tra mã (tồn tại, còn hạn), tính số tiền giảm và hiển thị tổng mới. Mã được kiểm tra lại trong transaction ở bước 9, mã và số tiền giảm được lưu vào đơn.
 A3. Khách xác nhận lại giá hoặc giỏ mới : hệ thống hiển thị lại trang đặt hàng với tổng tiền mới, khi khách xác nhận thì quay lại bước 6.
 A4. Quay lại sau khi đăng nhập lại: giỏ hàng vẫn còn, khách quay lại trang đặt hàng và nhập lại thông tin nhận hàng nếu chưa được giữ.
 
@@ -164,12 +165,12 @@ E12. Giá sản phẩm thay đổi: hoàn tác, hiển thị tổng tiền mới
 ##### Dữ liệu nhập và mã giảm giá:
 
 E13. Thông tin nhận hàng không hợp lệ (bước 7): báo lỗi từng trường bằng tiếng Việt (họ tên và địa chỉ không rỗng, số điện thoại đúng định dạng 10 chữ số bắt đầu bằng 0), giữ dữ liệu đã nhập, không mở transaction. Nội dung nhập được làm sạch khi hiển thị (chống XSS).
-E14. Mã giảm giá không hợp lệ (A2, mức C): báo rõ lý do (không tồn tại, hết hạn, hết lượt, không đạt điều kiện), giữ nguyên tổng tiền, khách bỏ mã hoặc nhập mã khác. Nếu mã mất hiệu lực lúc xác nhận (bước 9): hoàn tác và hiển thị tổng mới để khách xác nhận. Số tiền giảm không vượt quá tổng tiền.
+E14. Mã giảm giá không hợp lệ (A2, mức C): báo rõ lý do (không tồn tại, hết hạn), giữ nguyên tổng tiền, khách bỏ mã hoặc nhập mã khác. Nếu mã mất hiệu lực lúc xác nhận (bước 9): hoàn tác và hiển thị tổng mới để khách xác nhận. Số tiền giảm không vượt quá tổng tiền.
 
 ##### Gửi trùng và lỗi hệ thống:
 
 E15. Bấm “Xác nhận” hai lần, gửi lại do mạng chậm hoặc tải lại trang sau khi thành công: giao diện vô hiệu hóa nút; server chặn bằng mã chống gửi trùng duy nhất, yêu cầu thứ hai không tạo đơn mới mà trả về đơn đã tạo.
 E16. Mất kết nối trước khi nhận phản hồi (đơn có thể đã được tạo): khi khách tải lại, hệ thống hướng dẫn kiểm tra “Đơn hàng của tôi” trước khi đặt lại; mã chống gửi trùng ngăn việc tạo đơn thứ hai.
 E17. Lỗi CSDL hoặc mất kết nối trong transaction: hoàn tác, không tạo đơn, không đổi tồn kho, giữ nguyên giỏ hàng, hiển thị thông báo để khách thử lại, ghi log.
-E18. Lock timeout hoặc deadlock khi khóa dòng (bước 8): hoàn tác và tự thử lại tối đa vài lần; nếu vẫn lỗi thì báo “Hệ thống đang bận, vui lòng thử lại”. Khóa theo thứ tự id tăng dần để giảm nguy cơ deadlock.
+E18. Lock timeout hoặc deadlock khi khóa dòng (bước 8): hoàn tác và tự thử lại tối đa 2 lần; nếu vẫn lỗi thì báo “Hệ thống đang bận, vui lòng thử lại”. Khóa theo thứ tự id tăng dần để giảm nguy cơ deadlock.
 E19. Khách xem hoặc đặt theo đơn, giỏ của người khác bằng cách đổi ID: chặn 403 hoặc 404 (TM-NFR4).
