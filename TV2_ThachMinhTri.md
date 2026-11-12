@@ -11,7 +11,8 @@
 | Mã | Ngày | Giai đoạn | Nội dung | Commit / PR |
 | --- | --- | --- | --- | --- |
 | AI-01 | 10/11/2026 |  Lập trình | Hỗ trợ cấu hình Eloquent | [Pull Request](https://github.com/ngoctramcam/ECommerce-Project/pull/3) |
-| AI-01 | 11/11/202 | Lập trìn | Phân tích yêu cầu của nhiệm vụ ngày 3  | [Commit](https://github.com/ngoctramcam/ECommerce-Project/commit/a19835307686fe116f538c2c2b2360f86af5ec74) |
+| AI-02 | 11/11/202 | Lập trình | Phân tích yêu cầu của nhiệm vụ ngày 3  | [Commit](https://github.com/ngoctramcam/ECommerce-Project/commit/a19835307686fe116f538c2c2b2360f86af5ec74) |
+| AI-03 | 12/11/202 | Lập trình | Sinh mã cho nhiệm vụ 1 | [Commit](https://github.com/ngoctramcam/ECommerce-Project/commit/dbc2ddb0e101973fd85aeb134bbc43e8722057b3) |
 
 ## AI-01 – Hỗ trợ cấu hình Eloquent 
 - **Ngày / Người dùng AI:** 10/11/2026 – TV2
@@ -98,3 +99,47 @@ Hãy giúp mình phân tích từng yêu cầu và trình bày chi tiết về b
 
 ### 8. Sản phẩm cuối cùng
 [feat/TM04-dang-ky](https://github.com/ngoctramcam/ECommerce-Project/tree/feat/TM-04-dang-ky)
+
+---
+
+
+## AI-03 – Sinh mã Middleware
+- **Ngày / Người dùng AI:** 10/11/2026 – TV2
+- **Công cụ AI:** Copilot
+- **Thẻ Trello / Nhánh Git liên quan:** TM-04: Đăng ký, đăng nhập
+
+### 1. Mục đích
+- Sinh code cho nhiệm vụ 1
+
+### 2. Prompt đã dùng
+```
+Hôm nay là ngày 4 và đây là chi tiết nhiệm vụ của mình:
+AuthService.login(): kiểm tra email/mật khẩu, chặn tài khoản bị khóa; tạo session/JWT.
+Hãy phân tích và sinh mã giúp mình
+```
+
+### 3. Kết quả AI trả về (tóm tắt)
+> 1. Phân tích yêu cầu
+> 2. Cấu trúc bảng User nên có
+> 3. Viết LoginRequest
+> 4. AuthService.login()
+> 5. AuthController
+> 6. Nếu đề tài yêu cầu JWT
+> 7. Các trường hợp test
+
+### 4. Phần giữ lại
+- Mục 4, 5
+
+### 5. Phần loại bỏ / chỉnh sửa và lý do
+- Bỏ: Mục 3 vì kiểm tra tồn tại có 2 trường email và password nên viết trong Service luôn, 6 vì dùng session thay vì JWT
+- Sửa: Không
+
+
+### 6. AI sai hoặc chưa chắc chắn ở đâu
+- Chưa chắc chắn ở controller và web.php
+
+### 7. Cách kiểm chứng
+- gõ trực tiếp đường dẫn trên url
+
+### 8. Sản phẩm cuối cùng
+[feat/TM04-dang-ky](https://github.com/ngoctramcam/ECommerce-Project/commit/dbc2ddb0e101973fd85aeb134bbc43e8722057b3)
