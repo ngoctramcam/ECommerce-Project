@@ -16,7 +16,7 @@ Nhờ AI hướng dẫn khung markdown decuong.md
 
 # ĐỀ CƯƠNG ĐỒ ÁN LẬP TRÌNH WEB
 
-## 1. Thông tin chung
+1. Thông tin chung
 
 - **Tên đề tài:** Website Thương mại điện tử bán sách
 - **Nhóm:** Nhóm XX
@@ -27,13 +27,13 @@ Nhờ AI hướng dẫn khung markdown decuong.md
 
 ---
 
-## 2. Mô tả đề tài
+2. Mô tả đề tài
 
 Xây dựng website bán sách trực tuyến cho phép khách hàng tìm kiếm, xem chi tiết sách, thêm vào giỏ hàng và đặt hàng. Hệ thống hỗ trợ quản trị sản phẩm, danh mục và theo dõi đơn hàng.
 
 ---
 
-## 3. Công nghệ sử dụng
+3. Công nghệ sử dụng
 
 ### Backend
 
@@ -57,7 +57,7 @@ Xây dựng website bán sách trực tuyến cho phép khách hàng tìm kiếm
 
 ---
 
-## 4. Thành viên và phân công
+4. Thành viên và phân công
 
 | Thành viên | Vai trò                       | Chức năng phụ trách                                          |
 | ---------- | ----------------------------- | ------------------------------------------------------------ |
@@ -68,39 +68,13 @@ Xây dựng website bán sách trực tuyến cho phép khách hàng tìm kiếm
 
 ---
 
-## 5. Chức năng bắt buộc
+5. Chức năng bắt buộc
 
-### Nhóm chức năng người dùng
+6. Phạm vi hệ thống
 
-- TM-01: Xem danh sách sách
-- TM-02: Tìm kiếm sách
-- TM-03: Xem chi tiết sách
-- TM-04: Đăng ký / Đăng nhập
-- TM-05: Quản lý hồ sơ cá nhân
-- TM-06: Đặt hàng
-- TM-07: Xem lịch sử đơn hàng
-- TM-08: Quản lý giỏ hàng
+7. Thiết kế cơ sở dữ liệu dự kiến
 
-### Nhóm chức năng quản trị
-
-- TM-11: Quản lý danh mục sách
-- TM-12: Quản lý sản phẩm (sách)
-- TM-13: Quản lý đơn hàng
-- TM-14: Thống kê cơ bản
-
----
-
-## 6. Phạm vi hệ thống
-
-### Người dùng
-
-### Quản trị viên
-
-## 7. Thiết kế cơ sở dữ liệu dự kiến
-
-### Bảng chính
-
-## 8. Kiến trúc hệ thống
+8. Kiến trúc hệ thống
 
 ### 4. Phần giữ lại
 
@@ -142,3 +116,41 @@ Link commit/PR: https://github.com/ngoctramcam/ECommerce-Project/commit/b8ff1dcf
 - Cách kiểm chứng: [Giữ lại những chức khớp với đặc tả]
 - Tỷ lệ nội dung AI còn giữ lại (ước lượng): [45%]
 - Điều học được: [Prompt cần truyền đầy đủ đặc tả , dữ liệu cần thiết thì AI nó mới hiểu và cho kết quả chuẩn]
+
+```
+
+```
+
+## AI-03 – <Vẽ Sequence Diagram>
+
+- Ngày / Người dùng: [2026-11-11] / Trần Quang Vinh
+- Công cụ: [Copilot]
+- Giai đoạn: Lập kế hoạch
+- Task / Commit / PR: [DOC] Đề cương / [fe7021d] / [PR1]
+- Mục đích: [Hướng dẫn vẽ sequence diagram]
+- Prompt chính (nguyên văn hoặc link chia sẻ hội thoại): [Nhờ AI vẽ sequence bằng PlantUML/Mermaid từ những dữ liệu của file tôi vừa gửi và file đặc tả và hình erd.]
+- Kết quả AI trả về (tóm tắt): [Trả về 3 bản sequence diagram với đầy đủ 3 luồng ]
+- Đánh giá: [Sơ đồ mà AI đưa ra đã bám sát được đặc tả nhưng vẫn còn vài chỗ AI làm thiếu ý và chưa đủ luồng]
+- Đã chỉnh sửa gì: [Vẽ theo sơ đồ sequence diagram của AI và thêm 1 vài chỗ]
+- Cách kiểm chứng: [Giữ lại những chức khớp với đặc tả]
+- Tỷ lệ nội dung AI còn giữ lại (ước lượng): [75%]
+- Điều học được: [Prompt cần truyền đầy đủ đặc tả , dữ liệu cần thiết thì AI nó mới hiểu và cho kết quả chuẩn]
+
+```
+
+```
+
+## AI-04 – <Thiết kế kịch bản 10 phút vấn đáp>
+
+- Ngày / Người dùng: [2026-11-12] / Trần Quang Vinh
+- Công cụ: [Copilot]
+- Giai đoạn: Lập kế hoạch
+- Task / Commit / PR: [DOC] Đề cương / [] / []
+- Mục đích: [Nhờ AI thiết kế kịch bản 10 phút vấn đáp]
+- Prompt chính (nguyên văn hoặc link chia sẻ hội thoại): [Nhờ AI góp ý cấu trúc phần trình bày 10 phút;nhóm tôi gồm 4 người, TV4 và TV5 là 1.Dựa vào dữ liệu của file markdown decuong và file pdf Ngay04_Thu5 và có thêm hình ảnh của Trello nhóm tôi.]
+- Kết quả AI trả về (tóm tắt): [1.Giới thiệu đề tài,2.Trello&Quản lý dự án,3.Chức năng hệ thống,4.Kiến trúc hệ thống,5.ERD,6.Wireframe+Giao diện,7.Kết quả hiện tại,8.Kế hoạch Sprint 2 ]
+- Đánh giá: [Nội dung kịch bản AI đưa ra rất đầy đủ và chi tiết , nhưng mình cần chỉnh sửa thêm ý để kịch bản phù hợp hơn]
+- Đã chỉnh sửa gì: [Lấy 1 phần nội dung của AI đưa ra và thêm ý của mình]
+- Cách kiểm chứng: []
+- Tỷ lệ nội dung AI còn giữ lại (ước lượng): [85%]
+- Điều học được: [Cách thiết kế kịch bản của AI, giành cho buổi vấn đáp]
