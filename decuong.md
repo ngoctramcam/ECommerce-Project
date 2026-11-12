@@ -64,6 +64,6 @@ Các chức năng được quản lý trên Trello, phân loại mức độ ưu
 
 **Trưởng nhóm:** TV1
 
-**Ngày lập đề cương:** 09/11/2026
+**Ngày lập đề cương:** 09/11/2026.
 
 **Trạng thái:** Chờ giảng viên phê duyệt.
