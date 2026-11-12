@@ -20,7 +20,7 @@ Route::get('/test-db', function () {
         return 'Kết nối thất bại';
     }
 });
-
+Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 

@@ -10,7 +10,7 @@ class Voucher extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'voucher'; // Tên bảng theo đúng sơ đồ ERD
+    protected $table = 'vouchers'; // Tên bảng theo đúng sơ đồ ERD
     protected $primaryKey = 'voucher_id';
 
     protected $fillable = [
