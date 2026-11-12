@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('phone', 20)->nullable();
             $table->string('address', 255)->nullable();
             $table->enum('role', ['admin', 'user'])->default('user');
+            $table->enum('status', ['active', 'locked'])->default('active');
             $table->timestamps(); // Tự động tạo created_at và updated_at dạng TIMESTAMP
             $table->softDeletes(); // Tạo cột deleted_at (mặc định NULL)
         });

@@ -20,7 +20,8 @@ class UserSeeder extends Seeder
             'password' => Hash::make('admin123'),
             'phone' => '0900000000',
             'address' => 'TP.HCM',
-            'role' => 'admin'
+            'role' => 'admin',
+            'status' => 'active'
         ]);
 
         for ($i = 1; $i <= 10; $i++) {
@@ -30,7 +31,8 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('12345678'),
                 'phone' => '09000000' . $i,
                 'address' => 'Hồ Chí Minh',
-                'role' => 'user'
+                'role' => 'user',
+                'status' => 'active'
             ]);
         }
     }
