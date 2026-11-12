@@ -81,3 +81,26 @@
 - Cách kiểm chứng: []
 - Tỷ lệ nội dung AI còn giữ lại (ước lượng): [85%]
 - Điều học được: [Cách thiết kế kịch bản của AI, giành cho buổi vấn đáp]
+
+```
+
+```
+
+## AI-05 – <Nhận xét dự án Trello>
+
+- Ngày / Người dùng: [2026-11-12] / Trần Quang Vinh
+- Công cụ: [Copilot]
+- Giai đoạn: Lập kế hoạch
+- Task / Commit / PR: [DOC] Đề cương / [] / []
+- Mục đích: [Nhờ AI nhận xét board Trello]
+- Prompt chính (nguyên văn hoặc link chia sẻ hội thoại): [Hãy kiểm tra dự án Trello của nhóm tôi có đạt chuẩn theo yêu cầu hay không.]
+- Kết quả AI trả về (tóm tắt): [Nhìn tổng thể, nhóm bạn đã đạt khoảng 80-85% yêu cầuThêm cột Bugs đúng yêu cầu.Gắn đầy đủ Labels cho mọi thẻ.Đưa các task sắp làm vào Sprint hiện tại thay vì để trống.Có ít nhất vài thẻ đi qua Review trước khi vào Done.Thêm thẻ Retrospective Sprint 1.Bảo đảm mỗi card có:]
+- Đánh giá: [Nhận xét AI đưa ra rất đúng theo yêu cầu]
+- Đã chỉnh sửa gì: [Chỉnh sửa lại những gì AI đưa ra vào Trello]
+- Cách kiểm chứng: []
+- Tỷ lệ nội dung AI còn giữ lại (ước lượng): [85%]
+- Điều học được: [Cách thiết kế board Trello]
+
+```
+
+```
