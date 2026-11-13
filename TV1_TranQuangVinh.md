@@ -1,3 +1,24 @@
+# AI log – TV1 – Nguyễn Văn A
+
+> Mỗi thành viên một tệp trong `ai-logs/`. Ghi một mục ngay sau mỗi lần dùng AI có ảnh hưởng đến sản phẩm, commit cùng thay đổi liên quan. Cả đồ án tối thiểu 6 mục có nội dung thực chất. Mã mục tăng dần: AI-01, AI-02, ...
+
+| Mục             | Thông tin                      |
+| --------------- | ------------------------------ |
+| Họ tên, MSSV    | Trần Quang Vinh – [0306241421] |
+| Nhóm, đề tài    | Nhóm [03] – [Website bán sách] |
+| Vai trò         | TV1 – LE (Leader)              |
+| Công cụ AI dùng | [Copilot]                      |
+
+## Bảng tổng hợp
+
+| Mã    | Ngày    | Giai đoạn         | Nội dung                              | Commit / PR   |
+| ----- | ------- | ----------------- | ------------------------------------- | ------------- |
+| AI-01 | [09/11] | Phân tích yêu cầu | Hướng dẫn xây dựng khung đề cương     | [PR 5]        |
+| AI-02 | [10/11] | Lập kế hoạch      | Hướng dẫn form viết đặc tả            | [PR 1]        |
+| AI-03 | [11/11] | Lập kế hoạch      | Hướng dẫn vẽ sequence diagram         | [PR 1]        |
+| AI-04 | [11/11] | Lập kế hoạch      | Thiết kế lập kế hoạch vấn đáp 10 phút | [Không có PR] |
+| AI-05 | [12/11] | Lập kế hoạch      | Nhờ AI nhận xét board Trello          | [Không có PR] |
+
 ## AI-01 – <Markdown-decuong>
 
 - Ngày / Người dùng: [2026-11-9] / Trần Quang Vinh
