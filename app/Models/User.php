@@ -1,5 +1,5 @@
 <?php
-
+// AI-assisted [AI-01]
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -19,9 +19,14 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
+        'full_name',
         'email',
         'password',
+        'address',
+        'phone',
+        'role',
+        'status'
+
     ];
 
     /**
@@ -45,5 +50,17 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    // Quan hệ: Một User có nhiều Orders
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'user_id', 'user_id');
+    }
+
+    // Quan hệ: Một User có nhiều CartItems
+    public function cartItems()
+    {
+        return $this->hasMany(CartItem::class, 'user_id', 'user_id');
     }
 }
