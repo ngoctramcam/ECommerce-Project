@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\AuthController;
 use App\Http\Middleware\AdminAuthMiddleware;
+use App\Http\Controllers\CategoryController;
 
 // Route trang chủ
 Route::get('/', function () {
@@ -32,6 +33,7 @@ Route::middleware([AdminAuthMiddleware::class])->group(function () {
     Route::get('/admin', function () {
         return view('welcome');
     })->name('admin.dashboard');
+    Route::resource('categories', CategoryController::class);
 });
 
 // [(TV3) ]: Route hứng toàn bộ đường dẫn phía React (/login, /register...) đặt ở cuối cùng để khi bấm F5 không bị lỗi 404
