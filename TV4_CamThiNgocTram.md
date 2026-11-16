@@ -1,4 +1,22 @@
-## AI-01 – <tên việc ngắn gọn>
+# AI log – TV4 – Cam Thị Ngọc Trâm
+
+| Mục             | Thông tin                                                |
+| --------------- | -------------------------------------------------------- |
+| Họ tên, MSSV    | Cam Thị Ngọc Trâm - 0306241330                           |
+| Nhóm, đề tài    | Nhóm [số] – Xây dựng website thương mại điện tử bán sách |
+| Vai trò         | TV3 – BE (Backend)                                       |
+| Công cụ AI dùng | GitHub Copilot                                           |
+
+## Bảng tổng hợp
+
+| Mã    | Ngày       | Giai đoạn | Nội dung                                             | Commit / PR                                                                   |
+| ----- | ---------- | --------- | ---------------------------------------------------- | ----------------------------------------------------------------------------- |
+| AI-01 | 10/11/2026 | Thiết kế  | Nhờ AI gợi ý những thuộc tính thương có của các bảng | [commit](https://github.com/ngoctramcam/ECommerce-Project/tree/docs/Database) |
+| AI-02 | 11/11/202  | Thiết kế  | Nhờ AI gợi ý cách trình bày mô tả erd                | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/docs/Database) |
+| AI-03 | 12/11/202  | Lập trình | Nhờ AI tạo dữ liệu giùm                              | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/feat/database) |
+| AI-04 | 16/11/202  | Lập trình | Nhờ AI viết chức năng CRUD cho Categories            | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/feat/database) |
+
+## AI-01 – <Tạo ERD>
 
 - **Ngày / Người dùng AI:** 10/11/2026 – TV4
 - **Công cụ AI:** Copilot
@@ -37,7 +55,7 @@ Link commit/PR: [...](https://github.com/ngoctramcam/ECommerce-Project/tree/docs
 
 ## AI-02 – <Mô tả erd-v2>>
 
-- **Ngày / Người dùng AI:** 10/11/2026 – TV4
+- **Ngày / Người dùng AI:** 11/11/2026 – TV4
 - **Công cụ AI:** Copilot
 - **Thẻ Trello / Nhánh Git liên quan:** [DOC] ERD - docs/Database/erd_v2.png
 
@@ -70,7 +88,7 @@ AI đưa ra bản mẫu về trình bày mô tả một csdl
 
 Link commit/PR: [...](https://github.com/ngoctramcam/ECommerce-Project/tree/docs/Database)
 
-## AI-03 – <Tạo dữ liệu, kiêmr tra dữ liệu và ràng buộc>
+## AI-03 – <Tạo dữ liệu, kiểm tra dữ liệu và ràng buộc>
 
 - **Ngày / Người dùng AI:** 11/11/2026 – TV4
 - **Công cụ AI:** Copilot
@@ -101,3 +119,42 @@ AI đưa ra lệnh để tạo dữ liệu của các file php trong seeders
 ### 8. Sản phẩm cuối cùng
 
 Link commit/PR: [...](https://github.com/ngoctramcam/ECommerce-Project/tree/feat/database)
+
+## AI-04 – Viết chức năng CRUD
+
+- **Ngày / Người dùng AI:** 16/11/2026 – TV4
+- **Công cụ AI:** Copilot
+- **Thẻ Trello / Nhánh Git liên quan:** [TM-11] Quản lý danh mục
+
+### 1. Mục đích
+
+Nhờ AI viết chức năng CRUD cho quản lý danh mục của Admin
+
+### 2. Prompt đã dùng
+
+Tôi đang viết chức năng CRUD cho bảng categories ở phía admin, tôi dung Laravel + react để làm
+
+### 3. Kết quả AI trả về (tóm tắt)
+
+AI đưa 4 hàm CRUD cho bảng admin
+
+### 4. Phần giữ lại
+
+- Giữ lại khung sườn code
+
+### 5. Phần loại bỏ chỉnh sửa và lý do
+
+- Bỏ cách viết theo API viết route bình thường
+- Sửa những tên thuộc tính vì AI viết chưa đúng theo thuộc tính trong model.
+
+### 6. AI sai hoặc chưa chắc chắn ở đâu
+
+AI gợi ý viết api.
+
+### 7. Cách kiểm chứng
+
+Xem lại trong model với phần chức năng đăng nhập đăng xuất viết trước đó.
+
+### 8. Sản phẩm cuối cùng
+
+Link commit/PR: [...](https://github.com/ngoctramcam/ECommerce-Project/tree/feat/TM-11-danh-muc)
