@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\AuthController;
 use App\Http\Middleware\AdminAuthMiddleware;
-
+use App\Http\Controllers\UserController;
 // Route trang chủ
 Route::get('/', function () {
     return view('welcome');
@@ -19,6 +19,8 @@ Route::get('/test-db', function () {
         return 'Kết nối thất bại: ' . $e->getMessage();
     }
 });
+//TODO(BUG): chưa gắn AdminAuthMiddleware cho route này
+Route::get('/api/admin/users', [UserController::class, 'index']);
 
 // [(TV3)]: Bổ sung route POST /register vì TV2 đã viết sẵn hàm register() trong AuthController nhưng chưa khai báo đường dẫn ở đây
 Route::post('/register', [AuthController::class, 'register']);
