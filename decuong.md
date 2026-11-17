@@ -40,15 +40,19 @@ Dự án triển khai các chức năng theo tài liệu đặc tả yêu cầu,
 | TM-01 | [Trang chủ]             | TV3       |
 | TM-02 | [Tìm kiếm,lọc sản phẩm] | TV3       |
 | TM-03 | [Xem chi tiết sản phẩm] | TV3       |
-| TM-04 | [Đăng ký,đăng nhập]     | TV2       |
-| TM-05 | [Giỏ hàng]              | TV5       |
-| TM-06 | [Đặt hàng COD]          | TV2       |
+| TM-04 | [Đăng ký,đăng nhập]     | TV2,TV3   |
+| TM-05 | [Giỏ hàng]              | TV5,TV3   |
+| TM-06 | [Đặt hàng COD]          | TV2,TV1   |
 | TM-07 | [Đơn hàng của tôi]      | TV5       |
-| TM-08 | [Hồ sơ cá nhân]         | TV1       |
+| TM-08 | [Hồ sơ cá nhân]         | TV1,TV3   |
 | TM-11 | [Quản lý danh mục]      | TV4       |
-| TM-12 | [Quản lý sản phẩm]      | TV4       |
+| TM-12 | [Quản lý sản phẩm]      | TV4,TV3   |
 | TM-13 | [Quản lý đơn hàng]      | TV5       |
 | TM-14 | [Quản lý người dùng]    | TV1       |
+
+Chức năng cộng điểm thêm
+| TM-09 | [Đánh giá sản phẩm] | TV4 |
+| TM-16 | [Mã giảm giá] | TV5 |
 
 Các chức năng được quản lý trên Trello, phân loại mức độ ưu tiên Must/Could và triển khai theo kế hoạch Sprint.
 
