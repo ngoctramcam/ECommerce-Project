@@ -51,8 +51,8 @@ Dự án triển khai các chức năng theo tài liệu đặc tả yêu cầu,
 | TM-14 | [Quản lý người dùng]    | TV1       |
 
 Chức năng cộng điểm thêm
-| TM-09 | [Đánh giá sản phẩm] | TV4 |
-| TM-16 | [Mã giảm giá] | TV5 |
+| TM-09 | [Đánh giá sản phẩm] | TV1,TV3 |
+| TM-16 | [Mã giảm giá] | TV2,TV5 |
 
 Các chức năng được quản lý trên Trello, phân loại mức độ ưu tiên Must/Could và triển khai theo kế hoạch Sprint.
 
