@@ -4,9 +4,9 @@
 
 ## Quy ước chung
 
--Mọi kiểm tra dữ liệu và kiểm tra quyền đều thực hiện ở phía server (NFR-01, NFR-05).
--Thông báo lỗi bằng tiếng Việt, nêu rõ trường sai. Lỗi hệ thống không lộ chi tiết kỹ thuật và được ghi log phía server.
--Số lần nhập sai tối đa 7 lần,thời gian chặn 3 phút,số lần thử lại sau khi deadlock 2 lần.
+- Mọi kiểm tra dữ liệu và kiểm tra quyền đều thực hiện ở phía server (NFR-01, NFR-05).
+- Thông báo lỗi bằng tiếng Việt, nêu rõ trường sai. Lỗi hệ thống không lộ chi tiết kỹ thuật và được ghi log phía server.
+- Số lần nhập sai tối đa 7 lần,thời gian chặn 3 phút,số lần thử lại sau khi deadlock 2 lần.
 
 ### UC-01:Đăng nhập(TM-04a)
 
@@ -16,13 +16,13 @@ Mô tả:Xác thực bằng email và mật khẩu để truy cập vào hệ th
 
 #### Tiền điều kiện:
 
--Người dùng đã có tài khoản
--Chưa đăng nhập(chưa có phiên hoặc token hợp lệ)
+- Người dùng đã có tài khoản
+- Chưa đăng nhập(chưa có phiên hoặc token hợp lệ)
 
 #### Hậu điều kiện:
 
--Thành công:tạo phiên/token, đặt lại bộ đếm nhập sai, điều hướng theo vai trò (customer về trang chủ hoặc trang đang xem dở,admin về trang quản trị).
--Thất bại: không tạo phiên, báo lỗi, tăng bộ đếm nhập sai nếu sai thông tin.
+- Thành công:tạo phiên/token, đặt lại bộ đếm nhập sai, điều hướng theo vai trò (customer về trang chủ hoặc trang đang xem dở,admin về trang quản trị).
+- Thất bại: không tạo phiên, báo lỗi, tăng bộ đếm nhập sai nếu sai thông tin.
 
 #### Luồng chính:
 
@@ -38,10 +38,10 @@ Mô tả:Xác thực bằng email và mật khẩu để truy cập vào hệ th
 
 #### Luồng phụ:
 
-A1. Chưa có tài khoản: người dùng chọn “Đăng ký” và chuyển sang TM-04b (email duy nhất, mật khẩu từ 8 ký tự).
-A2. Bị chuyển đến đăng nhập từ chức năng cần đăng nhập (bấm “Thêm vào giỏ” ở TM-05a, vào giỏ hàng, đặt hàng): sau khi đăng nhập thành công, quay lại đúng trang đang xem. Địa chỉ quay lại chỉ được thuộc cùng website (chống chuyển hướng độc hại).
-A3. Đã đăng nhập mà mở lại trang Đăng nhập: chuyển thẳng đến trang theo vai trò.
-A4. Đăng xuất (TM-04c): hủy phiên/token ở server, xóa token ở trình duyệt, chuyển về trang chủ với vai trò Khách vãng lai.
+- A1. Chưa có tài khoản: người dùng chọn “Đăng ký” và chuyển sang TM-04b (email duy nhất, mật khẩu từ 8 ký tự).
+- A2. Bị chuyển đến đăng nhập từ chức năng cần đăng nhập (bấm “Thêm vào giỏ” ở TM-05a, vào giỏ hàng, đặt hàng): sau khi đăng nhập thành công, quay lại đúng trang đang xem. Địa chỉ quay lại chỉ được thuộc cùng website (chống chuyển hướng độc hại).
+- A3. Đã đăng nhập mà mở lại trang Đăng nhập: chuyển thẳng đến trang theo vai trò.
+- A4. Đăng xuất (TM-04c): hủy phiên/token ở server, xóa token ở trình duyệt, chuyển về trang chủ với vai trò Khách vãng lai.
 
 #### Luồng ngoại lệ:
 
@@ -61,17 +61,17 @@ E7. Tài khoản bị quản trị khóa khi đang có phiên (TM-14): ở yêu 
 
 #### Tiền điều kiện:
 
--Đã đăng nhập với vai trò admin
--Có ít nhất 1 danh mục
+- Đã đăng nhập với vai trò admin
+- Có ít nhất 1 danh mục
 
 #### Hậu điều kiện
 
--Thành công: dữ liệu sản phẩm được cập nhật trong CSDL, thay đổi hiển thị ngay ở trang khách hàng.
--Thất bại: không có thay đổi nào trong CSDL.
+- Thành công: dữ liệu sản phẩm được cập nhật trong CSDL, thay đổi hiển thị ngay ở trang khách hàng.
+- Thất bại: không có thay đổi nào trong CSDL.
 
 #### Luồng chính (Thêm sản phẩm)
 
-1.Quản trị mở trang "Quản lý sản phẩm"
+1.Quản trị mở trang "Quản lý sản phẩm".
 2.Hệ thống kiểm tra quyền admin và hiển thị danh sách phân trang phía server(10 đến 20 sách mỗi trang,không hiển thị sách đã xóa mềm)
 3.Quản trị bấm "Thêm sản phẩm"
 4.Hệ thống hiển thị form:tên,danh mục (chọn từ danh sách hiện có),giá,tồn kho,mô tả,ảnh đại diện,ẩn/hiện,kèm CSRF Token
@@ -110,13 +110,13 @@ E10. CSRF token sai hoặc hết hạn: từ chối, tải lại form, giữ d�
 
 #### Tiền điều kiện:
 
--Đã đăng nhập, tài khoản không bị khóa
--Giỏ hàng có ít nhất 1 sản phẩm
+- Đã đăng nhập, tài khoản không bị khóa
+- Giỏ hàng có ít nhất 1 sản phẩm
 
 #### Hậu điều kiện:
 
--Thành công:tạo đơn trạng thái "Chờ xác nhận" (lưu họ tên người nhận,số điện thoại,địa chỉ giao hàng,phương thức thanh toán COD,tổng tiền tính ở server);order_items lưu số lượng,đơn giá lúc mua và thành tiền;tồn kho các sách được trừ;giỏ hàng được xóa;tất cả nằm trong một transaction.
--Thất bại:không tạo đơn,tồn kho và giỏ hàng giữ nguyên.
+- Thành công:tạo đơn trạng thái "Chờ xác nhận" (lưu họ tên người nhận,số điện thoại,địa chỉ giao hàng,phương thức thanh toán COD,tổng tiền tính ở server);order_items lưu số lượng,đơn giá lúc mua và thành tiền;tồn kho các sách được trừ;giỏ hàng được xóa;tất cả nằm trong một transaction.
+- Thất bại:không tạo đơn,tồn kho và giỏ hàng giữ nguyên.
 
 #### Luồng chính:
 
