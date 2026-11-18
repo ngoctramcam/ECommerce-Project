@@ -16,7 +16,7 @@ return new class extends Migration
 
             $table->string('code', 50)->unique();
             $table->decimal('discount_amount', 10, 2);
-            $table->text("description");
+            $table->text("description")->nullable();
             $table->dateTime('expired_date');
 
             $table->timestamps(); // Tự động tạo created_at và updated_at dạng TIMESTAMP
