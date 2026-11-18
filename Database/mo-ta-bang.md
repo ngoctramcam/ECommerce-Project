@@ -4,15 +4,16 @@ products
 - product_name - nvarchar(255) - not null
 - description - text -
 - price - decimal(10,2) - not null
-- stock - double - not null, >=0
+- stock - int - not null, >=0
 - author - nvarchar(255) - not null
 - publisher - nvarchar -
 - image - nvarchar(255) - not null
 - slug - nvarchar(255) - not null, unique
+- status - bool - default true (true: còn bán , false: không còn bán)
 - category_id - int - not null, ForeignKey -> categories.category_id
 - created_at - timestamp, default CURRENT_TIMESTAMP, not null
 - updated_at - timestamp, default CURRENT_TIMESTAMP, not null
-- deleted_at - timestamp, default null
+- is_delete - softDeletes, default null
 
 categories
 
@@ -22,19 +23,19 @@ categories
 - slug - nvarchar(255) - not null, unique
 - created_at - timestamp, default CURRENT_TIMESTAMP, not null
 - updated_at - timestamp, default CURRENT_TIMESTAMP, not null
-- deleted_at - timestamp, default null
+- is_delete - softDeletes, default null
 
 order_items
 
 - order_item_id - int - PrimaryKey, not null
-- quantity - double - not null, >=1
+- quantity - int - not null, >=1
 - unit_price - decimal(10,2), not null
 - subtotal - decimal(10,2) - not null
 - user_id - int - not null, ForeignKey -> users.user_id
 - product_id - int - not null, ForeignKey -> products.product_id
 - created_at - timestamp, default CURRENT_TIMESTAMP, not null
 - updated_at - timestamp, default CURRENT_TIMESTAMP, not null
-- deleted_at - timestamp, default null
+- is_delete - softDeletes, default null
 
 orders
 
@@ -42,15 +43,14 @@ orders
 - user_id - int - not null, ForeignKey -> users.user_id
 - voucher_id - int - ForeignKey -> vouchers.voucher_id
 - recipient_name - nvarchar(255) - not null
-- recipient_phone - varchar(20) - not null
+- recipient_phone - varchar(10) - not null
 - shipping_address - nvarchar(255) - not null
 - order_date - datetime - not null
 - total_amount - decimal(10,2) - not null
-- payment_method - enum('COD', 'VNPAY', 'MOMO') - not null
-- status - enum('PENDING', 'CONFIRMED', 'SHIPPING', 'COMPLETED', 'CANCELLED') - default 'PENDING'
+- status - enum('PENDING', 'SHIPPING', 'COMPLETED', 'CANCELLED') - default 'PENDING'
 - created_at - timestamp - default CURRENT_TIMESTAMP, not null
 - updated_at - timestamp - default CURRENT_TIMESTAMP, not null
-- deleted_at - timestamp - default null
+- is-delete - softDeletes - default null
 
 users
 
@@ -64,7 +64,7 @@ users
 - status - enum('active', 'locked') - default 'active'
 - created_at - timestamp - default CURRENT_TIMESTAMP, not null
 - updated_at - timestamp - default CURRENT_TIMESTAMP, not null
-- deleted_at - timestamp - default null
+- is_delete - timestamp - default null
 
 carts_items
 
@@ -74,17 +74,18 @@ carts_items
 - quantity - int - not null, >= 1
 - created_at - timestamp - default CURRENT_TIMESTAMP, not null
 - updated_at - timestamp - default CURRENT_TIMESTAMP, not null
-- deleted_at - timestamp - default null
+- is_delete - timestamp - default null
 
 vouchers
 
 - voucher_id - int - PrimaryKey, not null
 - code - varchar(50) - not null, unique
 - discount_amount - decimal(10,2) - not null
+- description - nvarchar(255) -
 - expired_date - datetime - not null
 - created_at - timestamp - default CURRENT_TIMESTAMP, not null
 - updated_at - timestamp - default CURRENT_TIMESTAMP, not null
-- deleted_at - timestamp - default null
+- is_delete - timestamp - default null
 
 ratings
 (Bảng này được suy ra từ quan hệ "rating" trong ERD)
