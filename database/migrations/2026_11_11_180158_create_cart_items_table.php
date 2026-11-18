@@ -19,12 +19,9 @@ return new class extends Migration
 
             $table->integer('quantity')->unsigned();
 
-            $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')
-                ->useCurrent()
-                ->useCurrentOnUpdate();
-
-            $table->softDeletes('deleted_at');
+            $table->timestamps(); // Tự động tạo created_at và updated_at dạng TIMESTAMP
+            $table->boolean("is_delete")->default(true);
+            $table->softDeletes(); // Tạo cột deleted_at (mặc định NULL)
 
             $table->foreign('user_id')
                 ->references('user_id')

@@ -16,12 +16,12 @@ return new class extends Migration
 
             $table->string('code', 50)->unique();
             $table->decimal('discount_amount', 10, 2);
-
+            $table->text("description");
             $table->dateTime('expired_date');
 
-            $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
-            $table->softDeletes('deleted_at');
+            $table->timestamps(); // Tự động tạo created_at và updated_at dạng TIMESTAMP
+            $table->boolean("is_delete")->default(true);
+            $table->softDeletes(); // Tạo cột deleted_at (mặc định NULL)
         });
     }
 

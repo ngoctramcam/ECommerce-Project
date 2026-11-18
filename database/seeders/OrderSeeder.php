@@ -20,7 +20,6 @@ class OrderSeeder extends Seeder
 
         $statuses = [
             'PENDING',
-            'CONFIRMED',
             'SHIPPING',
             'COMPLETED',
             'CANCELLED'

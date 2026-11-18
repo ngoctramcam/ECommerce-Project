@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id('user_id'); // Primary Key, Auto-increment, Not Null
-            $table->string('full_name', 255);
             $table->string('email', 255)->unique();
             $table->string('password', 255);
             $table->string('phone', 20)->nullable();
@@ -21,6 +20,7 @@ return new class extends Migration
             $table->enum('role', ['admin', 'user'])->default('user');
             $table->enum('status', ['active', 'locked'])->default('active');
             $table->timestamps(); // Tự động tạo created_at và updated_at dạng TIMESTAMP
+            $table->boolean("is_delete")->default(true);
             $table->softDeletes(); // Tạo cột deleted_at (mặc định NULL)
         });
     }
