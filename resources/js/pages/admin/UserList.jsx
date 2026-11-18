@@ -13,7 +13,7 @@ export default function UserList() {
             setError("");
             try {
                 const qs = new URLSearchParams({ page: String(page), keyword });
-                const res = await fetch(`/api/admin/users?${qs}`, {
+                const res = await fetch(`/users?${qs}`, {
                     headers: { Accept: "application/json" },
                     signal: controller.signal,
                 });
@@ -63,7 +63,7 @@ export default function UserList() {
                         {result.data.map((u) => (
                             <tr key={u.user_id} className="border-b">
                                 <td>{u.user_id}</td>
-                                <td>{u.fullname}</td>
+                                <td>{u.full_name}</td>
                                 <td>{u.email}</td>
                                 <td>{u.phone}</td>
                                 <td>{u.role}</td>

@@ -78,7 +78,7 @@ class AuthController extends Controller
                 'success' => true,
                 'message' => 'Đăng nhập thành công.',
                 'user' => [
-                    'id' => $user->id,
+                    'id' => $user->user_id,
                     'name' => $user->full_name,
                     'email' => $user->email,
                     'role' => $user->role,

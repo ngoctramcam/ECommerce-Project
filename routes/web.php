@@ -19,8 +19,8 @@ Route::get('/test-db', function () {
         return 'Kết nối thất bại: ' . $e->getMessage();
     }
 });
-//TODO(BUG): chưa gắn AdminAuthMiddleware cho route này
-Route::get('/api/admin/users', [UserController::class, 'index']);
+
+
 
 // [(TV3)]: Bổ sung route POST /register vì TV2 đã viết sẵn hàm register() trong AuthController nhưng chưa khai báo đường dẫn ở đây
 Route::post('/register', [AuthController::class, 'register']);
@@ -30,10 +30,15 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 
+
 Route::middleware([AdminAuthMiddleware::class])->group(function () {
     Route::get('/admin', function () {
         return view('welcome');
     })->name('admin.dashboard');
+
+        //Phần Vinh làm
+Route::get('users', [UserController::class, 'index']);
+
 });
 
 // [(TV3) ]: Route hứng toàn bộ đường dẫn phía React (/login, /register...) đặt ở cuối cùng để khi bấm F5 không bị lỗi 404
