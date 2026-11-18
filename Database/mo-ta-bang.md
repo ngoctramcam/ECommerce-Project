@@ -13,7 +13,8 @@ products
 - category_id - int - not null, ForeignKey -> categories.category_id
 - created_at - timestamp, default CURRENT_TIMESTAMP, not null
 - updated_at - timestamp, default CURRENT_TIMESTAMP, not null
-- is_delete - softDeletes, default null
+- is_delete - bool - default true, not null
+- deleted_at - softDeletes - default null 
 
 categories
 
@@ -23,7 +24,8 @@ categories
 - slug - nvarchar(255) - not null, unique
 - created_at - timestamp, default CURRENT_TIMESTAMP, not null
 - updated_at - timestamp, default CURRENT_TIMESTAMP, not null
-- is_delete - softDeletes, default null
+- is_delete - bool - default true, not null
+- deleted_at - softDeletes - default null
 
 order_items
 
@@ -35,7 +37,8 @@ order_items
 - product_id - int - not null, ForeignKey -> products.product_id
 - created_at - timestamp, default CURRENT_TIMESTAMP, not null
 - updated_at - timestamp, default CURRENT_TIMESTAMP, not null
-- is_delete - softDeletes, default null
+- is_delete - bool - default true, not null
+- deleted_at - softDeletes - default null
 
 orders
 
@@ -50,7 +53,8 @@ orders
 - status - enum('PENDING', 'SHIPPING', 'COMPLETED', 'CANCELLED') - default 'PENDING'
 - created_at - timestamp - default CURRENT_TIMESTAMP, not null
 - updated_at - timestamp - default CURRENT_TIMESTAMP, not null
-- is-delete - softDeletes - default null
+- is_delete - bool - default true, not null
+- deleted_at - softDeletes - default null
 
 users
 
@@ -64,7 +68,8 @@ users
 - status - enum('active', 'locked') - default 'active'
 - created_at - timestamp - default CURRENT_TIMESTAMP, not null
 - updated_at - timestamp - default CURRENT_TIMESTAMP, not null
-- is_delete - timestamp - default null
+- is_delete - bool - default true, not null
+- deleted_at - softDeletes - default null
 
 carts_items
 
@@ -74,7 +79,8 @@ carts_items
 - quantity - int - not null, >= 1
 - created_at - timestamp - default CURRENT_TIMESTAMP, not null
 - updated_at - timestamp - default CURRENT_TIMESTAMP, not null
-- is_delete - timestamp - default null
+- is_delete - bool - default true, not null
+- deleted_at - softDeletes - default null
 
 vouchers
 
@@ -85,7 +91,8 @@ vouchers
 - expired_date - datetime - not null
 - created_at - timestamp - default CURRENT_TIMESTAMP, not null
 - updated_at - timestamp - default CURRENT_TIMESTAMP, not null
-- is_delete - timestamp - default null
+- is_delete - bool - default true, not null
+- deleted_at - softDeletes - default null
 
 ratings
 (Bảng này được suy ra từ quan hệ "rating" trong ERD)
