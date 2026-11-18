@@ -1,168 +1,206 @@
-import React, { useState } from "react";
+// AI-assisted [AI-04] - Giao diện Trang chủ TM-01 hỗ trợ lướt ngang (Tuần 1)
+import React, { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import BookCard from "../components/BookCard";
 
-// DỮ LIỆU GIẢ CHUẨN ERD
+// [NGÀY 3 - TV3 - TM-01]: Dữ liệu giả danh mục & sản phẩm (đủ số lượng để test lướt ngang)
 const MOCK_CATEGORIES = [
-    { id: "all", name: "Tất cả" },
-    { id: "van-hoc", name: "Văn học Việt Nam" },
-    { id: "kinh-te", name: "Kinh tế & Quản trị" },
-    { id: "ky-nang", name: "Kỹ năng sống" },
-    { id: "thieu-nhi", name: "Sách thiếu nhi" },
+    { category_id: 1, category_name: "Văn học" },
+    { category_id: 2, category_name: "Kỹ năng sống" },
+    { category_id: 3, category_name: "Thiếu nhi" },
+    { category_id: 4, category_name: "Kinh tế" },
 ];
 
-const MOCK_NEW_BOOKS = [
+const MOCK_PRODUCTS = [
     {
-        id: 1,
-        title: "Nhà Giả Kim",
-        author: "Paulo Coelho",
-        category: "Văn học",
-        price: 79000,
+        product_id: 1,
+        product_name: "Những ngày xanh",
+        author: "Nguyễn An",
+        price: 128000,
+        category_id: 1,
+        image: "",
     },
     {
-        id: 2,
-        title: "Đắc Nhân Tâm",
-        author: "Dale Carnegie",
-        category: "Kỹ năng",
-        price: 85000,
+        product_id: 2,
+        product_name: "Đi qua mùa gió",
+        author: "Trần Minh",
+        price: 96000,
+        category_id: 1,
+        image: "",
     },
     {
-        id: 3,
-        title: "Tuổi Trẻ Đáng Giá Bao Nhiêu",
-        author: "Rosie Nguyễn",
-        category: "Kỹ năng",
-        price: 68000,
-    },
-    {
-        id: 4,
-        title: "Cây Cam Ngọt Của Tôi",
-        author: "José Mauro",
-        category: "Văn học",
-        price: 92000,
-    },
-];
-
-const MOCK_CATEGORY_BOOKS = [
-    {
-        id: 5,
-        title: "Tư Duy Nhanh Và Chậm",
-        author: "Daniel Kahneman",
-        category: "Kinh tế & Quản trị",
-        price: 145000,
-    },
-    {
-        id: 6,
-        title: "Khéo Ăn Nói Sẽ Có Được Thiên Hạ",
-        author: "Trác Nhã",
-        category: "Kỹ năng sống",
-        price: 88000,
-    },
-    {
-        id: 7,
-        title: "Số Đỏ",
-        author: "Vũ Trọng Phụng",
-        category: "Văn học Việt Nam",
-        price: 65000,
-    },
-    {
-        id: 8,
-        title: "Hoàng Tử Bé",
-        author: "Antoine de Saint-Exupéry",
-        category: "Sách thiếu nhi",
-        price: 55000,
-    },
-    {
-        id: 9,
-        title: "Dế Mèn Phiêu Lưu Ký",
-        author: "Tô Hoài",
-        category: "Sách thiếu nhi",
-        price: 42000,
-    },
-    {
-        id: 10,
-        title: "Cha Giàu Cha Nghèo",
-        author: "Robert Kiyosaki",
-        category: "Kinh tế & Quản trị",
+        product_id: 3,
+        product_name: "Một thoáng bình yên",
+        author: "Lê Hà",
         price: 115000,
+        category_id: 2,
+        image: "",
+    },
+    {
+        product_id: 4,
+        product_name: "Chạm vào nắng mai",
+        author: "Phạm Linh",
+        price: 142000,
+        category_id: 3,
+        image: "",
+    },
+    {
+        product_id: 5,
+        product_name: "Dế Mèn phiêu lưu ký",
+        author: "Tô Hoài",
+        price: 68000,
+        category_id: 3,
+        image: "",
+    },
+    {
+        product_id: 6,
+        product_name: "Tuổi trẻ đáng giá bao nhiêu?",
+        author: "Rosie Nguyễn",
+        price: 90000,
+        category_id: 2,
+        image: "",
+    },
+    {
+        product_id: 7,
+        product_name: "Tư duy nhanh và chậm",
+        author: "Daniel Kahneman",
+        price: 185000,
+        category_id: 4,
+        image: "",
+    },
+    {
+        product_id: 8,
+        product_name: "Nhà đầu tư thông minh",
+        author: "Benjamin Graham",
+        price: 195000,
+        category_id: 4,
+        image: "",
+    },
+    {
+        product_id: 9,
+        product_name: "Mắt biếc",
+        author: "Nguyễn Nhật Ánh",
+        price: 110000,
+        category_id: 1,
+        image: "",
+    },
+    {
+        product_id: 10,
+        product_name: "Cánh đồng bất tận",
+        author: "Nguyễn Ngọc Tư",
+        price: 85000,
+        category_id: 1,
+        image: "",
+    },
+    {
+        product_id: 11,
+        product_name: "Cho tôi xin một vé đi tuổi thơ",
+        author: "Nguyễn Nhật Ánh",
+        price: 80000,
+        category_id: 1,
+        image: "",
     },
 ];
 
 export default function HomePage() {
-    const [selectedCat, setSelectedCat] = useState("all");
+    const [searchParams, setSearchParams] = useSearchParams();
+    const urlCategory = searchParams.get("category");
+    const [activeCategory, setActiveCategory] = useState(urlCategory || "all");
 
-    const filteredCategoryBooks =
-        selectedCat === "all"
-            ? MOCK_CATEGORY_BOOKS
-            : MOCK_CATEGORY_BOOKS.filter((b) => {
-                  if (selectedCat === "van-hoc")
-                      return b.category === "Văn học Việt Nam";
-                  if (selectedCat === "kinh-te")
-                      return b.category === "Kinh tế & Quản trị";
-                  if (selectedCat === "ky-nang")
-                      return b.category === "Kỹ năng sống";
-                  if (selectedCat === "thieu-nhi")
-                      return b.category === "Sách thiếu nhi";
-                  return true;
-              });
+    useEffect(() => {
+        setActiveCategory(urlCategory || "all");
+    }, [urlCategory]);
+
+    // Khối 1: 6 cuốn sách mới phát hành (hiển thị 4 cuốn đầu, lướt ngang để xem tiếp cuốn 5, 6)
+    const newestBooks = MOCK_PRODUCTS.slice(0, 6);
+
+    // Khối 2: Lọc trực tiếp từ mảng dữ liệu giả theo danh mục đang chọn
+    const categoryBooks =
+        activeCategory === "all"
+            ? MOCK_PRODUCTS
+            : MOCK_PRODUCTS.filter(
+                  (book) => String(book.category_id) === String(activeCategory),
+              );
+
+    const handleTabClick = (categoryId) => {
+        setActiveCategory(categoryId);
+        setSearchParams(categoryId === "all" ? {} : { category: categoryId });
+    };
 
     return (
-        <div className="space-y-10 py-2">
-            {/* KHỐI 1: SÁCH MỚI */}
-            <section className="space-y-4">
-                <div className="flex items-center justify-between border-b pb-3">
-                    <div>
-                        <h2 className="text-lg font-bold text-gray-800 flex items-center gap-2">
-                            <span>✨</span> Sách Mới Phát Hành
-                        </h2>
-                        <p className="text-xs text-gray-500">
-                            Những tựa sách mới nhất cập bến Mộc Sách
-                        </p>
-                    </div>
-                    <a
-                        href="#"
-                        className="text-xs font-semibold text-emerald-700 hover:underline"
-                    >
-                        Xem tất cả &rarr;
-                    </a>
-                </div>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    {MOCK_NEW_BOOKS.map((book) => (
-                        <BookCard key={book.id} book={book} />
+        <div className="py-4 sm:py-6 space-y-10">
+            {/* [NGÀY 3 - TV3 - TM-01]: Khối 1 - Sách Mới Phát Hành (lướt ngang) */}
+            <section>
+                <h2 className="text-lg sm:text-xl font-bold text-gray-800 mb-4">
+                    Sách Mới Phát Hành
+                </h2>
+
+                {/* Hàng ngang: hiện 2 thẻ trên Mobile, 4 thẻ trên Desktop, vuốt/cuộn ngang để xem thêm */}
+                <div className="flex gap-3 sm:gap-5 overflow-x-auto pb-3 snap-x snap-mandatory scroll-smooth">
+                    {newestBooks.map((book) => (
+                        <div
+                            key={book.product_id}
+                            className="w-[calc(50%-6px)] md:w-[calc(25%-15px)] shrink-0 snap-start"
+                        >
+                            <BookCard book={book} />
+                        </div>
                     ))}
                 </div>
             </section>
 
-            {/* KHỐI 2: KHỐI THEO DANH MỤC */}
-            <section className="space-y-4">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b pb-3">
-                    <div>
-                        <h2 className="text-lg font-bold text-gray-800 flex items-center gap-2">
-                            <span>📂</span> Sách Theo Danh Mục
-                        </h2>
-                        <p className="text-xs text-gray-500">
-                            Lọc sách theo chủ đề bạn yêu thích
-                        </p>
-                    </div>
-                    <div className="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0">
-                        {MOCK_CATEGORIES.map((cat) => (
-                            <button
-                                key={cat.id}
-                                onClick={() => setSelectedCat(cat.id)}
-                                className={`text-xs px-3 py-1.5 rounded-full font-medium whitespace-nowrap transition-colors ${
-                                    selectedCat === cat.id
-                                        ? "bg-emerald-700 text-white"
-                                        : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                                }`}
-                            >
-                                {cat.name}
-                            </button>
-                        ))}
-                    </div>
-                </div>
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                    {filteredCategoryBooks.map((book) => (
-                        <BookCard key={book.id} book={book} />
+            {/* [NGÀY 3 - TV3 - TM-01]: Khối 2 - Sách Theo Danh Mục (lướt ngang) */}
+            <section id="category-books-section" className="scroll-mt-28">
+                <h2 className="text-lg sm:text-xl font-bold text-gray-800 mb-3">
+                    Sách Theo Danh Mục
+                </h2>
+
+                {/* Dãy nút lọc dạng thẻ bo tròn (Pill Tabs) */}
+                <div className="flex items-center gap-2 overflow-x-auto pb-2 mb-5">
+                    <button
+                        type="button"
+                        onClick={() => handleTabClick("all")}
+                        className={`px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-medium whitespace-nowrap transition-colors cursor-pointer ${
+                            String(activeCategory) === "all"
+                                ? "bg-emerald-700 text-white"
+                                : "bg-white border border-gray-200 text-gray-600 hover:border-emerald-600 hover:text-emerald-700"
+                        }`}
+                    >
+                        Tất cả
+                    </button>
+
+                    {MOCK_CATEGORIES.map((cat) => (
+                        <button
+                            key={cat.category_id}
+                            type="button"
+                            onClick={() => handleTabClick(cat.category_id)}
+                            className={`px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-medium whitespace-nowrap transition-colors cursor-pointer ${
+                                String(activeCategory) ===
+                                String(cat.category_id)
+                                    ? "bg-emerald-700 text-white"
+                                    : "bg-white border border-gray-200 text-gray-600 hover:border-emerald-600 hover:text-emerald-700"
+                            }`}
+                        >
+                            {cat.category_name}
+                        </button>
                     ))}
                 </div>
+
+                {categoryBooks.length > 0 ? (
+                    <div className="flex gap-3 sm:gap-5 overflow-x-auto pb-3 snap-x snap-mandatory scroll-smooth">
+                        {categoryBooks.map((book) => (
+                            <div
+                                key={book.product_id}
+                                className="w-[calc(50%-6px)] md:w-[calc(25%-15px)] shrink-0 snap-start"
+                            >
+                                <BookCard key={book.product_id} book={book} />
+                            </div>
+                        ))}
+                    </div>
+                ) : (
+                    <p className="text-sm text-gray-500 bg-white border border-gray-200 rounded-lg py-8 text-center">
+                        Chưa có sách thuộc danh mục này.
+                    </p>
+                )}
             </section>
         </div>
     );
