@@ -24,11 +24,12 @@ class Product extends Model
         'author',
         'image',
         'slug',
+        'status',
         'category_id',
         'publisher_name',
     ];
 
-// Quan hệ: Product thuộc về một Category
+    // Quan hệ: Product thuộc về một Category
     public function category()
     {
         return $this->belongsTo(Category::class, 'caterory_id', 'category_id');

@@ -6,6 +6,7 @@ import MainLayout from "./layouts/MainLayout";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
+import CartPage from "./pages/CartPage";
 import axios from "axios";
 
 // [KIẾN THỨC TRỌNG TÂM - Tách lớp Client-Server & Bảo mật NFR-01]:
@@ -37,6 +38,8 @@ export default function App() {
                     {/* [NGÀY 4 - TV3 & TV2 - TM-04]: Trang Đăng nhập và Đăng ký */}
                     <Route path="login" element={<LoginPage />} />
                     <Route path="register" element={<RegisterPage />} />
+                    {/*TV3: Giao diện giỏ hàng */}
+                    <Route path="cart" element={<CartPage/>}/>
                 </Route>
             </Routes>
         </BrowserRouter>

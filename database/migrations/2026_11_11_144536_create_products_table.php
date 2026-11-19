@@ -25,6 +25,7 @@ return new class extends Migration
 
             $table->string('image', 255);
             $table->string('slug', 255)->unique();
+            $table->boolean("status")->default(true); // true: đang bán, false: ngừng bán
 
             $table->unsignedBigInteger('category_id');
 
