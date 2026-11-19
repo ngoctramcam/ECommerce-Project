@@ -2,79 +2,79 @@ import React, { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import BookCard from "../components/BookCard";
 
-// Dữ liệu mẫu đồng bộ cấu trúc với BookCard
+// Dữ liệu mẫu đồng bộ trường CSDL (product_id, product_name) với BookCard
 const MOCK_BOOKS = [
     {
-        id: 1,
-        title: "Nhà Giả Kim",
-        author: "Paulo Coelho",
-        category: "Văn học Việt Nam",
-        price: 79000,
+        product_id: 1,
+        product_name: "Những ngày xanh",
+        author: "Nguyễn An",
+        category: "Văn học",
+        price: 128000,
     },
     {
-        id: 2,
-        title: "Đắc Nhân Tâm",
-        author: "Dale Carnegie",
+        product_id: 2,
+        product_name: "Đi qua mùa gió",
+        author: "Trần Minh",
+        category: "Văn học",
+        price: 96000,
+    },
+    {
+        product_id: 3,
+        product_name: "Một thoáng bình yên",
+        author: "Lê Hà",
         category: "Kỹ năng sống",
-        price: 85000,
+        price: 115000,
     },
     {
-        id: 3,
-        title: "Tuổi Trẻ Đáng Giá Bao Nhiêu",
+        product_id: 4,
+        product_name: "Chạm vào nắng mai",
+        author: "Phạm Linh",
+        category: "Thiếu nhi",
+        price: 142000,
+    },
+    {
+        product_id: 5,
+        product_name: "Tư Duy Nhanh Và Chậm",
+        author: "Daniel Kahneman",
+        category: "Kinh tế",
+        price: 145000,
+    },
+    {
+        product_id: 6,
+        product_name: "Tuổi Trẻ Đáng Giá Bao Nhiêu",
         author: "Rosie Nguyễn",
         category: "Kỹ năng sống",
         price: 68000,
     },
     {
-        id: 4,
-        title: "Cây Cam Ngọt Của Tôi",
-        author: "José Mauro",
-        category: "Văn học Việt Nam",
-        price: 92000,
-    },
-    {
-        id: 5,
-        title: "Tư Duy Nhanh Và Chậm",
-        author: "Daniel Kahneman",
-        category: "Kinh tế & Quản trị",
-        price: 145000,
-    },
-    {
-        id: 6,
-        title: "Khéo Ăn Nói Sẽ Có Được Thiên Hạ",
-        author: "Trác Nhã",
-        category: "Kỹ năng sống",
-        price: 88000,
-    },
-    {
-        id: 7,
-        title: "Số Đỏ",
+        product_id: 7,
+        product_name: "Số Đỏ",
         author: "Vũ Trọng Phụng",
-        category: "Văn học Việt Nam",
+        category: "Văn học",
         price: 65000,
     },
     {
-        id: 8,
-        title: "Hoàng Tử Bé",
-        author: "Antoine de Saint-Exupéry",
-        category: "Sách thiếu nhi",
+        product_id: 8,
+        product_name: "Dế Mèn Phiêu Lưu Ký",
+        author: "Tô Hoài",
+        category: "Thiếu nhi",
         price: 55000,
     },
     {
-        id: 9,
-        title: "Cha Giàu Cha Nghèo",
-        author: "Robert Kiyosaki",
-        category: "Kinh tế & Quản trị",
-        price: 115000,
+        product_id: 9,
+        product_name: "Nhà Đầu Tư Thông Minh",
+        author: "Benjamin Graham",
+        category: "Kinh tế",
+        price: 195000,
     },
 ];
 
 const CATEGORIES = [
     "Tất cả",
-    "Văn học Việt Nam",
-    "Kinh tế & Quản trị",
+    "Văn học",
     "Kỹ năng sống",
-    "Sách thiếu nhi",
+    "Thiếu nhi",
+    "Kinh tế",
 ];
 
 export default function BookListPage() {
@@ -103,7 +103,7 @@ export default function BookListPage() {
         }).sort((a, b) => {
             if (sortBy === "price-asc") return a.price - b.price;
             if (sortBy === "price-desc") return b.price - a.price;
-            return b.id - a.id; // newest
+            return b.product_id - a.product_id; // newest
         });
     }, [selectedCategory, minPrice, maxPrice, sortBy]);
 
@@ -122,7 +122,7 @@ export default function BookListPage() {
                     Trang chủ
                 </Link>
                 <span>/</span>
-                <span className="text-gray-800 font-medium">Danh mục sách</span>
+                <span className="text-gray-800 font-medium">Tất cả sách</span>
             </nav>
 
             {/* Nút mở bộ lọc trên Mobile */}
@@ -243,7 +243,7 @@ export default function BookListPage() {
                     {filteredBooks.length > 0 ? (
                         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                             {filteredBooks.map((book) => (
-                                <BookCard key={book.id} book={book} />
+                                <BookCard key={book.product_id} book={book} />
                             ))}
                         </div>
                     ) : (
