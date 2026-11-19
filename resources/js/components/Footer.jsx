@@ -1,141 +1,88 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
+// [NGÀY 2 - TV3]: Dựng Footer dùng chung, chia 3 cột trên Desktop (md:grid-cols-3) và xếp dọc trên Mobile (grid-cols-1)
 export default function Footer() {
+    const navigate = useNavigate();
+
+    const handleGoToCategories = () => {
+        navigate("/");
+        setTimeout(() => {
+            const section = document.getElementById("category-books-section");
+            if (section) {
+                section.scrollIntoView({ behavior: "smooth" });
+            }
+        }, 100);
+    };
+
     return (
-        <footer className="bg-slate-900 text-slate-300 pt-12 pb-24 md:pb-8 border-t border-slate-800 mt-12">
-            <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-8">
-                {/* Cột 1: Giới thiệu thương hiệu */}
-                <div>
-                    <h3 className="text-xl font-bold text-white mb-3 flex items-center gap-2">
-                        📚 Mộc Sách
-                    </h3>
-                    <p className="text-sm text-slate-400 mb-4 leading-relaxed">
-                        Mỗi cuốn sách, một thế giới mới. Đồng hành và lan tỏa
-                        thói quen đọc sách cùng cộng đồng người đọc Việt Nam mỗi
-                        ngày.
-                    </p>
-                    <div className="flex space-x-3 text-lg text-slate-400">
-                        <span className="cursor-pointer hover:text-emerald-400 transition-colors">
-                            🌐
-                        </span>
-                        <span className="cursor-pointer hover:text-emerald-400 transition-colors">
-                            📘
-                        </span>
-                        <span className="cursor-pointer hover:text-emerald-400 transition-colors">
-                            📸
-                        </span>
+        <footer className="bg-white border-t border-gray-200 mt-12">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    {/* Cột 1: Thông tin thương hiệu */}
+                    <div>
+                        <Link
+                            to="/"
+                            className="text-lg sm:text-xl font-bold text-emerald-700 tracking-tight"
+                        >
+                            Mộc Sách
+                        </Link>
+                        <p className="text-gray-500 text-xs sm:text-sm mt-2 leading-relaxed">
+                            Nuôi dưỡng tâm hồn qua từng trang sách.
+                        </p>
+                    </div>
+
+                    {/* Cột 2: Khám phá */}
+                    <div>
+                        <h3 className="text-sm font-semibold text-gray-800 mb-3">
+                            Khám phá
+                        </h3>
+                        <ul className="space-y-2 text-xs sm:text-sm text-gray-500 list-none m-0 p-0">
+                            <li>
+                                <Link
+                                    to="/"
+                                    className="hover:text-emerald-700 transition-colors"
+                                >
+                                    Trang chủ
+                                </Link>
+                            </li>
+                            <li>
+                                <button
+                                    type="button"
+                                    onClick={handleGoToCategories}
+                                    className="hover:text-emerald-700 transition-colors cursor-pointer"
+                                >
+                                    Danh mục sách
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+
+                    {/* Cột 3: Tài khoản của bạn */}
+                    <div>
+                        <h3 className="text-sm font-semibold text-gray-800 mb-3">
+                            Tài khoản của bạn
+                        </h3>
+                        <ul className="space-y-2 text-xs sm:text-sm text-gray-500 list-none m-0 p-0">
+                            <li>
+                                <Link
+                                    to="/cart"
+                                    className="hover:text-emerald-700 transition-colors"
+                                >
+                                    Giỏ hàng
+                                </Link>
+                            </li>
+                            <li>
+                                <Link
+                                    to="/orders"
+                                    className="hover:text-emerald-700 transition-colors"
+                                >
+                                    Đơn hàng của tôi
+                                </Link>
+                            </li>
+                        </ul>
                     </div>
                 </div>
-
-                {/* Cột 2: Danh mục nổi bật */}
-                <div>
-                    <h4 className="text-white font-semibold mb-3">
-                        Danh mục sách
-                    </h4>
-                    <ul className="space-y-2 text-sm text-slate-400">
-                        <li>
-                            <Link
-                                to="/categories"
-                                className="hover:text-emerald-400 transition-colors"
-                            >
-                                Văn học Việt Nam
-                            </Link>
-                        </li>
-                        <li>
-                            <Link
-                                to="/categories"
-                                className="hover:text-emerald-400 transition-colors"
-                            >
-                                Kinh tế & Quản trị
-                            </Link>
-                        </li>
-                        <li>
-                            <Link
-                                to="/categories"
-                                className="hover:text-emerald-400 transition-colors"
-                            >
-                                Kỹ năng sống
-                            </Link>
-                        </li>
-                        <li>
-                            <Link
-                                to="/categories"
-                                className="hover:text-emerald-400 transition-colors"
-                            >
-                                Sách thiếu nhi
-                            </Link>
-                        </li>
-                    </ul>
-                </div>
-
-                {/* Cột 3: Hỗ trợ khách hàng */}
-                <div>
-                    <h4 className="text-white font-semibold mb-3">
-                        Hỗ trợ khách hàng
-                    </h4>
-                    <ul className="space-y-2 text-sm text-slate-400">
-                        <li>
-                            <Link
-                                to="#"
-                                className="hover:text-emerald-400 transition-colors"
-                            >
-                                Hướng dẫn mua hàng
-                            </Link>
-                        </li>
-                        <li>
-                            <Link
-                                to="#"
-                                className="hover:text-emerald-400 transition-colors"
-                            >
-                                Chính sách đổi trả
-                            </Link>
-                        </li>
-                        <li>
-                            <Link
-                                to="#"
-                                className="hover:text-emerald-400 transition-colors"
-                            >
-                                Chính sách vận chuyển
-                            </Link>
-                        </li>
-                        <li>
-                            <Link
-                                to="#"
-                                className="hover:text-emerald-400 transition-colors"
-                            >
-                                Phương thức thanh toán
-                            </Link>
-                        </li>
-                    </ul>
-                </div>
-
-                {/* Cột 4: Thông tin liên hệ */}
-                <div>
-                    <h4 className="text-white font-semibold mb-3">
-                        Thông tin liên hệ
-                    </h4>
-                    <ul className="space-y-2.5 text-sm text-slate-400">
-                        <li className="flex items-center gap-2">
-                            <span>📞</span> Hotline:{" "}
-                            <span className="text-white font-medium">
-                                1900 6868
-                            </span>
-                        </li>
-                        <li className="flex items-center gap-2">
-                            <span>✉️</span> Email: cskh@mocsach.vn
-                        </li>
-                        <li className="flex items-start gap-2">
-                            <span>📍</span> 12 Nguyễn Văn Bình, P. Bến Nghé,
-                            Q.1, TP. HCM
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            {/* Dòng bản quyền (Copyright) */}
-            <div className="max-w-7xl mx-auto px-4 mt-10 pt-6 border-t border-slate-800 text-center text-xs text-slate-500">
-                © 2026 Mộc Sách. Bản quyền thuộc về Dự án Mộc Sách.
             </div>
         </footer>
     );
