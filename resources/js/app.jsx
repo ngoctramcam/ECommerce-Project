@@ -7,7 +7,7 @@ import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import axios from "axios";
-
+import UserList from "./pages/admin/UserList";
 // [KIẾN THỨC TRỌNG TÂM - Tách lớp Client-Server & Bảo mật NFR-01]:
 // Frontend React giao tiếp với Backend Laravel qua HTTP/JSON, không truy vấn trực tiếp CSDL.
 window.axios = axios;
@@ -33,10 +33,13 @@ export default function App() {
                 <Route path="/" element={<MainLayout />}>
                     {/* [NGÀY 3 - TV3 - TM-01]: Trang chủ hiển thị mặc định khi vào "/" */}
                     <Route index element={<HomePage />} />
-
                     {/* [NGÀY 4 - TV3 & TV2 - TM-04]: Trang Đăng nhập và Đăng ký */}
                     <Route path="login" element={<LoginPage />} />
                     <Route path="register" element={<RegisterPage />} />
+                    <Route
+                        path="/admin/quan-ly-nguoi-dung"
+                        element={<UserList />}
+                    />
                 </Route>
             </Routes>
         </BrowserRouter>
