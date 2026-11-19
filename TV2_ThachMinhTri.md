@@ -4,7 +4,7 @@
 | Họ tên, MSSV |Thạch Minh Trí - 0306241331 |
 | Nhóm, đề tài | Nhóm [số] – Xây dựng website thương mại điện tử bán sách |
 | Vai trò | TV2 – BE (Backend Lead) |
-| Công cụ AI dùng | GitHub Copilot |
+| Công cụ AI dùng | GitHub Copilot, Gemini |
 
 ## Bảng tổng hợp
 
@@ -13,6 +13,7 @@
 | AI-01 | 10/11/2026 |  Lập trình | Hỗ trợ cấu hình Eloquent | [Pull Request](https://github.com/ngoctramcam/ECommerce-Project/pull/3) |
 | AI-02 | 11/11/202 | Lập trình | Phân tích yêu cầu của nhiệm vụ ngày 3  | [Commit](https://github.com/ngoctramcam/ECommerce-Project/commit/a19835307686fe116f538c2c2b2360f86af5ec74) |
 | AI-03 | 12/11/202 | Lập trình | Sinh mã cho nhiệm vụ 1 | [Commit](https://github.com/ngoctramcam/ECommerce-Project/commit/dbc2ddb0e101973fd85aeb134bbc43e8722057b3) |
+| AI-04 | 18/11/202 | Lập trình | Viết khung OrderService | [Commit](https://github.com/ngoctramcam/ECommerce-Project/commit/d384debd085af1511fdfb27578d335b245cc4a15) |
 
 ## AI-01 – Hỗ trợ cấu hình Eloquent 
 - **Ngày / Người dùng AI:** 10/11/2026 – TV2
@@ -102,7 +103,6 @@ Hãy giúp mình phân tích từng yêu cầu và trình bày chi tiết về b
 
 ---
 
-
 ## AI-03 – Sinh mã Middleware
 - **Ngày / Người dùng AI:** 10/11/2026 – TV2
 - **Công cụ AI:** Copilot
@@ -143,3 +143,87 @@ Hãy phân tích và sinh mã giúp mình
 
 ### 8. Sản phẩm cuối cùng
 [feat/TM04-dang-ky](https://github.com/ngoctramcam/ECommerce-Project/commit/dbc2ddb0e101973fd85aeb134bbc43e8722057b3)
+
+---
+
+## AI-03 – Sinh mã Middleware
+- **Ngày / Người dùng AI:** 10/11/2026 – TV2
+- **Công cụ AI:** Gemini
+- **Thẻ Trello / Nhánh Git liên quan:** TM-06: Đặt hàng (COD)
+
+### 1. Mục đích
+- Sinh code cho nhiệm vụ 1
+
+### 2. Prompt đã dùng
+```
+Mình là BE lead của một đồ án web thương mại điện tử sử dụng laravel + reactjs. Đây là nhiệm vụ của mình
+Thiết kế OrderService.placeOrder(): đọc giỏ, kiểm tra tồn kho, tạo order + order_items, trừ kho, xóa giỏ – trong 1 transaction.
+Viết mã giả và chia checklist cho TM-06.
+```
+
+### 3. Kết quả AI trả về (tóm tắt)
+> 1. Mã giả
+> 2. Khung OrderService
+
+### 4. Phần giữ lại
+- 1, 2
+
+### 5. Phần loại bỏ / chỉnh sửa và lý do
+- Bỏ: Không
+- Sửa: Sửa lại tên thuộc tính cho khớp với db
+
+
+### 6. AI sai hoặc chưa chắc chắn ở đâu
+- không
+
+### 7. Cách kiểm chứng
+- Kiểm tra bằng tinker của laravel
+- Các bước kiểm tra:
+1.  Gõ ```bash php artisan tinker ``` vào terminal trong thư mục dự án
+2.  Tạo dữ liệu giỏ hàng mẫu
+// Lấy sản phẩm đầu tiên có số lượng > 0
+```bash
+$product = \App\Models\Product::where('stock', '>', 0)->first() ?? \App\Models\Product::create([
+    'product_name' => 'Sách Test OrderService',
+    'price'        => 120000,
+    'stock'        => 10,
+    'slug'         => 'sach-test-orderservice-' . time(),
+]);
+```
+// Thêm vào giỏ hàng của user_id = 2
+```bash
+\App\Models\CartItem::create([
+    'user_id'    => 2,
+    'product_id' => $product->product_id,
+    'quantity'   => 1,
+]);
+```
+3. Gọi hàm placeOrder để test
+```bash
+$order = (new \App\Services\OrderService())->placeOrder(2, [
+    'recipient_name'   => 'Khách Hàng 2',
+    'recipient_phone'  => '0901234567',
+    'shipping_address' => 'TP. Hồ Chí Minh',
+    'payment_method'   => 'COD',
+]);
+
+$order;
+```
+4. Kiểm tra
+// Kiểm tra số lượng tồn của sản phẩm
+```bash
+$product->fresh()->stock;
+```
+Nếu stock giảm thì thành công
+// 2. Giỏ hàng của user_id = 2
+```bash
+\App\Models\CartItem::where('user_id', 2)->get();
+```
+Trả về mảng rỗng là thành công
+// 3. Chi tiết order_items vừa tạo
+```bash
+\App\Models\OrderItem::where('order_id', $order->order_id)->get();
+```
+Hàm sẽ hiển thị chi tiết hóa đơn của khách hàng
+### 8. Sản phẩm cuối cùng
+[Commit](https://github.com/ngoctramcam/ECommerce-Project/commit/d384debd085af1511fdfb27578d335b245cc4a15)
