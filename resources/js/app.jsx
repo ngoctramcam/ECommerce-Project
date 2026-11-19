@@ -8,6 +8,7 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import CartPage from "./pages/CartPage";
 import axios from "axios";
+import UserList from "./pages/admin/UserList";
 
 // [KIẾN THỨC TRỌNG TÂM - Tách lớp Client-Server & Bảo mật NFR-01]:
 // Frontend React giao tiếp với Backend Laravel qua HTTP/JSON, không truy vấn trực tiếp CSDL.
@@ -39,7 +40,12 @@ export default function App() {
                     <Route path="login" element={<LoginPage />} />
                     <Route path="register" element={<RegisterPage />} />
                     {/*TV3: Giao diện giỏ hàng */}
-                    <Route path="cart" element={<CartPage/>}/>
+                    <Route path="cart" element={<CartPage />} />
+                    {/* Vinh làm nha */}
+                    <Route
+                        path="/admin/quan-ly-nguoi-dung"
+                        element={<UserList />}
+                    />
                 </Route>
             </Routes>
         </BrowserRouter>

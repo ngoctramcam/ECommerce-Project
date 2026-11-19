@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 
-const ROLE_LABEL = { admin: "Admin", customer: "Khách hàng" };
+const ROLE_LABEL = { admin: "Admin", user: "Khách hàng" };
 const STATUS_LABEL = { active: "Hoạt động", locked: "Bị khóa" };
 
 const formatId = (id) => `ND${String(id).padStart(3, "0")}`;
-
+const getXsrf = () => {
+    const m = document.cookie.match(/(?:^|; )XSRF-TOKEN=([^;]*)/);
+    return m ? decodeURIComponent(m[1]) : "";
+};
 /* ---------- Icon (SVG inline, không cần thư viện) ---------- */
 const Icon = ({ children }) => (
     <svg
@@ -86,13 +89,14 @@ function Badge({ tone, children }) {
     );
 }
 
-function IconButton({ label, onClick, danger, children }) {
+function IconButton({ label, onClick, danger, disabled, children }) {
     return (
         <button
             type="button"
             title={label}
             aria-label={label}
             onClick={onClick}
+            disabled={disabled}
             className={`flex h-8 w-8 items-center justify-center rounded-md border text-gray-600 transition focus:outline-none focus:ring-2 focus:ring-gray-300 ${
                 danger
                     ? "border-red-100 bg-red-50 text-red-600 hover:bg-red-100"
@@ -128,7 +132,7 @@ export default function UserList() {
     const [result, setResult] = useState({ data: [], last_page: 1, total: 0 });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
-
+    const [reload, setReload] = useState(0);
     useEffect(() => {
         const controller = new AbortController();
         const timer = setTimeout(async () => {
@@ -142,9 +146,9 @@ export default function UserList() {
                     role,
                     status,
                 });
-                const res = await fetch(`/users?${qs}`, {
+                const res = await fetch(`/admin/users?${qs}`, {
                     headers: { Accept: "application/json" },
-                    signal: controller.signal,
+                    credentials: "same-origin",
                 });
                 if (!res.ok) throw new Error(`HTTP ${res.status}`);
                 setResult(await res.json());
@@ -159,12 +163,39 @@ export default function UserList() {
             clearTimeout(timer);
             controller.abort();
         };
-    }, [keyword, role, status, page]);
+    }, [keyword, role, status, page, reload]);
 
     // Đổi bộ lọc thì quay về trang 1
     const onFilter = (setter) => (e) => {
         setter(e.target.value);
         setPage(1);
+    };
+    const handleToggleLock = async (user) => {
+        const action = user.status === "active" ? "khóa" : "mở khóa";
+        if (
+            !window.confirm(
+                `Bạn có chắc muốn ${action} tài khoản ${user.email}?`,
+            )
+        )
+            return;
+        try {
+            const res = await fetch(
+                `/admin/users/${user.user_id}/toggle-lock`,
+                {
+                    method: "PATCH",
+                    headers: {
+                        Accept: "application/json",
+                        "X-XSRF-TOKEN": getXsrf(),
+                    },
+                    credentials: "same-origin",
+                },
+            );
+            const body = await res.json().catch(() => ({}));
+            if (!res.ok) throw new Error(body.message || `HTTP ${res.status}`);
+            setReload((n) => n + 1);
+        } catch (err) {
+            alert(err.message || "Có lỗi xảy ra");
+        }
     };
 
     const lastPage = result.last_page || 1;
@@ -303,14 +334,18 @@ export default function UserList() {
                                     </td>
                                     <td className="px-6 py-6">
                                         <div className="flex gap-2">
-                                            <IconButton label="Sửa">
-                                                <EditIcon />
-                                            </IconButton>
-                                            <IconButton label="Khóa / mở khóa">
+                                            <IconButton
+                                                label={
+                                                    u.status === "active"
+                                                        ? "Khóa tài khoản"
+                                                        : "Mở khóa tài khoản"
+                                                }
+                                                disabled={u.role === "admin"}
+                                                onClick={() =>
+                                                    handleToggleLock(u)
+                                                }
+                                            >
                                                 <LockIcon />
-                                            </IconButton>
-                                            <IconButton label="Xóa" danger>
-                                                <TrashIcon />
                                             </IconButton>
                                         </div>
                                     </td>

@@ -31,13 +31,10 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 
 
-Route::middleware([AdminAuthMiddleware::class])->group(function () {
-    Route::get('/admin', function () {
-        return view('welcome');
-    })->name('admin.dashboard');
-
+Route::prefix('admin')->middleware([AdminAuthMiddleware::class])->group(function () {
         //Phần Vinh làm
 Route::get('users', [UserController::class, 'index']);
+Route::patch('/users/{id}/toggle-lock', [UserController::class, 'toggleLock']);
 
 });
 
