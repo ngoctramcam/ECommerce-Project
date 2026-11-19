@@ -1,5 +1,5 @@
 <?php
-
+// AI-assisted [AI-04]
 namespace App\Services;
 
 use Illuminate\Support\Facades\DB;
