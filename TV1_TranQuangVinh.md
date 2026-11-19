@@ -11,13 +11,19 @@
 
 ## Bảng tổng hợp
 
-| Mã    | Ngày    | Giai đoạn         | Nội dung                              | Commit / PR   |
-| ----- | ------- | ----------------- | ------------------------------------- | ------------- |
-| AI-01 | [09/11] | Phân tích yêu cầu | Hướng dẫn xây dựng khung đề cương     | [PR 5]        |
-| AI-02 | [10/11] | Lập kế hoạch      | Hướng dẫn form viết đặc tả            | [PR 1]        |
-| AI-03 | [11/11] | Lập kế hoạch      | Hướng dẫn vẽ sequence diagram         | [PR 1]        |
-| AI-04 | [11/11] | Lập kế hoạch      | Thiết kế lập kế hoạch vấn đáp 10 phút | [Không có PR] |
-| AI-05 | [12/11] | Lập kế hoạch      | Nhờ AI nhận xét board Trello          | [Không có PR] |
+| Mã    | Ngày    | Giai đoạn         | Nội dung                                                   | Commit / PR   |
+| ----- | ------- | ----------------- | ---------------------------------------------------------- | ------------- |
+| AI-01 | [09/11] | Phân tích yêu cầu | Hướng dẫn xây dựng khung đề cương                          | [PR 5]        |
+| AI-02 | [10/11] | Lập kế hoạch      | Hướng dẫn form viết đặc tả                                 | [PR 1]        |
+| AI-03 | [11/11] | Lập kế hoạch      | Hướng dẫn vẽ sequence diagram                              | [PR 1]        |
+| AI-04 | [11/11] | Lập kế hoạch      | Thiết kế lập kế hoạch vấn đáp 10 phút                      | [Không có PR] |
+| AI-05 | [12/11] | Lập kế hoạch      | Nhờ AI nhận xét board Trello                               | [Không có PR] |
+| AI-06 | [13/11] | Lập kế hoạch      | Hướng dẫn viết sequence                                    | [PR 6]        |
+| AI-07 | [13/11] | Lập kế hoạch      | Hướng dẫn các kí hiệu của sequence diagram                 | [PR 6]        |
+| AI-08 | [18/11] | Lập trình         | Thiết kế giao diện giống màn hình                          | [PR 11]       |
+| AI-09 | [19/11] | Lập trình         | Hướng dẫn khóa/mở khóa tài khoản (TM-14) và viết unit test | [PR 13]       |
+| AI-10 | [19/11] | Lập trình         | Gỡ lỗi route và nối nút khóa trên trang Quản lý người dùng | [PR 13]       |
+| AI-11 | [19/11] | Kiểm thử          | Rà soát bảo mật model User và RegisterRequest              | [PR 13]       |
 
 ## AI-01 – <Markdown-decuong>
 
@@ -121,6 +127,121 @@
 - Cách kiểm chứng: [Đối chiếu các đề xuất của AI với yêu cầu quản lý dự án của nhóm và kiểm tra trực tiếp trên board Trello sau khi chỉnh sửa.]
 - Tỷ lệ nội dung AI còn giữ lại (ước lượng): [85%]
 - Điều học được: [Cách thiết kế board Trello]
+
+```
+
+```
+
+## AI-06 – <Giải thích kí hiệu trong sequence>
+
+- Ngày / Người dùng: [2026-11-13] / Trần Quang Vinh
+- Công cụ: [Copilot]
+- Giai đoạn: Lập kế hoạch
+- Task / Commit / PR: [DOC] Đề cương / [Không có] / []
+- Mục đích: [Nhờ AI hướng dẫn các kí hiệu sequence diagram]
+- Prompt chính (nguyên văn hoặc link chia sẻ hội thoại): [Bạn hãy giải thích tất cả kí hiệu trog sequence , giải thích rõ đường đi từng chỗ k bỏ xót.]
+- Kết quả AI trả về (tóm tắt): [Giải thích chi tiết về các kí hiệu của sequence diagram]
+- Đánh giá: [Các kí hiệu và giải thích của AI đưa ra đầy đủ và đúng, dễ hiểu]
+- Đã chỉnh sửa gì: []
+- Cách kiểm chứng: [Đối chiếu với các trang web bên ngoài]
+- Tỷ lệ nội dung AI còn giữ lại (ước lượng): [80%]
+- Điều học được: [Prompt rõ yêu cầu của mình và phải nói là giải thích 1 cách dễ hiểu]
+
+```
+
+```
+
+## AI-07 – <Viết đặc tả từ mô hình usecase>
+
+- Ngày / Người dùng: [2026-11-13] / Trần Quang Vinh
+- Công cụ: [Copilot]
+- Giai đoạn: Lập kế hoạch
+- Task / Commit / PR: [DOC] Đề cương / [08c5974] / [PR6]
+- Mục đích: [Hướng dẫn viết đặc tả Usecase]
+- Prompt chính (nguyên văn hoặc link chia sẻ hội thoại): [Hãy từ những dữ liệu này, vẽ giúp tôi sequence diagram luồng Đặt hàng (Khách hàng → Giao diện → Controller →OrderService → CSDL, có transaction)
+  Vẽ sequence bằng PlantUML/Mermaid.]
+- Kết quả AI trả về (tóm tắt): [Trả về file .md về đặc tả của 3 chức năng trong Usecase]
+- Đánh giá: [Đặc tả bám sát vào mô hình Usecase nhưng vài chỗ vẫn chưa theo yêu cầu của file đồ án có sẵn]
+- Đã chỉnh sửa gì: [Lấy những luồng hoạt động và các luồng ngoại lệ]
+- Cách kiểm chứng: [Đối chiếu với file đặc tả đồ án]
+- Tỷ lệ nội dung AI còn giữ lại (ước lượng): [80%]
+- Điều học được: [Prompt cần nói rõ đầy đủ mô hình usecaee,output mong muốn]
+
+```
+
+```
+
+## AI-08 – <Thiết kế giao diện frontend>
+
+- Ngày / Người dùng: [2026-11-18] / Trần Quang Vinh
+- Công cụ: [Copilot]
+- Giai đoạn: Lập kế hoạch
+- Task / Commit / PR: [DOC] Đề cương / [c5b90f2] / [PR11]
+- Mục đích: [Hướng dẫn vẽ sequence diagram]
+- Prompt chính (nguyên văn hoặc link chia sẻ hội thoại): [Hãy thiết kế trang quản lý người dùng giống tài liệu. Thiết kế ngôn ngữ react, sài tailwind]
+- Kết quả AI trả về (tóm tắt): [Trả về đoạn code giao diện của file UserList.jsx ]
+- Đánh giá: [Giao diện mà AI render ra chính xác với màn hình vừa chụp]
+- Đã chỉnh sửa gì: [Lấy những đoạn code giao diện]
+- Cách kiểm chứng: [Đối chiếu với màn hình trong figma]
+- Tỷ lệ nội dung AI còn giữ lại (ước lượng): [85%]
+- Điều học được: [Prompt cần nói rõ đầy đủ ngôn ngữ, framework mình sài, hình ảnh cụ thể]
+
+```
+
+```
+
+## AI-09 – <Khóa/mở khóa tài khoản và unit test (TM-14)>
+
+- Ngày / Người dùng: [2026-11-19] / Trần Quang Vinh
+- Công cụ: [Copilot]
+- Giai đoạn: Lập trình
+- Task / Commit / PR: [TM-14] Quản lý người dùng / [fecf172] / [PR ...]
+- Mục đích: [Hướng dẫn từng bước làm chức năng khóa/mở khóa tài khoản và viết unit test cho Laravel.]
+- Prompt chính (nguyên văn hoặc link chia sẻ hội thoại): [Gửi file hướng dẫn Ngày 7, ảnh trang Quản lý người dùng và file migration bảng users, khóa/mở khóa tài khoản, sau đó gửi thêm kết quả lỗi từ terminal để hỏi cách sửa.]
+- Kết quả AI trả về (tóm tắt): [Đề xuất hàm toggleLock trong UserService (không cho tự khóa mình, không khóa admin), route PATCH, hàm xử lý bấm nút bên React và 3 unit test (khóa, mở khóa, tự khóa). AI giả định có cột is_active, sau khi xem migration thì đổi sang cột status (active/locked). AI cũng đề xuất xóa token Sanctum khi khóa.]
+- Đánh giá: [Đúng một phần – phần thu hồi token không áp dụng được vì project chưa có bảng personal_access_tokens, test đầu tiên bị lỗi "no such table"; AI cũng ban đầu đoán sai tên cột.]
+- Đã chỉnh sửa gì: [Dùng cột status có sẵn thay vì thêm cột mới; bỏ phần xóa token vì đề không yêu cầu; sửa test đầu tiên cho bớt phụ thuộc bảng token; chỉ giữ 3 test và chạy lại đến khi đạt 3/3 pass.]
+- Cách kiểm chứng: [Chạy php artisan test --filter=UserLockTest (3 test pass); thử tay trên giao diện: khóa, mở khóa ND011, F5 vẫn giữ trạng thái; kiểm tra cột status trong CSDL bằng tinker; đối chiếu với yêu cầu TM-14 trong hướng dẫn Ngày 7.]
+- Tỷ lệ nội dung AI còn giữ lại (ước lượng): [70 %]
+- Điều học được: [Phải đưa cấu trúc bảng thật (migration) cho AI trước, nếu không AI tự đoán tên cột; một test pass chưa chắc là test thật (lần đầu chỉ là test mẫu example).]
+
+```
+
+```
+
+## AI-10 – <Gỡ lỗi route và nối nút khóa trên giao diện>
+
+- Ngày / Người dùng: [2026-11-19] / Trần Quang Vinh
+- Công cụ: [Copilot]
+- Giai đoạn: Lập trình
+- Task / Commit / PR: [TM-14] Quản lý người dùng / [fecf172] / [PR ...]
+- Mục đích: [Sửa lỗi trang danh sách người dùng ra JSON thay vì giao diện React, và nối nút ổ khóa với API.]
+- Prompt chính (nguyên văn hoặc link chia sẻ hội thoại): [Gửi file routes/web.php, kết quả php artisan route:list, file UserList.jsx, thông báo lỗi 405 và lỗi console của React, hỏi nguyên nhân từng lỗi.]
+- Kết quả AI trả về (tóm tắt): [AI chỉ ra route GET /users trả JSON trùng URL với trang React; đề xuất đưa API vào nhóm prefix admin; chỉ ra nút ổ khóa chưa có onClick, hàm fetchUsers và biến api không tồn tại, lỗi disabled is not defined, và route bị nhân đôi thành admin/admin/users do prefix cộng với đường dẫn con.]
+- Đánh giá: [Đúng – các lỗi AI chỉ ra đều tái hiện được qua route:list và console; tuy nhiên AI phải hỏi thêm file router vì ban đầu không biết UserList chưa được gắn vào route React.]
+- Đã chỉnh sửa gì: [Đổi nhóm route sang prefix admin và bỏ chữ admin thừa ở đường dẫn con; đổi fetch sang /admin/users; thêm onClick và disabled cho nút khóa; thêm state reload để tải lại danh sách; đổi nhãn vai trò customer thành user cho khớp CSDL.]
+- Cách kiểm chứng: [Chạy php artisan route:list --path=users để xem route đúng; mở F12 tab Network xem mã trả về của request PATCH; thử khóa và mở khóa trên giao diện; chạy lại php artisan test.]
+- Tỷ lệ nội dung AI còn giữ lại (ước lượng): [75 %]
+- Điều học được: [Lỗi 405 không có nghĩa route sai kiểu mà có thể do đường dẫn không khớp; nên đọc kết quả route:list thay vì đoán; không dán đường dẫn có {id} lên thanh địa chỉ để thử PATCH.]
+
+```
+
+```
+
+## AI-11 – <Rà soát bảo mật model User và RegisterRequest>
+
+- Ngày / Người dùng: [2026-11-19] / Trần Quang Vinh
+- Công cụ: [Copilot]
+- Giai đoạn: Kiểm thử
+- Task / Commit / PR: [BUG] Rà soát bảo mật / [Không có] / [PR ...]
+- Mục đích: [Kiểm tra mã của nhóm có lỗi bảo mật thường gặp (gán hàng loạt, quyền truy cập route) theo chuyên đề ngày 6.]
+- Prompt chính (nguyên văn hoặc link chia sẻ hội thoại): [Gửi file migration và model User, RegisterRequest, kết quả tìm kiếm trong mã nguồn, hỏi có lỗi bảo mật không và cách kiểm tra.]
+- Kết quả AI trả về (tóm tắt): [AI nhận ra role và status nằm trong $fillable, RegisterRequest có rule role, route toggle-lock nằm ngoài middleware admin; ban đầu AI nghi ngờ người lạ có thể tự đăng ký thành admin và đề xuất viết test để chứng minh.]
+- Đánh giá: [Đúng một phần – nghi ngờ đăng ký thành admin không được xác nhận: test RegisterSecurityTest pass dù role vẫn nằm trong $fillable, tức hệ thống đã chặn ở chỗ khác. Hai lỗi còn lại (route không có middleware, fillable quá rộng) là có thật.]
+- Đã chỉnh sửa gì: [Không ghi lỗi đăng ký là nghiêm trọng vì không chứng minh được; đưa route toggle-lock vào nhóm middleware admin; giữ test RegisterSecurityTest làm test hồi quy; ghi các lỗi còn lại thành thẻ trong cột Bugs với mức độ phù hợp.]
+- Cách kiểm chứng: [Viết test tự động gửi đăng ký kèm role=admin và kiểm tra role trong CSDL; chạy php artisan route:list --path=users để xem route đã nằm trong nhóm admin; xem git diff để biết file nào đã sửa.]
+- Tỷ lệ nội dung AI còn giữ lại (ước lượng): [70 %]
+- Điều học được: [Nghi ngờ lỗi bảo mật phải kiểm chứng bằng test trước khi báo; kết quả pass cũng cần xem lại có phải test thật không.]
 
 ```
 
