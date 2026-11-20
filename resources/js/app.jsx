@@ -7,6 +7,12 @@ import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import CartPage from "./pages/CartPage";
+
+// Import các trang Admin đã có trong thư mục pages/admin
+import CategoryManagement from "./pages/admin/CategoryManagement";
+import BookManagement from "./pages/admin/BookManagement";
+import UserList from "./pages/admin/UserList";
+
 import axios from "axios";
 
 // [KIẾN THỨC TRỌNG TÂM - Tách lớp Client-Server & Bảo mật NFR-01]:
@@ -40,6 +46,13 @@ export default function App() {
                     <Route path="register" element={<RegisterPage />} />
                     {/*TV3: Giao diện giỏ hàng */}
                     <Route path="cart" element={<CartPage/>}/>
+                </Route>
+
+                {/* Giao diện Admin (tách riêng để không dính Header/Footer của trang bán hàng) */}
+                <Route path="/admin">
+                    <Route path="categories" element={<CategoryManagement />} />
+                    <Route path="books" element={<BookManagement />} />
+                    <Route path="users" element={<UserList />} />
                 </Route>
             </Routes>
         </BrowserRouter>
