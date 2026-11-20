@@ -33,25 +33,40 @@ class CartService
             ];
         }
 
-        $cartItem = CartItem::where('user_id', $userId)
+        // Tìm cả các bản ghi đã xóa mềm (SoftDeletes) để tránh lỗi trùng khóa unique (user_id, product_id)
+        $cartItem = CartItem::withTrashed()
+            ->where('user_id', $userId)
             ->where('product_id', $productId)
             ->first();
 
         if ($cartItem) {
+            // Nếu sản phẩm này từng bị xóa khỏi giỏ trước đó -> khôi phục lại với số lượng mới
+            if ($cartItem->trashed()) {
+                if ($qty > $product->stock) {
+                    return [
+                        'success' => false,
+                        'message' => 'Số lượng vượt tồn kho'
+                    ];
+                }
 
-            $newQty = $cartItem->quantity + $qty;
+                $cartItem->restore();
+                $cartItem->quantity = $qty;
+                $cartItem->save();
+            } else {
+                // Đang nằm trong giỏ -> cộng dồn số lượng
+                $newQty = $cartItem->quantity + $qty;
 
-            if ($newQty > $product->stock) {
-                return [
-                    'success' => false,
-                    'message' => 'Số lượng vượt tồn kho'
-                ];
+                if ($newQty > $product->stock) {
+                    return [
+                        'success' => false,
+                        'message' => 'Số lượng vượt tồn kho'
+                    ];
+                }
+
+                $cartItem->quantity = $newQty;
+                $cartItem->save();
             }
-
-            $cartItem->quantity = $newQty;
-            $cartItem->save();
         } else {
-
             if ($qty > $product->stock) {
                 return [
                     'success' => false,
