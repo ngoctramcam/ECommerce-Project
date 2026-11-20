@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Middleware\AdminAuthMiddleware;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CartController;
 // Route trang chủ
 Route::get('/', function () {
     return view('welcome');
@@ -29,6 +30,12 @@ Route::post('/register', [AuthController::class, 'register']);
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+//T5 Giỏ hàng
+Route::get('/api/cart', [CartController::class, 'index']);
+Route::post('/api/cart/add', [CartController::class, 'add']);
+Route::put('/api/cart/{id}', [CartController::class, 'update']);
+Route::delete('/api/cart/{id}', [CartController::class, 'destroy']);
 
 Route::middleware([AdminAuthMiddleware::class])->group(function () {
     Route::get('/admin', function () {

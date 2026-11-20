@@ -1,17 +1,64 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-// [NGÀY 3 - TV3]: Tạo component "Thẻ sản phẩm" (ảnh, tên, tác giả, giá) để TM-01, TM-02, TM-03 dùng lại
+const getCsrfToken = () => {
+    const meta = document.querySelector('meta[name="csrf-token"]');
+    return meta ? meta.getAttribute("content") : "";
+};
+
 export default function BookCard({ book, onAddToCart }) {
     const formattedPrice = new Intl.NumberFormat("vi-VN").format(
-        book.price || 0,
+        book.price || 0
     );
 
-    const handleAddToCart = () => {
+    const handleAddToCart = async (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        // Nếu component cha có truyền hàm xử lý riêng thì ưu tiên dùng
         if (onAddToCart) {
             onAddToCart(book);
-        } else {
+            return;
+        }
+
+        // Kiểm tra đăng nhập
+        const storedUser = localStorage.getItem("user");
+        if (!storedUser) {
+            alert("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng!");
+            return;
+        }
+
+        const user = JSON.parse(storedUser);
+        const productId = book.product_id ?? book.id;
+
+        try {
+            const res = await fetch("/api/cart/add", {
+                method: "POST",
+                credentials: "same-origin",
+                headers: {
+                    "Content-Type": "application/json",
+                    Accept: "application/json",
+                    "X-CSRF-TOKEN": getCsrfToken(),
+                },
+                body: JSON.stringify({
+                    user_id: user.id,
+                    product_id: productId,
+                    qty: 1,
+                }),
+            });
+
+            const data = await res.json();
+
+            if (!res.ok || !data.success) {
+                alert(data.message || "Không thể thêm vào giỏ hàng.");
+                return;
+            }
+
             alert(`Đã thêm "${book.product_name}" vào giỏ hàng!`);
+            window.dispatchEvent(new Event("cartUpdated"));
+        } catch (error) {
+            console.error("Lỗi khi thêm giỏ hàng:", error);
+            alert("Có lỗi xảy ra khi kết nối máy chủ.");
         }
     };
 
