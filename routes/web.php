@@ -39,6 +39,7 @@ Route::middleware([AdminAuthMiddleware::class])->group(function () {
     //Route::get('categories', [CategoryController::class, 'index']);
     //Phần Vinh làm
     Route::get('users', [UserController::class, 'index']);
+    Route::patch('/users/{id}/toggle-lock', [UserController::class, 'toggleLock']);
 });
 
 // [(TV3) ]: Route hứng toàn bộ đường dẫn phía React (/login, /register...) đặt ở cuối cùng để khi bấm F5 không bị lỗi 404
