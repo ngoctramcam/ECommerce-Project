@@ -180,3 +180,48 @@ Ban đầu AI mặc định khóa chính của bảng là id thay vì cart_id / 
 ### 8. Sản phẩm cuối cùng
 
 Link commit/PR: [...] (https://github.com/ngoctramcam/ECommerce-Project/tree/feat/TM-05-gio-hang)
+
+## AI-05 – Rà soát và hoàn thiện logic Trang giỏ hàng (Cart Page)
+
+- **Ngày / Người dùng AI:** 20/11/2026 – TV5
+- **Công cụ AI:** Copilot
+- **Thẻ Trello / Nhánh Git liên quan:** [TM-05] Giỏ hàng
+
+### 1. Mục đích
+
+Nhờ AI viết chức năng Trang giỏ hàng cho người dùng (hiển thị danh sách sản phẩm trong giỏ, sửa số lượng không vượt quá tồn kho, xóa sản phẩm khỏi giỏ và tính tổng tiền) sử dụng Laravel và React.
+
+### 2. Prompt đã dùng
+
+Tôi đang làm Trang giỏ hàng cho website bán sách bằng Laravel và React. Hãy giúp tôi viết đầy đủ các chức năng: hiển thị danh sách sản phẩm trong giỏ hàng, cập nhật số lượng (kiểm tra không được vượt quá số lượng tồn kho stock), xóa sản phẩm khỏi giỏ và tự động tính tổng tiền thanh toán.
+
+### 3. Kết quả AI trả về (tóm tắt)
+
+AI cung cấp trọn bộ mã nguồn xử lý phía backend (CartService và CartController gồm các hàm lấy danh sách giỏ hàng, cập nhật số lượng có kiểm tra stock, xóa sản phẩm) cùng component giao diện React hiển thị bảng giỏ hàng và tính tổng tiền tự động.
+
+### 4. Phần giữ lại
+
+- Giữ lại logic kiểm tra số lượng cập nhật so với cột stock trong bảng products và trả về thông báo lỗi rõ ràng khi vượt tồn kho.
+
+- Giữ lại luồng cập nhật số lượng, xóa sản phẩm và công thức tính lại thành tiền từng món cũng như tổng thanh toán trên giao diện React.
+
+### 5. Phần loại bỏ chỉnh sửa và lý do
+
+- Sửa lại tên khóa chính và tên cột (cart_id, product_id, user_id, quantity, price) cho khớp chính xác với Model CartItem và Product trong dự án.
+
+- Điều chỉnh lại cách gọi route và cấu trúc dữ liệu JSON trả về để đồng bộ với hệ thống đăng nhập hiện tại.
+
+### 6. AI sai hoặc chưa chắc chắn ở đâu
+
+- Ban đầu AI đặt tên cột khóa chính là id và tên cột số lượng là qty chưa đúng với cấu trúc bảng cart_items thực tế trong CSDL.
+
+### 7. Cách kiểm chứng
+
+- Đối chiếu tên cột và quan hệ trong file app/Models/CartItem.php, app/Models/Product.php và bảng cart_items trên phpMyAdmin.
+- Chạy kiểm thử thực tế trên trình duyệt (http://127.0.0.1:8000):
+  Tăng/nhập số lượng lớn hơn số lượng tồn kho (stock = 20) $\rightarrow$ hệ thống chặn lại và hiện thông báo "Số lượng vượt tồn kho (còn lại 20 sản phẩm)".  
+  Tăng/giảm số lượng hợp lệ $\rightarrow$ số lượng trong CSDL cập nhật theo và tổng tiền tự động tính lại đúng.Bấm xóa sản phẩm $\rightarrow$ sản phẩm biến mất khỏi giỏ hàng và tổng thanh toán cập nhật lại.
+
+### 8. Sản phẩm cuối cùng
+
+Link commit/PR: [...] (https://github.com/ngoctramcam/ECommerce-Project/tree/feat/TM-05-gio-hang)
