@@ -58,12 +58,12 @@ Route::middleware([AdminAuthMiddleware::class])->group(function () {
     Route::get('users', [UserController::class, 'index']);
     Route::patch('/users/{id}/toggle-lock', [UserController::class, 'toggleLock']);
 });
-// TV1 (TM-08): Hồ sơ cá nhân – chỉ người đã đăng nhập mới xem/sửa hồ sơ của chính mình
+
 Route::middleware('auth')->group(function () {
     Route::get('/api/profile', [ProfileController::class, 'show']);
     Route::put('/api/profile', [ProfileController::class, 'update']);
+    Route::put('/api/profile/password',[ProfileController::class,'changePassword']);
 });
-
 // [(TV3) ]: Route hứng toàn bộ đường dẫn phía React (/login, /register...) đặt ở cuối cùng để khi bấm F5 không bị lỗi 404
 Route::get('/{any}', function () {
     return view('welcome');

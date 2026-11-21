@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const SHOW_PASSWORD_FORM = false;
+const SHOW_PASSWORD_FORM = true;
 
 const PHONE_REGEX = /^(0|\+84)\d{9}$/;
 
