@@ -40,7 +40,7 @@ Route::middleware([AdminAuthMiddleware::class])->group(function () {
     //Phần Vinh làm
     Route::get('users', [UserController::class, 'index']);
 });
-
+////////////1
 // [(TV3) ]: Route hứng toàn bộ đường dẫn phía React (/login, /register...) đặt ở cuối cùng để khi bấm F5 không bị lỗi 404
 Route::get('/{any}', function () {
     return view('welcome');
