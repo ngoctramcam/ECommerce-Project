@@ -6,6 +6,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Middleware\AdminAuthMiddleware;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ProfileController;
+use Illuminate\Support\Facades\Auth;
 // Route trang chủ
 Route::get('/', function () {
     return view('welcome');
@@ -36,11 +38,14 @@ Route::middleware([AdminAuthMiddleware::class])->group(function () {
     })->name('admin.dashboard');
     //TV4: CURD Category
     Route::resource('api/categories', CategoryController::class);
+    
     //Route::get('categories', [CategoryController::class, 'index']);
     //Phần Vinh làm
     Route::get('users', [UserController::class, 'index']);
 });
 
+Route::get('/api/profile', [ProfileController::class, 'show']);
+Route::put('/api/profile', [ProfileController::class, 'update']);
 // [(TV3) ]: Route hứng toàn bộ đường dẫn phía React (/login, /register...) đặt ở cuối cùng để khi bấm F5 không bị lỗi 404
 Route::get('/{any}', function () {
     return view('welcome');
