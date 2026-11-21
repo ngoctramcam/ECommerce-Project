@@ -1,4 +1,4 @@
-// AI-assisted [AI-03] - Header 2 tầng responsive có nút Tất cả sách cạnh Danh mục sách (Tuần 1)
+// AI-assisted [AI-03] - Header 2 tầng responsive kết nối danh mục và số lượng giỏ hàng từ CSDL
 import React, { useState, useEffect, useRef } from "react";
 import {
     Link,
@@ -6,20 +6,17 @@ import {
     useSearchParams,
     useLocation,
 } from "react-router-dom";
-
-// [NGÀY 2 & NGÀY 3 - TV3]: Dữ liệu giả danh mục sách
-const MOCK_CATEGORIES = [
-    { category_id: 1, category_name: "Văn học" },
-    { category_id: 2, category_name: "Kỹ năng sống" },
-    { category_id: 3, category_name: "Thiếu nhi" },
-    { category_id: 4, category_name: "Kinh tế" },
-];
+import axios from "axios";
 
 export default function Header() {
-    // [NGÀY 4 - TV3 - TM-04]: State lưu thông tin tài khoản đang đăng nhập
+    // State lưu thông tin tài khoản đang đăng nhập
     const [user, setUser] = useState(null);
 
-    // [NGÀY 2 - TV3]: State đóng/mở menu danh mục
+    // State danh mục thật từ CSDL & số lượng sản phẩm trong giỏ hàng
+    const [categories, setCategories] = useState([]);
+    const [cartCount, setCartCount] = useState(0);
+
+    // State đóng/mở menu danh mục
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [isMobileCatOpen, setIsMobileCatOpen] = useState(false);
 
@@ -32,7 +29,7 @@ export default function Header() {
     const isHomePage = location.pathname === "/";
     const isBooksPage = location.pathname === "/books";
 
-    // [NGÀY 4 - TV3 - TM-04]: Đọc thông tin user từ localStorage khi tải lại trang
+    // Đọc thông tin user từ localStorage khi tải lại trang
     useEffect(() => {
         try {
             const savedUser = localStorage.getItem("user");
@@ -43,6 +40,50 @@ export default function Header() {
             localStorage.removeItem("user");
         }
     }, []);
+
+    // Lấy danh sách danh mục thật từ CSDL
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const res = await axios.get("/api/categories");
+                const categoryList = Array.isArray(res.data)
+                    ? res.data
+                    : res.data?.data || [];
+                setCategories(categoryList);
+            } catch (error) {
+                console.error("Lỗi khi tải danh mục ở Header:", error);
+            }
+        };
+
+        fetchCategories();
+    }, []);
+
+    // Lấy số lượng sản phẩm trong giỏ hàng từ CSDL
+    const fetchCartCount = async () => {
+        try {
+            const res = await axios.get("/api/cart");
+            const items = Array.isArray(res.data)
+                ? res.data
+                : res.data?.items || res.data?.data || [];
+
+            // Tính tổng số lượng các sản phẩm có trong giỏ
+            const totalQty = items.reduce(
+                (sum, item) => sum + Number(item.quantity || 1),
+                0,
+            );
+            setCartCount(totalQty);
+        } catch (error) {
+            setCartCount(0);
+        }
+    };
+
+    useEffect(() => {
+        fetchCartCount();
+
+        // Lắng nghe sự kiện cập nhật giỏ hàng từ các trang khác (Thêm/Sửa/Xóa giỏ)
+        window.addEventListener("cartUpdated", fetchCartCount);
+        return () => window.removeEventListener("cartUpdated", fetchCartCount);
+    }, [location.pathname, user]);
 
     // Đóng menu danh mục khi bấm chuột ra ngoài
     useEffect(() => {
@@ -59,15 +100,16 @@ export default function Header() {
             document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
-    // [NGÀY 4 - TV3 - TM-04]: Đăng xuất phía Client (không gọi API)
+    // Đăng xuất phía Client
     const handleLogout = () => {
         localStorage.removeItem("user");
         localStorage.removeItem("token");
         setUser(null);
+        setCartCount(0);
         window.location.href = "/login";
     };
 
-    // [NGÀY 3 - TV3 - TM-01]: Chọn danh mục và cuộn xuống khối lọc sách ở Trang chủ
+    // Chọn danh mục và cuộn xuống khối lọc sách ở Trang chủ
     const handleSelectCategory = (categoryId) => {
         setIsDropdownOpen(false);
         setIsMobileCatOpen(false);
@@ -83,7 +125,7 @@ export default function Header() {
 
     return (
         <>
-            {/* [NGÀY 2 - TV3]: Header chung (Logo, Tìm kiếm, Đăng nhập, Giỏ hàng) */}
+            {/* Header chung (Logo, Tìm kiếm, Đăng nhập, Giỏ hàng) */}
             <header className="bg-white sticky top-0 z-40 border-b border-gray-200">
                 <div className="max-w-7xl mx-auto px-3 sm:px-6 py-3">
                     <div className="flex items-center justify-between gap-3 sm:gap-6">
@@ -155,7 +197,7 @@ export default function Header() {
                                 <span>🛒</span>
                                 <span>Giỏ hàng</span>
                                 <span className="bg-emerald-700 text-white text-[11px] px-1.5 py-0.5 rounded-full font-semibold leading-none">
-                                    3
+                                    {cartCount}
                                 </span>
                             </Link>
                         </div>
@@ -188,7 +230,7 @@ export default function Header() {
                     </div>
                 </div>
 
-                {/* [NGÀY 2 - TV3]: Menu danh mục Desktop (Trang chủ | Danh mục sách ▼ | Tất cả sách) */}
+                {/* Menu danh mục Desktop (Trang chủ | Danh mục sách ▼ | Tất cả sách) */}
                 <nav className="hidden md:block border-t border-gray-100 bg-white">
                     <div className="max-w-7xl mx-auto px-6 h-10 flex items-center justify-between text-sm">
                         <div className="flex items-center gap-6">
@@ -237,7 +279,7 @@ export default function Header() {
                                             </button>
                                         </li>
 
-                                        {MOCK_CATEGORIES.map((cat) => (
+                                        {categories.map((cat) => (
                                             <li key={cat.category_id}>
                                                 <button
                                                     type="button"
@@ -294,7 +336,7 @@ export default function Header() {
                 </nav>
             </header>
 
-            {/* [NGÀY 2 - TV3]: Thanh điều hướng đáy cho màn hình 360px (Mobile) */}
+            {/* Thanh điều hướng đáy cho màn hình 360px (Mobile) */}
             <nav className="md:hidden fixed bottom-0 inset-x-0 bg-white border-t border-gray-200 z-50">
                 <ul className="grid grid-cols-4 h-14 items-center text-[11px] font-medium text-gray-500 list-none m-0 p-0">
                     <li>
@@ -324,9 +366,16 @@ export default function Header() {
                     <li>
                         <Link
                             to="/cart"
-                            className="w-full flex flex-col items-center justify-center gap-0.5 hover:text-emerald-700"
+                            className="w-full flex flex-col items-center justify-center gap-0.5 hover:text-emerald-700 relative"
                         >
-                            <span className="text-base">🛒</span>
+                            <span className="text-base relative">
+                                🛒
+                                {cartCount > 0 && (
+                                    <span className="absolute -top-1 -right-2.5 bg-emerald-700 text-white text-[9px] px-1 rounded-full font-bold leading-tight">
+                                        {cartCount}
+                                    </span>
+                                )}
+                            </span>
                             <span>Giỏ hàng</span>
                         </Link>
                     </li>
@@ -365,7 +414,7 @@ export default function Header() {
                                     Tất cả
                                 </button>
                             </li>
-                            {MOCK_CATEGORIES.map((cat) => (
+                            {categories.map((cat) => (
                                 <li key={cat.category_id}>
                                     <button
                                         type="button"
