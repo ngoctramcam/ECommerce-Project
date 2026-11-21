@@ -58,7 +58,7 @@ Route::middleware([AdminAuthMiddleware::class])->group(function () {
     Route::get('users', [UserController::class, 'index']);
     Route::patch('/users/{id}/toggle-lock', [UserController::class, 'toggleLock']);
 });
-
+//Route cho ProfilePage
 Route::middleware('auth')->group(function () {
     Route::get('/api/profile', [ProfileController::class, 'show']);
     Route::put('/api/profile', [ProfileController::class, 'update']);
