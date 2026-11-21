@@ -6,8 +6,9 @@ use App\Http\Controllers\AuthController;
 use App\Http\Middleware\AdminAuthMiddleware;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\Auth;
 // Route trang chủ
 Route::get('/', function () {
     return view('welcome');
@@ -32,21 +33,38 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+//T5 Giỏ hàng
+Route::get('/api/cart', [CartController::class, 'index']);
+Route::post('/api/cart/add', [CartController::class, 'add']);
+Route::put('/api/cart/{id}', [CartController::class, 'update']);
+Route::delete('/api/cart/{id}', [CartController::class, 'destroy']);
+
+//TV4 : Lấy sản phẩm
+Route::apiResource('api/products', ProductController::class);
+Route::patch('api/products/{id}/toggle-status', [ProductController::class, 'toggleStatus']);
+
 Route::middleware([AdminAuthMiddleware::class])->group(function () {
     Route::get('/admin', function () {
         return view('welcome');
     })->name('admin.dashboard');
     //TV4: CURD Category
     Route::resource('api/categories', CategoryController::class);
-    
-    //Route::get('categories', [CategoryController::class, 'index']);
+    //TV4: CRUD sản phẩm
+    Route::post('api/products', [ProductController::class, 'store']);
+    Route::put('api/products/{id}', [ProductController::class, 'update']);
+    Route::patch('api/products/{id}/toggle-status', [ProductController::class, 'toggleStatus']);
+    Route::delete('api/products/{id}', [ProductController::class, 'destroy']);
     //Phần Vinh làm
     Route::get('users', [UserController::class, 'index']);
+    Route::patch('/users/{id}/toggle-lock', [UserController::class, 'toggleLock']);
+});
+// TV1 (TM-08): Hồ sơ cá nhân – chỉ người đã đăng nhập mới xem/sửa hồ sơ của chính mình
+Route::middleware('auth')->group(function () {
+    Route::get('/api/profile', [ProfileController::class, 'show']);
+    Route::put('/api/profile', [ProfileController::class, 'update']);
 });
 
-Route::get('/api/profile', [ProfileController::class, 'show']);
-Route::put('/api/profile', [ProfileController::class, 'update']);
 // [(TV3) ]: Route hứng toàn bộ đường dẫn phía React (/login, /register...) đặt ở cuối cùng để khi bấm F5 không bị lỗi 404
 Route::get('/{any}', function () {
     return view('welcome');
-})->where('any', '.*');
+})->where('any', '^(?!api/).*$');

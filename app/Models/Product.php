@@ -18,7 +18,7 @@ class Product extends Model
 
     protected $fillable = [
         'product_name',
-        'descreption',
+        'description',
         'price',
         'stock',
         'author',
@@ -32,7 +32,7 @@ class Product extends Model
     // Quan hệ: Product thuộc về một Category
     public function category()
     {
-        return $this->belongsTo(Category::class, 'caterory_id', 'category_id');
+        return $this->belongsTo(Category::class, 'category_id', 'category_id');
     }
 
     // Quan hệ: Product nằm trong nhiều OrderItems
