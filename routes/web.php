@@ -7,6 +7,8 @@ use App\Http\Middleware\AdminAuthMiddleware;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\ProductController;
+
 // Route trang chủ
 Route::get('/', function () {
     return view('welcome');
@@ -37,13 +39,21 @@ Route::post('/api/cart/add', [CartController::class, 'add']);
 Route::put('/api/cart/{id}', [CartController::class, 'update']);
 Route::delete('/api/cart/{id}', [CartController::class, 'destroy']);
 
+//TV4 : Lấy sản phẩm
+Route::apiResource('api/products', ProductController::class);
+Route::patch('api/products/{id}/toggle-status', [ProductController::class, 'toggleStatus']);
+
 Route::middleware([AdminAuthMiddleware::class])->group(function () {
     Route::get('/admin', function () {
         return view('welcome');
     })->name('admin.dashboard');
     //TV4: CURD Category
     Route::resource('api/categories', CategoryController::class);
-    //Route::get('categories', [CategoryController::class, 'index']);
+    //TV4: CRUD sản phẩm
+    Route::post('api/products', [ProductController::class, 'store']);
+    Route::put('api/products/{id}', [ProductController::class, 'update']);
+    Route::patch('api/products/{id}/toggle-status', [ProductController::class, 'toggleStatus']);
+    Route::delete('api/products/{id}', [ProductController::class, 'destroy']);
     //Phần Vinh làm
     Route::get('users', [UserController::class, 'index']);
     Route::patch('/users/{id}/toggle-lock', [UserController::class, 'toggleLock']);
