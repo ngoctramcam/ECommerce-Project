@@ -4,17 +4,18 @@
 | --------------- | -------------------------------------------------------- |
 | Họ tên, MSSV    | Cam Thị Ngọc Trâm - 0306241330                           |
 | Nhóm, đề tài    | Nhóm [số] – Xây dựng website thương mại điện tử bán sách |
-| Vai trò         | TV3 – BE (Backend)                                       |
+| Vai trò         | TV4 – BE (Backend)                                       |
 | Công cụ AI dùng | GitHub Copilot                                           |
 
 ## Bảng tổng hợp
 
-| Mã    | Ngày       | Giai đoạn | Nội dung                                             | Commit / PR                                                                   |
-| ----- | ---------- | --------- | ---------------------------------------------------- | ----------------------------------------------------------------------------- |
-| AI-01 | 10/11/2026 | Thiết kế  | Nhờ AI gợi ý những thuộc tính thương có của các bảng | [commit](https://github.com/ngoctramcam/ECommerce-Project/tree/docs/Database) |
-| AI-02 | 11/11/202  | Thiết kế  | Nhờ AI gợi ý cách trình bày mô tả erd                | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/docs/Database) |
-| AI-03 | 12/11/202  | Lập trình | Nhờ AI tạo dữ liệu giùm                              | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/feat/database) |
-| AI-04 | 16/11/202  | Lập trình | Nhờ AI viết chức năng CRUD cho Categories            | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/feat/database) |
+| Mã    | Ngày       | Giai đoạn | Nội dung                                             | Commit / PR                                                                         |
+| ----- | ---------- | --------- | ---------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| AI-01 | 10/11/2026 | Thiết kế  | Nhờ AI gợi ý những thuộc tính thương có của các bảng | [commit](https://github.com/ngoctramcam/ECommerce-Project/tree/docs/Database)       |
+| AI-02 | 11/11/202  | Thiết kế  | Nhờ AI gợi ý cách trình bày mô tả erd                | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/docs/Database)       |
+| AI-03 | 12/11/202  | Lập trình | Nhờ AI tạo dữ liệu giùm                              | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/feat/database)       |
+| AI-04 | 16/11/202  | Lập trình | Nhờ AI viết chức năng CRUD cho Categories            | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/feat/TM-11-danh-muc) |
+| AI-05 | 21/11/202  | Lập trình | Nhờ AI viết chức năng CRUD cho Products              | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/feat/TM-12-san-pham) |
 
 ## AI-01 – <Tạo ERD>
 
@@ -158,3 +159,47 @@ Xem lại trong model với phần chức năng đăng nhập đăng xuất vi�
 ### 8. Sản phẩm cuối cùng
 
 Link commit/PR: [...](https://github.com/ngoctramcam/ECommerce-Project/tree/feat/TM-11-danh-muc)
+
+## AI-05 – Viết chức năng CRUD Product
+
+- **Ngày / Người dùng AI:** 21/11/2026 – TV4
+- **Công cụ AI:** Copilot
+- **Thẻ Trello / Nhánh Git liên quan:** [TM-12] Quản lý sản phẩm
+
+### 1. Mục đích
+
+Nhờ AI hỗ trợ xây dựng chức năng giỏ hàng cho người dùng (thêm sản phẩm vào giỏ, xem danh sách, cập nhật số lượng, xóa sản phẩm khỏi giỏ) trên hệ thống Laravel + React.
+
+### 2. Prompt đã dùng
+
+Tôi đang làm chức năng giỏ hàng cho người dùng bằng Laravel và React. Bảng cart_items có khóa chính cart_id, ràng buộc unique trên (user_id, product_id) và sử dụng SoftDeletes. Hãy giúp tôi viết xử lý backend và kết nối giao diện.
+
+### 3. Kết quả AI trả về (tóm tắt)
+
+AI cung cấp mã nguồn CartService xử lý logic thêm/cập nhật/xóa sản phẩm trong giỏ hàng (sử dụng withTrashed() và restore() khi thêm lại sản phẩm đã xóa mềm), các route xử lý tương ứng và đoạn code React gọi dữ liệu từ backend.
+
+### 4. Phần giữ lại
+
+- Giữ lại luồng xử lý kiểm tra sản phẩm đã tồn tại trong giỏ bằng withTrashed() và khôi phục bằng restore() để tránh lỗi trùng lặp ràng buộc unique(user_id, product_id).
+
+- Giữ lại phần kiểm tra tồn kho (stock) trước khi tăng số lượng sản phẩm trong giỏ.
+
+### 5. Phần loại bỏ chỉnh sửa và lý do
+
+- Chỉnh sửa lại tên cột khóa chính thành cart_id và khóa ngoại product_id, user_id cho khớp chính xác với Model CartItem và cấu trúc CSDL thực tế.
+
+- Đồng bộ lại cách truyền CSRF Token và cấu trúc route theo đúng chuẩn routes/web.php của dự án.
+
+### 6. AI sai hoặc chưa chắc chắn ở đâu
+
+Ban đầu AI mặc định khóa chính của bảng là id thay vì cart_id, và chưa lường trước lỗi Duplicate entry nếu chỉ dùng where() thông thường mà bỏ qua các bản ghi đã xóa mềm (SoftDeletes).
+
+### 7. Cách kiểm chứng
+
+- Kiểm tra lại cấu trúc bảng cart_items trên phpMyAdmin (XAMPP) và Model CartItem.php.
+
+- Chạy thử nghiệm thực tế trên trình duyệt: thêm cùng một sản phẩm nhiều lần, xóa sản phẩm khỏi giỏ rồi thêm lại để xác nhận không phát sinh lỗi SQL và số lượng cập nhật đúng.
+
+### 8. Sản phẩm cuối cùng
+
+Link commit/PR: [...](https://github.com/ngoctramcam/ECommerce-Project/tree/feat/TM-05-gio-hang)
