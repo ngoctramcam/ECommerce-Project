@@ -145,27 +145,37 @@ Link commit/PR: [...](https://github.com/ngoctramcam/ECommerce-Project/blob/docs
 
 ### 1. Mục đích
 
-Nhờ AI viết chức năng thêm giỏ sản phẩm vào giỏ hàng
+Nhờ AI hỗ trợ xây dựng đầy đủ chức năng giỏ hàng cho người dùng (thêm sản phẩm vào giỏ, xem danh sách sản phẩm trong giỏ, cập nhật số lượng, xóa sản phẩm khỏi giỏ) trên hệ thống Laravel + React.
 
 ### 2. Prompt đã dùng
 
-Tui cần hàm thêm sản phẩm vào giỏ hàng, cần phải kiểm tra người dùng có đăng nhập chưa, sản phẩm có tồn tại hay không, sản phẩm tồn kho còn đủ hay khôn, sản phẩm còn kinh doanh không.
+Tôi đang làm chức năng giỏ hàng bằng Laravel và React. Cần xử lý đầy đủ các trường hợp: kiểm tra người dùng đã đăng nhập chưa, sản phẩm có tồn tại và còn kinh doanh không, số lượng tồn kho có đủ không; đồng thời xử lý khi thêm lại sản phẩm đã từng xóa mềm (SoftDeletes) khỏi giỏ hàng để không bị lỗi trùng khóa unique(user_id, product_id).
 
 ### 3. Kết quả AI trả về (tóm tắt)
 
-AI đưa hàm add add($userId, $productId, $qty = 1) với đầy đủ các yêu cầu cần kiểm tra
+AI cung cấp mã nguồn CartService (gồm các hàm thêm, lấy danh sách, cập nhật số lượng, xóa sản phẩm), CartController kiểm tra dữ liệu đầu vào và trạng thái đăng nhập, các route xử lý tương ứng cùng logic gọi API từ giao diện React.
 
 ### 4. Phần giữ lại
 
-- Giữ lại khung sườn code
+- Giữ lại luồng kiểm tra điều kiện trước khi thêm vào giỏ (đăng nhập, tồn tại sản phẩm, trạng thái status = 1, đối chiếu số lượng với stock).
+
+- Giữ lại cách dùng withTrashed() và restore() trong CartService để khôi phục bản ghi cũ khi thêm lại sản phẩm đã xóa mềm, tránh lỗi Duplicate entry trên cặp (user_id, product_id).
 
 ### 5. Phần loại bỏ chỉnh sửa và lý do
 
-- Sửa những tên thuộc tính vì AI viết chưa đúng theo thuộc tính trong model.
+- Chỉnh sửa lại tên cột khóa chính thành cart_id, product_id và các thuộc tính cho khớp chính xác với Model CartItem và Product trong dự án.
+
+- Điều chỉnh lại cấu trúc route và cách gửi CSRF Token cho đồng bộ với file routes/web.php của hệ thống.
 
 ### 6. AI sai hoặc chưa chắc chắn ở đâu
 
+Ban đầu AI mặc định khóa chính của bảng là id thay vì cart_id / product_id, và chưa lường trước lỗi trùng khóa duy nhất (user_id, product_id) nếu chỉ truy vấn bằng where() thông thường mà bỏ qua các dòng đã xóa mềm (SoftDeletes).
+
 ### 7. Cách kiểm chứng
+
+- Đối chiếu trực tiếp tên cột, khóa chính và quan hệ với file app/Models/CartItem.php, app/Models/Product.php và cấu trúc bảng trong phpMyAdmin.
+
+- Chạy test thực tế trên trình duyệt: thêm sản phẩm khi chưa đăng nhập, thêm vượt quá stock, thêm sản phẩm ngừng kinh doanh (status = 0), xóa sản phẩm khỏi giỏ rồi thêm lại để xác nhận dữ liệu cập nhật chính xác và không phát sinh lỗi SQL.
 
 ### 8. Sản phẩm cuối cùng
 
