@@ -27,6 +27,7 @@ class Product extends Model
         'status',
         'category_id',
         'publisher_name',
+        'is_delete'
     ];
 
     // Quan hệ: Product thuộc về một Category

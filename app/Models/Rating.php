@@ -1,0 +1,19 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Rating extends Model
+{
+      protected $table = 'ratings'; // Tên bảng theo đúng sơ đồ ERD
+    protected $primaryKey = 'voucher_id';
+
+    protected $fillable = [
+        'star',
+        'comment',
+        'user_id',
+        'product_id'
+    ];
+
+}

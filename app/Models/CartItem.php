@@ -17,6 +17,7 @@ class CartItem extends Model
         'quantity',
         'user_id',
         'product_id',
+        'is_delete'
     ];
 
     // Quan hệ: CartItem thuộc về một User

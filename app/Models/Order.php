@@ -17,12 +17,12 @@ class Order extends Model
         'recipient_name',
         'recipient_phone',
         'shipping_address',
-        'payment_method',
         'total_amount',
         'order_date',
         'status',
         'user_id',
         'voucher_id',
+        'is_delete'
     ];
 
     // Quan hệ: Order thuộc về một User
