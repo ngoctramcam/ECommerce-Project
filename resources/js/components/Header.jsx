@@ -101,13 +101,23 @@ export default function Header() {
     }, []);
 
     // Đăng xuất phía Client
-    const handleLogout = () => {
-        localStorage.removeItem("user");
-        localStorage.removeItem("token");
-        setUser(null);
-        setCartCount(0);
-        window.location.href = "/login";
-    };
+const handleLogout = async () => {
+    try {
+        await window.axios.post('/logout', {}, {
+            headers: { Accept: 'application/json' },
+        });
+    } catch (error) {
+        console.error('Lỗi khi đăng xuất trên server:', error);
+    } finally {
+        localStorage.removeItem('user');
+        localStorage.removeItem('token');
+        sessionStorage.removeItem('user');
+        sessionStorage.removeItem('token');
+        if (typeof setUser === 'function') setUser(null);
+        if (typeof setCartCount === 'function') setCartCount(0);
+        window.location.href = '/login';
+    }
+};
 
     // Chọn danh mục và cuộn xuống khối lọc sách ở Trang chủ
     const handleSelectCategory = (categoryId) => {

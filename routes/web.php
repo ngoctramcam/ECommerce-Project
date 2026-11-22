@@ -26,9 +26,8 @@ Route::get('/test-db', function () {
 
 // [(TV3)]: Bổ sung route POST /register vì TV2 đã viết sẵn hàm register() trong AuthController nhưng chưa khai báo đường dẫn ở đây
 Route::post('/register', [AuthController::class, 'register']);
-
-
 Route::post('/login', [AuthController::class, 'login']);
+Route::get('/auth/me', [AuthController::class, 'me']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 //T5 Giỏ hàng

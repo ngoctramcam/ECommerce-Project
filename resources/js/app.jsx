@@ -9,6 +9,7 @@ import RegisterPage from "./pages/RegisterPage";
 import CartPage from "./pages/CartPage";
 
 // Import các trang Admin đã có trong thư mục pages/admin
+import AdminRoute from "./pages/admin/components/AdminRoute";
 import CategoryManagement from "./pages/admin/CategoryManagement";
 import BookManagement from "./pages/admin/BookManagement";
 import UserList from "./pages/admin/UserList";
@@ -49,10 +50,12 @@ export default function App() {
                 </Route>
 
                 {/* Giao diện Admin (tách riêng để không dính Header/Footer của trang bán hàng) */}
-                <Route path="/admin">
-                    <Route path="categories" element={<CategoryManagement />} />
-                    <Route path="books" element={<BookManagement />} />
-                    <Route path="users" element={<UserList />} />
+                <Route element={<AdminRoute />}>
+                    <Route path="/admin">
+                        <Route path="categories" element={<CategoryManagement />} />
+                        <Route path="books" element={<BookManagement />} />
+                        <Route path="users" element={<UserList />} />
+                    </Route>
                 </Route>
             </Routes>
         </BrowserRouter>
