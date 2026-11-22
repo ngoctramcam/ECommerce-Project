@@ -1,4 +1,5 @@
 // AI-assisted [AI-03] - Header 2 tầng responsive kết nối danh mục và số lượng giỏ hàng từ CSDL
+// AI-assisted [AI-03] - Header 2 tầng responsive kết nối danh mục và số lượng giỏ hàng từ CSDL
 import React, { useState, useEffect, useRef } from "react";
 import {
     Link,
@@ -10,8 +11,10 @@ import axios from "axios";
 
 export default function Header() {
     // State lưu thông tin tài khoản đang đăng nhập
+    // State lưu thông tin tài khoản đang đăng nhập
     const [user, setUser] = useState(null);
 
+    // State đóng/mở menu danh mục
     // State danh mục thật từ CSDL & số lượng sản phẩm trong giỏ hàng
     const [categories, setCategories] = useState([]);
     const [cartCount, setCartCount] = useState(0);
@@ -26,9 +29,29 @@ export default function Header() {
     const [searchParams] = useSearchParams();
     const selectedCategory = searchParams.get("category") || "all";
 
+    // State & hàm xử lý tìm kiếm từ Header (đã khai báo chuẩn)
+    const [searchKeyword, setSearchKeyword] = useState(
+        searchParams.get("keyword") || "",
+    );
+
+    useEffect(() => {
+        setSearchKeyword(searchParams.get("keyword") || "");
+    }, [searchParams]);
+
+    const handleHeaderSearch = (e) => {
+        e.preventDefault();
+        const trimmed = searchKeyword.trim();
+        navigate(
+            trimmed
+                ? `/books?keyword=${encodeURIComponent(trimmed)}`
+                : "/books",
+        );
+    };
+
     const isHomePage = location.pathname === "/";
     const isBooksPage = location.pathname === "/books";
 
+    // Đọc thông tin user từ localStorage khi tải lại trang
     // Đọc thông tin user từ localStorage khi tải lại trang
     useEffect(() => {
         try {
@@ -120,6 +143,7 @@ const handleLogout = async () => {
 };
 
     // Chọn danh mục và cuộn xuống khối lọc sách ở Trang chủ
+    // Chọn danh mục và cuộn xuống khối lọc sách ở Trang chủ
     const handleSelectCategory = (categoryId) => {
         setIsDropdownOpen(false);
         setIsMobileCatOpen(false);
@@ -135,6 +159,7 @@ const handleLogout = async () => {
 
     return (
         <>
+            {/* Header chung (Logo, Tìm kiếm, Đăng nhập, Giỏ hàng) */}
             {/* Header chung (Logo, Tìm kiếm, Đăng nhập, Giỏ hàng) */}
             <header className="bg-white sticky top-0 z-40 border-b border-gray-200">
                 <div className="max-w-7xl mx-auto px-3 sm:px-6 py-3">
@@ -152,17 +177,30 @@ const handleLogout = async () => {
                             </span>
                         </Link>
 
-                        {/* Ô tìm kiếm Desktop */}
-                        <div className="hidden md:flex flex-1 max-w-md relative">
-                            <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm">
-                                🔍
-                            </span>
+                        {/* <--- [TM-02 - Ô tìm kiếm Desktop]: Chuyển kính lúp sang phải thành nút bấm tìm kiếm */}
+                        <form
+                            onSubmit={handleHeaderSearch}
+                            className="hidden md:flex flex-1 max-w-md relative"
+                        >
                             <input
                                 type="text"
+                                enterKeyHint="search"
+                                value={searchKeyword}
+                                onChange={(e) =>
+                                    setSearchKeyword(e.target.value)
+                                }
                                 placeholder="Tìm tên sách, tác giả..."
-                                className="w-full bg-gray-50 border border-gray-200 rounded-full py-1.5 pl-9 pr-4 text-sm text-gray-700 focus:outline-none focus:bg-white focus:border-emerald-600 transition-all"
+                                className="w-full bg-gray-50 border border-gray-200 rounded-full py-1.5 pl-4 pr-10 text-sm text-gray-700 focus:outline-none focus:bg-white focus:border-emerald-600 transition-all"
                             />
-                        </div>
+                            {/* Nút submit tìm kiếm khi bấm chuột hoặc Enter */}
+                            <button
+                                type="submit"
+                                aria-label="Tìm kiếm"
+                                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-emerald-700 text-sm cursor-pointer"
+                            >
+                                🔍
+                            </button>
+                        </form>
 
                         {/* Khu vực Tài khoản & Giỏ hàng */}
                         <div className="flex items-center gap-2 sm:gap-3 shrink-0">
@@ -208,6 +246,7 @@ const handleLogout = async () => {
                                 <span>Giỏ hàng</span>
                                 <span className="bg-emerald-700 text-white text-[11px] px-1.5 py-0.5 rounded-full font-semibold leading-none">
                                     {cartCount}
+                                    {cartCount}
                                 </span>
                             </Link>
                         </div>
@@ -215,16 +254,30 @@ const handleLogout = async () => {
 
                     {/* Ô tìm kiếm & lối tắt Tất cả sách trên Mobile */}
                     <div className="mt-2.5 md:hidden space-y-2">
-                        <div className="relative">
-                            <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs">
-                                🔍
-                            </span>
+                        {/* <--- [TM-02 - Ô tìm kiếm Mobile]: Thêm enterKeyHint="search" và nút bấm 🔍 bên phải để chạm tìm trên điện thoại */}
+                        <form
+                            onSubmit={handleHeaderSearch}
+                            className="relative"
+                        >
                             <input
                                 type="text"
+                                enterKeyHint="search"
+                                value={searchKeyword}
+                                onChange={(e) =>
+                                    setSearchKeyword(e.target.value)
+                                }
                                 placeholder="Tìm sách, tác giả..."
-                                className="w-full bg-gray-50 border border-gray-200 rounded-full py-1.5 pl-9 pr-4 text-xs text-gray-700 focus:outline-none focus:bg-white focus:border-emerald-600"
+                                className="w-full bg-gray-50 border border-gray-200 rounded-full py-1.5 pl-4 pr-9 text-xs text-gray-700 focus:outline-none focus:bg-white focus:border-emerald-600"
                             />
-                        </div>
+                            {/* Nút submit tìm kiếm khi chạm ngón tay trên điện thoại */}
+                            <button
+                                type="submit"
+                                aria-label="Tìm kiếm"
+                                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-emerald-700 text-xs cursor-pointer"
+                            >
+                                🔍
+                            </button>
+                        </form>
                         <div>
                             <Link
                                 to="/books"
@@ -240,6 +293,7 @@ const handleLogout = async () => {
                     </div>
                 </div>
 
+                {/* Menu danh mục Desktop (Trang chủ | Danh mục sách ▼ | Tất cả sách) */}
                 {/* Menu danh mục Desktop (Trang chủ | Danh mục sách ▼ | Tất cả sách) */}
                 <nav className="hidden md:block border-t border-gray-100 bg-white">
                     <div className="max-w-7xl mx-auto px-6 h-10 flex items-center justify-between text-sm">
@@ -347,6 +401,7 @@ const handleLogout = async () => {
             </header>
 
             {/* Thanh điều hướng đáy cho màn hình 360px (Mobile) */}
+            {/* Thanh điều hướng đáy cho màn hình 360px (Mobile) */}
             <nav className="md:hidden fixed bottom-0 inset-x-0 bg-white border-t border-gray-200 z-50">
                 <ul className="grid grid-cols-4 h-14 items-center text-[11px] font-medium text-gray-500 list-none m-0 p-0">
                     <li>
@@ -378,6 +433,14 @@ const handleLogout = async () => {
                             to="/cart"
                             className="w-full flex flex-col items-center justify-center gap-0.5 hover:text-emerald-700 relative"
                         >
+                            <span className="text-base relative">
+                                🛒
+                                {cartCount > 0 && (
+                                    <span className="absolute -top-1 -right-2.5 bg-emerald-700 text-white text-[9px] px-1 rounded-full font-bold leading-tight">
+                                        {cartCount}
+                                    </span>
+                                )}
+                            </span>
                             <span className="text-base relative">
                                 🛒
                                 {cartCount > 0 && (

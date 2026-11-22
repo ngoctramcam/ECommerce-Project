@@ -4,6 +4,9 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MainLayout from "./layouts/MainLayout";
 import HomePage from "./pages/HomePage";
+import BookListPage from "./pages/BookListPage";
+import BookDetailPage from "./pages/BookDetailPage";
+import CheckoutPage from "./pages/CheckoutPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import CartPage from "./pages/CartPage";
@@ -15,6 +18,7 @@ import BookManagement from "./pages/admin/BookManagement";
 import UserList from "./pages/admin/UserList";
 
 import axios from "axios";
+import ProfilePage from "./pages/ProfilePage";
 
 // [KIẾN THỨC TRỌNG TÂM - Tách lớp Client-Server & Bảo mật NFR-01]:
 // Frontend React giao tiếp với Backend Laravel qua HTTP/JSON, không truy vấn trực tiếp CSDL.
@@ -42,11 +46,18 @@ export default function App() {
                     {/* [NGÀY 3 - TV3 - TM-01]: Trang chủ hiển thị mặc định khi vào "/" */}
                     <Route index element={<HomePage />} />
 
+                    {/* <---TM-02: Khai báo đường dẫn "/books" cho trang danh sách & tìm kiếm sách (TM-02) */}
+                    <Route path="books" element={<BookListPage />} />
+                    {/* tm-03*/}
+                    <Route path="/books/:id" element={<BookDetailPage />} />
+                    <Route path="checkout" element={<CheckoutPage />} />
+
                     {/* [NGÀY 4 - TV3 & TV2 - TM-04]: Trang Đăng nhập và Đăng ký */}
                     <Route path="login" element={<LoginPage />} />
                     <Route path="register" element={<RegisterPage />} />
                     {/*TV3: Giao diện giỏ hàng */}
-                    <Route path="cart" element={<CartPage/>}/>
+                    <Route path="cart" element={<CartPage />} />
+                    <Route path="profile" element={<ProfilePage />} />
                 </Route>
 
                 {/* Giao diện Admin (tách riêng để không dính Header/Footer của trang bán hàng) */}

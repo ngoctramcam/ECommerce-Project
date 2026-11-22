@@ -2,12 +2,15 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;                 
+use App\Services\ProductService;
 use App\Http\Controllers\AuthController;
 use App\Http\Middleware\AdminAuthMiddleware;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\OrderController;
 
 // Route trang chủ
 Route::get('/', function () {
@@ -39,6 +42,21 @@ Route::delete('/api/cart/{id}', [CartController::class, 'destroy']);
 // TV4: Công khai (Bên ngoài Admin - chỉ cho phép xem danh sách & chi tiết)
 Route::apiResource('api/products', ProductController::class)->only(['index', 'show']);
 Route::apiResource('api/categories', CategoryController::class)->only(['index', 'show']);
+// [TV3 - TM-02]: Tìm kiếm, lọc, sắp xếp và phân trang 12 sách/trang
+Route::get('/api/books/search', function (Request $request, ProductService $productService) {
+    return response()->json(
+        $productService->search(
+            $request->query('keyword'),
+            $request->query('categoryId'),
+            $request->query('minPrice'),
+            $request->query('maxPrice'),
+            $request->query('sort', 'newest'),
+            (int) $request->query('page', 1)
+        )
+    );
+});
+
+Route::post('api/orders', [OrderController::class, 'store']);
 
 Route::middleware([AdminAuthMiddleware::class])->group(function () {
     Route::get('/admin', function () {
