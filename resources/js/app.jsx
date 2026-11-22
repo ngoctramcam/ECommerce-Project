@@ -4,6 +4,7 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MainLayout from "./layouts/MainLayout";
 import HomePage from "./pages/HomePage";
+import BookListPage from "./pages/BookListPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import CartPage from "./pages/CartPage";
@@ -41,6 +42,9 @@ export default function App() {
                 <Route path="/" element={<MainLayout />}>
                     {/* [NGÀY 3 - TV3 - TM-01]: Trang chủ hiển thị mặc định khi vào "/" */}
                     <Route index element={<HomePage />} />
+
+                    {/* <---TM-02: Khai báo đường dẫn "/books" cho trang danh sách & tìm kiếm sách (TM-02) */}
+                    <Route path="books" element={<BookListPage />} />
 
                     {/* [NGÀY 4 - TV3 & TV2 - TM-04]: Trang Đăng nhập và Đăng ký */}
                     <Route path="login" element={<LoginPage />} />
