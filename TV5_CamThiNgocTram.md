@@ -225,3 +225,49 @@ AI cung cấp trọn bộ mã nguồn xử lý phía backend (CartService và Ca
 ### 8. Sản phẩm cuối cùng
 
 Link commit/PR: [...] (https://github.com/ngoctramcam/ECommerce-Project/tree/feat/TM-05-gio-hang)
+
+## AI-06 – Xây dựng và hoàn thiện trang Đơn hàng của tôi (My Orders Page)
+
+- **Ngày / Người dùng AI:** 22/11/2026 – TV5
+- **Công cụ AI:** Copilot
+- **Thẻ Trello / Nhánh Git liên quan:** [TM-07] Đơn hàng của tôi
+
+### 1. Mục đích
+
+Nhờ AI hỗ trợ xây dựng chức năng Đơn hàng của tôi (My Orders) cho người dùng từ trang cá nhân (Profile), bao gồm: lấy danh sách lịch sử đơn hàng và chi tiết sách từ CSDL, hiển thị giao diện responsive, cập nhật trạng thái đơn hàng (Hủy đơn hàng, Xác nhận đã nhận / Không nhận) và tự động hoàn lại số lượng tồn kho khi hủy đơn sử dụng Laravel và React.
+
+### 2. Prompt đã dùng
+
+Tôi đang làm trang Đơn hàng của tôi cho website bán sách bằng Laravel và React (Tailwind CSS). Dựa trên cấu trúc bảng `orders`, `order_items`, `products`, `vouchers`, hãy giúp tôi viết `OrderController` để lấy danh sách đơn hàng của người dùng đang đăng nhập, cập nhật trạng thái đơn hàng (hủy đơn, xác nhận đã nhận/không nhận, hoàn lại số lượng tồn kho `stock` khi hủy đơn) và hoàn thiện giao diện `MyOrdersPage.jsx` responsive theo thiết kế.
+
+### 3. Kết quả AI trả về (tóm tắt)
+
+AI cung cấp mã nguồn xử lý phía backend (`OrderController.php` gồm hàm `index` truy vấn đơn hàng qua Eloquent eager loading và hàm `updateStatus` dùng transaction cập nhật trạng thái kèm hoàn tồn kho) cùng component giao diện React (`MyOrdersPage.jsx`) hiển thị danh sách thẻ đơn hàng, chuẩn hóa trạng thái và xử lý các nút thao tác theo từng trạng thái đơn.
+
+### 4. Phần giữ lại
+
+- Giữ lại cấu trúc truy vấn Eloquent `Order::with(['orderItems.product', 'voucher'])` để lấy đầy đủ thông tin đơn hàng, danh sách sách và mã giảm giá áp dụng.
+
+- Giữ lại logic dùng `DB::transaction` và `lockForUpdate()` trong hàm `updateStatus` để đảm bảo cộng hoàn lại số lượng (`increment('stock', $item->quantity)`) chính xác và tránh hoàn kho trùng lặp khi khách hủy đơn.
+
+- Giữ lại bố cục giao diện thẻ đơn hàng responsive (Desktop & Mobile) cùng hàm `normalizeStatus()` chuẩn hóa trạng thái tiếng Việt/tiếng Anh từ CSDL để hiển thị đúng nút thao tác (_Hủy đơn hàng_, _Không nhận/Đã nhận_, _Đánh giá_).
+
+### 5. Phần loại bỏ chỉnh sửa và lý do
+
+- Sửa lại tên các cột thông tin người nhận (`recipient_name`, `recipient_phone`), giá đơn hàng (`unit_price`) và khóa chính (`order_id`, `order_item_id`) cho khớp chính xác với Model `Order` và `OrderItem` trong dự án.
+
+- Bổ sung hàm `normalizeStatus()` ở frontend để khớp cả giá trị trạng thái lưu bằng tiếng Việt (`Chờ xác nhận`, `Đang giao`, `Hoàn thành`, `Đã hủy`) lẫn tiếng Anh trong CSDL.
+
+### 6. AI sai hoặc chưa chắc chắn ở đâu
+
+- Ban đầu AI đặt tên cột là `receiver_name`, `receiver_phone` và `price` chưa khớp với tên cột thực tế (`recipient_name`, `recipient_phone`, `unit_price`) trong Model `Order` và `OrderItem`.
+
+- Ban đầu AI chỉ kiểm tra trạng thái chuỗi tiếng Anh (`pending`, `shipping`, `completed`) nên chưa nhận diện được dữ liệu trạng thái tiếng Việt từ Seeder, và chưa tự động cộng hoàn số lượng tồn kho `stock` khi khách bấm hủy đơn hàng.
+
+### 7. Cách kiểm chứng
+
+- Đối chiếu tên cột, khóa ngoại và quan hệ trong file `app/Models/Order.php`, `app/Models/OrderItem.php`, các file migration và dữ liệu thực tế trên phpMyAdmin (`bookstore_db`).
+- Chạy kiểm thử thực tế trên trình duyệt (`http://127.0.0.1:8000`):
+  - Truy cập từ trang Tài khoản (`/profile`) $\rightarrow$ bấm vào trang Đơn hàng của tôi (`/orders`) $\rightarrow$ hiển thị đúng danh sách đơn hàng của tài khoản đang đăng nhập kèm thông tin người nhận, sách, mã giảm giá và tổng tiền.
+  - Bấm **Hủy đơn hàng** ở đơn _Chờ xác nhận_ $\rightarrow$ trạng thái đơn chuyển sang _Đã hủy_, nút hủy ẩn đi và số lượng tồn kho (`stock`) của các sách trong đơn được cộng hoàn lại chính xác trong bảng `products`.
+  - Bấm **Đã nhận** / **Không nhận** ở đơn _Đang giao_ $\rightarrow$ trạng thái cập nhật xuống CSDL và giao diện đổi sang nút _Đánh giá_ (khi hoàn thành) hoặc _Đã hủy_ (khi không nhận).
