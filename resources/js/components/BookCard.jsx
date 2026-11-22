@@ -8,7 +8,7 @@ const getCsrfToken = () => {
 
 export default function BookCard({ book, onAddToCart }) {
     const formattedPrice = new Intl.NumberFormat("vi-VN").format(
-        book.price || 0
+        book.price || 0,
     );
 
     const handleAddToCart = async (e) => {
@@ -63,7 +63,10 @@ export default function BookCard({ book, onAddToCart }) {
     };
 
     return (
-        <div className="bg-white border border-gray-200 rounded-xl p-3 sm:p-4 flex flex-col justify-between hover:shadow-md transition-shadow">
+        // [NGÀY 9 - Responsive 360px]:
+        // - min-w-0 overflow-hidden: Khóa chiều rộng thẻ sách, không cho chữ/ảnh bên trong đẩy phình cột lưới 2 cột
+        // - p-2.5 sm:p-4: Giảm lề trong thẻ từ 12px xuống 10px trên màn 360px để bìa sách và nút bấm rộng rãi hơn
+        <div className="min-w-0 overflow-hidden bg-white border border-gray-200 rounded-xl p-2.5 sm:p-4 flex flex-col justify-between hover:shadow-md transition-shadow">
             <div>
                 {/* Bấm vào ảnh bìa để chuyển sang trang chi tiết sách */}
                 <Link

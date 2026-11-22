@@ -239,7 +239,8 @@ export default function BookDetailPage() {
             <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-8">
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-10 items-start">
                     {/* Cột trái: Ảnh bìa sách lấy từ cột product.image */}
-                    <div className="md:col-span-5 bg-emerald-50/60 rounded-xl p-6 flex items-center justify-center">
+                    {/* [NGÀY 9 - Responsive 360px]: Thu gọn nhẹ padding và khung ảnh bìa (w-44 h-60) cho vừa màn 360px */}
+                    <div className="md:col-span-5 bg-emerald-50/60 rounded-xl p-4 sm:p-6 flex items-center justify-center">
                         {product.image ? (
                             <img
                                 src={product.image}
@@ -255,7 +256,8 @@ export default function BookDetailPage() {
                     </div>
 
                     {/* Cột phải: Thông tin chi tiết & Nút thêm vào giỏ (TM-05) */}
-                    <div className="md:col-span-7 space-y-4">
+                    {/* [NGÀY 9 - Responsive 360px]: Thêm min-w-0 để nội dung chữ không đẩy tràn cột */}
+                    <div className="md:col-span-7 min-w-0 space-y-4">
                         <span className="inline-block text-[11px] font-semibold uppercase tracking-wider text-emerald-700">
                             {categoryName}
                         </span>
@@ -419,7 +421,8 @@ export default function BookDetailPage() {
                     <h2 className="text-base sm:text-lg font-bold text-gray-900 mb-4">
                         Sách cùng danh mục
                     </h2>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5">
+                    {/* [NGÀY 9 - Responsive 360px]: Chỉnh gap-2.5 trên mobile để 2 cột sách cùng danh mục vừa khít 360px */}
+                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-5">
                         {relatedBooks.map((item) => (
                             <BookCard
                                 key={item.product_id ?? item.id}

@@ -109,7 +109,8 @@ export default function HomePage() {
                 </h2>
 
                 {/* Dãy nút lọc dạng thẻ bo tròn (Pill Tabs) */}
-                <div className="flex items-center gap-2 overflow-x-auto pb-2 mb-5">
+                {/* Đổi overflow-x-auto pb-2 thành flex-wrap */}
+                <div className="flex flex-wrap items-center gap-2 mb-5">
                     <button
                         type="button"
                         onClick={() => handleTabClick("all")}
@@ -140,14 +141,13 @@ export default function HomePage() {
                 </div>
 
                 {categoryBooks.length > 0 ? (
-                    <div className="flex gap-3 sm:gap-5 overflow-x-auto pb-3 snap-x snap-mandatory scroll-smooth">
-                        {categoryBooks.map((book) => (
-                            <div
-                                key={book.product_id}
-                                className="w-[calc(50%-6px)] md:w-[calc(25%-15px)] shrink-0 snap-start"
-                            >
-                                <BookCard book={book} />
-                            </div>
+                    // [NGÀY 9 - Responsive 360px]:
+                    // - grid-cols-2: 2 cột trên mobile 360px
+                    // - md:grid-cols-4: 4 cột trên desktop >= 768px
+                    // - gap-2.5 sm:gap-5: Khoảng cách giữa các thẻ sách, nhỏ hơn trên mobile để bìa sách rộng hơn
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-5">
+                        {newestBooks.map((book) => (
+                            <BookCard key={book.product_id} book={book} />
                         ))}
                     </div>
                 ) : (

@@ -206,7 +206,8 @@ export default function CartPage() {
 
     return (
         <div className="min-h-screen bg-[#f8f9fa] font-sans text-gray-800 pb-36 lg:pb-12">
-            <div className="max-w-7xl mx-auto px-3 sm:px-6 pt-4 sm:pt-6 lg:pt-8">
+            {/* [NGÀY 9 - Responsive 360px]: Đổi px-3 sm:px-6 thành px-0 để không bị cộng dồn lề với MainLayout */}
+            <div className="max-w-7xl mx-auto px-0 pt-2 sm:pt-4 lg:pt-6">
                 {/* Breadcrumb & Tiêu đề */}
                 <div className="mb-4 sm:mb-6">
                     <div className="text-xs text-gray-400 mb-1.5 flex items-center gap-1.5">
@@ -248,7 +249,8 @@ export default function CartPage() {
                 ) : (
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-6 items-start">
                         {/* CỘT TRÁI: Danh sách sản phẩm */}
-                        <div className="lg:col-span-8">
+                        {/* [NGÀY 9 - Responsive 360px]: Thêm min-w-0 để danh sách sản phẩm co gọn trong khung 360px */}
+                        <div className="lg:col-span-8 min-w-0">
                             {/* --- GIAO DIỆN DESKTOP --- */}
                             <div className="hidden lg:block bg-white rounded-xl border border-gray-200/80 shadow-xs overflow-hidden">
                                 <div className="overflow-x-auto">
@@ -515,7 +517,8 @@ export default function CartPage() {
                         </div>
 
                         {/* CỘT PHẢI: Tóm tắt đơn hàng & Mã giảm giá */}
-                        <div className="lg:col-span-4 lg:sticky lg:top-20 bg-white rounded-xl border border-gray-200/80 shadow-xs p-4 sm:p-6">
+                        {/* [NGÀY 9 - Responsive 360px]: Thêm min-w-0 để khung mã giảm giá và tóm tắt không bị tràn ngang */}
+                        <div className="lg:col-span-4 min-w-0 lg:sticky lg:top-20 bg-white rounded-xl border border-gray-200/80 shadow-xs p-4 sm:p-6">
                             <h2 className="hidden lg:block text-lg font-bold text-[#1e293b] mb-4">
                                 Tóm tắt đơn hàng
                             </h2>

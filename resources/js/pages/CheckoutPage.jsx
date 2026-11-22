@@ -180,7 +180,8 @@ export default function CheckoutPage() {
                 className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 items-start"
             >
                 {/* Cột trái: Thông tin giao hàng & Thanh toán COD */}
-                <div className="lg:col-span-7 space-y-5">
+                {/* [NGÀY 9 - Responsive 360px]: Thêm min-w-0 để các ô input không đẩy phình khung form trên 360px */}
+                <div className="lg:col-span-7 min-w-0 space-y-5">
                     <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6 space-y-4">
                         <h2 className="text-base sm:text-lg font-bold text-gray-900">
                             Thông tin giao hàng
@@ -277,7 +278,8 @@ export default function CheckoutPage() {
                 </div>
 
                 {/* Cột phải: Tóm tắt đơn hàng giống hệt style card bên phải trang Giỏ hàng */}
-                <div className="lg:col-span-5 bg-white rounded-xl border border-gray-200 p-4 sm:p-6 space-y-4">
+                {/* [NGÀY 9 - Responsive 360px]: Thêm min-w-0 để khung tóm tắt đơn hàng không tràn ngang */}
+                <div className="lg:col-span-5 min-w-0 bg-white rounded-xl border border-gray-200 p-4 sm:p-6 space-y-4">
                     <h2 className="text-base sm:text-lg font-bold text-gray-900">
                         Tóm tắt đơn hàng ({orderItems.length} sản phẩm)
                     </h2>

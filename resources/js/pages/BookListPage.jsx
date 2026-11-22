@@ -166,7 +166,8 @@ export default function BookListPage() {
     };
 
     return (
-        <div className="max-w-7xl mx-auto px-3 sm:px-6 py-5">
+        // [NGÀY 9 - Responsive 360px]: Thêm px-0 để lưới sách sát mép màn hình mobile 360px
+        <div className="max-w-7xl mx-auto px-0 py-2 sm:py-4">
             {/* Breadcrumb (Trang chủ / Tất cả sách) */}
             <nav className="text-xs text-gray-500 mb-1.5">
                 <Link to="/" className="hover:text-emerald-700">
@@ -337,7 +338,8 @@ export default function BookListPage() {
                 </div>
             ) : (
                 <>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5">
+                    {/* [NGÀY 9 - Responsive 360px]: Chỉnh gap-2.5 trên mobile để 2 cột sách vừa khít khung 360px */}
+                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-5">
                         {pagination.data.map((book) => (
                             <BookCard
                                 key={book.book_id || book.id}
@@ -348,7 +350,8 @@ export default function BookListPage() {
 
                     {/* Thanh phân trang Trước 1 2 Sau */}
                     {pagination.last_page > 1 && (
-                        <div className="mt-8 flex items-center justify-center gap-1.5">
+                        // [NGÀY 9 - Responsive 360px]: Thêm flex-wrap để các nút số trang tự xuống dòng khi nhiều trang
+                        <div className="mt-8 flex flex-wrap items-center justify-center gap-1.5">
                             <button
                                 type="button"
                                 disabled={pagination.current_page <= 1}
