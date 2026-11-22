@@ -29,6 +29,61 @@ class ProductService
 
         return $query->get();
     }
+    /**
+     * [TV3 - TM-02]: Tìm kiếm, lọc, sắp xếp và phân trang phía server (12 sách/trang)
+     */
+    public function search(
+        ?string $keyword = null,
+        $categoryId = null,
+        $minPrice = null,
+        $maxPrice = null,
+        ?string $sort = 'newest',
+        int $page = 1
+    ) {
+        $query = Product::with('category')->where('status', 1);
+
+        // 1. Tìm kiếm theo tên sách hoặc tác giả (Eloquent tự tham số hóa)
+        $kw = trim((string) $keyword);
+        if ($kw !== '') {
+            $like = '%' . $kw . '%';
+            $query->where(function ($q) use ($like) {
+                $q->where('product_name', 'like', $like)
+                  ->orWhere('author', 'like', $like);
+            });
+        }
+
+        // 2. Lọc theo danh mục
+        if (!empty($categoryId) && $categoryId !== 'all') {
+            $query->where('category_id', $categoryId);
+        }
+
+        // 3. Lọc theo khoảng giá
+        if ($minPrice !== null && $minPrice !== '' && is_numeric($minPrice)) {
+            $query->where('price', '>=', (float) $minPrice);
+        }
+        if ($maxPrice !== null && $maxPrice !== '' && is_numeric($maxPrice)) {
+            $query->where('price', '<=', (float) $maxPrice);
+        }
+
+        // 4. Sắp xếp (Whitelist)
+        switch ($sort) {
+            case 'price-asc':
+            case 'price_asc':
+                $query->orderBy('price', 'asc');
+                break;
+            case 'price-desc':
+            case 'price_desc':
+                $query->orderBy('price', 'desc');
+                break;
+            case 'newest':
+            default:
+                $query->orderByDesc('product_id');
+                break;
+        }
+
+        // 5. Phân trang phía server: 12 sách/trang
+        return $query->paginate(12, ['*'], 'page', max(1, (int) $page));
+    }
 
     /**
      * Lấy chi tiết 1 sản phẩm
