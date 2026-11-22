@@ -26,6 +26,25 @@ export default function Header() {
     const [searchParams] = useSearchParams();
     const selectedCategory = searchParams.get("category") || "all";
 
+    // State & hàm xử lý tìm kiếm từ Header (đã khai báo chuẩn)
+    const [searchKeyword, setSearchKeyword] = useState(
+        searchParams.get("keyword") || "",
+    );
+
+    useEffect(() => {
+        setSearchKeyword(searchParams.get("keyword") || "");
+    }, [searchParams]);
+
+    const handleHeaderSearch = (e) => {
+        e.preventDefault();
+        const trimmed = searchKeyword.trim();
+        navigate(
+            trimmed
+                ? `/books?keyword=${encodeURIComponent(trimmed)}`
+                : "/books",
+        );
+    };
+
     const isHomePage = location.pathname === "/";
     const isBooksPage = location.pathname === "/books";
 
@@ -142,17 +161,24 @@ export default function Header() {
                             </span>
                         </Link>
 
-                        {/* Ô tìm kiếm Desktop */}
-                        <div className="hidden md:flex flex-1 max-w-md relative">
+                        {/* <--- [TM-02 - Ô tìm kiếm Desktop]: Đổi div thành form, gắn onSubmit, value và onChange */}
+                        <form
+                            onSubmit={handleHeaderSearch}
+                            className="hidden md:flex flex-1 max-w-md relative"
+                        >
                             <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm">
                                 🔍
                             </span>
                             <input
                                 type="text"
+                                value={searchKeyword}
+                                onChange={(e) =>
+                                    setSearchKeyword(e.target.value)
+                                }
                                 placeholder="Tìm tên sách, tác giả..."
                                 className="w-full bg-gray-50 border border-gray-200 rounded-full py-1.5 pl-9 pr-4 text-sm text-gray-700 focus:outline-none focus:bg-white focus:border-emerald-600 transition-all"
                             />
-                        </div>
+                        </form>
 
                         {/* Khu vực Tài khoản & Giỏ hàng */}
                         <div className="flex items-center gap-2 sm:gap-3 shrink-0">
@@ -205,16 +231,24 @@ export default function Header() {
 
                     {/* Ô tìm kiếm & lối tắt Tất cả sách trên Mobile */}
                     <div className="mt-2.5 md:hidden space-y-2">
-                        <div className="relative">
+                        {/* <--- [TM-02 Ô tìm kiếm Mobile]: Đổi div thành form, gắn onSubmit, value và onChange */}
+                        <form
+                            onSubmit={handleHeaderSearch}
+                            className="relative"
+                        >
                             <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs">
                                 🔍
                             </span>
                             <input
                                 type="text"
+                                value={searchKeyword}
+                                onChange={(e) =>
+                                    setSearchKeyword(e.target.value)
+                                }
                                 placeholder="Tìm sách, tác giả..."
                                 className="w-full bg-gray-50 border border-gray-200 rounded-full py-1.5 pl-9 pr-4 text-xs text-gray-700 focus:outline-none focus:bg-white focus:border-emerald-600"
                             />
-                        </div>
+                        </form>
                         <div>
                             <Link
                                 to="/books"
