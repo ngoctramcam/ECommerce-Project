@@ -10,6 +10,7 @@ import CheckoutPage from "./pages/CheckoutPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import CartPage from "./pages/CartPage";
+import MyOrdersPage from "./pages/MyOrdersPage";
 
 // Import các trang Admin đã có trong thư mục pages/admin
 import AdminRoute from "./pages/admin/components/AdminRoute";
@@ -55,9 +56,9 @@ export default function App() {
                     {/* [NGÀY 4 - TV3 & TV2 - TM-04]: Trang Đăng nhập và Đăng ký */}
                     <Route path="login" element={<LoginPage />} />
                     <Route path="register" element={<RegisterPage />} />
-                    {/*TV3: Giao diện giỏ hàng */}
-                    <Route path="cart" element={<CartPage />} />
-                    <Route path="profile" element={<ProfilePage />} />
+                    {/*TV4: Giao diện giỏ hàng */}
+                    <Route path="cart" element={<CartPage/>}/>
+                    <Route path= "orders" element={<MyOrdersPage/>}/>
                 </Route>
 
                 {/* Giao diện Admin (tách riêng để không dính Header/Footer của trang bán hàng) */}

@@ -39,6 +39,9 @@ Route::get('/api/cart', [CartController::class, 'index']);
 Route::post('/api/cart/add', [CartController::class, 'add']);
 Route::put('/api/cart/{id}', [CartController::class, 'update']);
 Route::delete('/api/cart/{id}', [CartController::class, 'destroy']);
+//TV5: Quản lý đơn hàng
+Route::get('/api/orders', [OrderController::class, 'index']);
+Route::patch('/api/orders/{id}/status', [OrderController::class, 'updateStatus']);
 
 // TV4: Công khai (Bên ngoài Admin - chỉ cho phép xem danh sách & chi tiết)
 Route::apiResource('api/products', ProductController::class)->only(['index', 'show']);
