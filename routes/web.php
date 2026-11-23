@@ -12,6 +12,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\OrderController;
 
+use App\Http\Controllers\ProfileController;
 // Route trang chủ
 Route::get('/', function () {
     return view('welcome');
@@ -73,8 +74,16 @@ Route::middleware([AdminAuthMiddleware::class])->group(function () {
     Route::get('users', [UserController::class, 'index']);
     Route::patch('/users/{id}/toggle-lock', [UserController::class, 'toggleLock']);
 });
+//Route cho ProfilePage
+Route::middleware('auth')->group(function () {
+    Route::get('/api/profile', [ProfileController::class, 'show']);
+    Route::put('/api/profile', [ProfileController::class, 'update']);
+    Route::put('/api/profile/password',[ProfileController::class,'changePassword']);
+});
 
+////////////1
 // [(TV3) ]: Route hứng toàn bộ đường dẫn phía React (/login, /register...) đặt ở cuối cùng để khi bấm F5 không bị lỗi 404
 Route::get('/{any}', function () {
     return view('welcome');
-})->where('any', '.*');
+
+})->where('any', '^(?!api/).*$');
