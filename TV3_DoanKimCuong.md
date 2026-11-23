@@ -7,7 +7,7 @@
 | Họ tên, MSSV    | DoanKimCuong – [0306241264]    |
 | Nhóm, đề tài    | Nhóm [03] – [Website bán sách] |
 | Vai trò         | TV3                            |
-| Công cụ AI dùng | Copilot, Figma AI, Gemini      |
+| Công cụ AI dùng | Copilot, Figma AI              |
 
 ## Bảng tổng hợp
 
