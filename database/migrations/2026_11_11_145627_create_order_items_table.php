@@ -22,6 +22,7 @@ return new class extends Migration
 
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('product_id');
+            $table->unsignedBigInteger('order_id');
 
             $table->timestamps(); // Tự động tạo created_at và updated_at dạng TIMESTAMP
             $table->boolean("is_delete")->default(true);
@@ -35,6 +36,11 @@ return new class extends Migration
             $table->foreign('product_id')
                 ->references('product_id')
                 ->on('products')
+                ->onDelete('cascade');
+
+            $table->foreign('order_id')
+                ->references('order_id')
+                ->on('orders')
                 ->onDelete('cascade');
         });
     }

@@ -14,6 +14,7 @@ import BookManagement from "./pages/admin/BookManagement";
 import UserList from "./pages/admin/UserList";
 
 import axios from "axios";
+import ProfilePage from "./pages/ProfilePage";
 
 // [KIẾN THỨC TRỌNG TÂM - Tách lớp Client-Server & Bảo mật NFR-01]:
 // Frontend React giao tiếp với Backend Laravel qua HTTP/JSON, không truy vấn trực tiếp CSDL.
@@ -45,7 +46,8 @@ export default function App() {
                     <Route path="login" element={<LoginPage />} />
                     <Route path="register" element={<RegisterPage />} />
                     {/*TV3: Giao diện giỏ hàng */}
-                    <Route path="cart" element={<CartPage/>}/>
+                    <Route path="cart" element={<CartPage />} />
+                    <Route path="profile" element={<ProfilePage />} />
                 </Route>
 
                 {/* Giao diện Admin (tách riêng để không dính Header/Footer của trang bán hàng) */}

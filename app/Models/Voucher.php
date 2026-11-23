@@ -17,6 +17,7 @@ class Voucher extends Model
         'code',
         'discount_amount',
         'expired_date',
+        'is_delete'
     ];
 
     // Quan hệ: Một Voucher được áp dụng cho nhiều Orders

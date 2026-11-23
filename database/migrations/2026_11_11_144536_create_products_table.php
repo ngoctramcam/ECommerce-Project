@@ -34,7 +34,7 @@ return new class extends Migration
             $table->index('category_id');
 
             $table->timestamps(); // Tự động tạo created_at và updated_at dạng TIMESTAMP
-            $table->boolean("is_delete")->default(true);
+            $table->boolean("is_delete")->default(false);
             $table->softDeletes(); // Tạo cột deleted_at (mặc định NULL)
             $table->foreign('category_id')
                 ->references('category_id')

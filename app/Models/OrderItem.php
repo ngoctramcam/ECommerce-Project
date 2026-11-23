@@ -19,6 +19,7 @@ class OrderItem extends Model
         'unit_price',
         'order_id',
         'product_id',
+        'user_id'
     ];
 
     // Quan hệ: OrderItem thuộc về một Order
