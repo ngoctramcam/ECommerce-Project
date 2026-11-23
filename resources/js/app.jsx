@@ -59,6 +59,7 @@ export default function App() {
                     {/*TV4: Giao diện giỏ hàng */}
                     <Route path="cart" element={<CartPage/>}/>
                     <Route path= "orders" element={<MyOrdersPage/>}/>
+                    <Route path="profile" element={<ProfilePage/>}/>
                 </Route>
 
                 {/* Giao diện Admin (tách riêng để không dính Header/Footer của trang bán hàng) */}
