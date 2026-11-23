@@ -16,7 +16,7 @@ import AdminRoute from "./pages/admin/components/AdminRoute";
 import CategoryManagement from "./pages/admin/CategoryManagement";
 import BookManagement from "./pages/admin/BookManagement";
 import UserList from "./pages/admin/UserList";
-
+import AdminLayout from "./layouts/AdminLayout";
 import axios from "axios";
 import ProfilePage from "./pages/ProfilePage";
 
@@ -61,11 +61,24 @@ export default function App() {
                 </Route>
 
                 {/* Giao diện Admin (tách riêng để không dính Header/Footer của trang bán hàng) */}
-                <Route element={<AdminRoute />}>
-                    <Route path="/admin">
-                        <Route path="categories" element={<CategoryManagement />} />
+                {/* Giao diện Admin (tách riêng để không dính Header/Footer của trang bán hàng) */}
+                <Route path="/admin" element={<AdminRoute />}>
+                    <Route element={<AdminLayout />}>
+                        <Route index element={<div>Tổng quan</div>} />
+                        <Route
+                            path="categories"
+                            element={<CategoryManagement />}
+                        />
                         <Route path="books" element={<BookManagement />} />
                         <Route path="users" element={<UserList />} />
+                        <Route
+                            path="orders"
+                            element={<div>Quản lý đơn hàng</div>}
+                        />
+                        <Route
+                            path="coupons"
+                            element={<div>Mã giảm giá</div>}
+                        />
                     </Route>
                 </Route>
             </Routes>
