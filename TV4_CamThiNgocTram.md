@@ -16,6 +16,7 @@
 | AI-03 | 12/11/202  | Lập trình | Nhờ AI tạo dữ liệu giùm                              | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/feat/database)       |
 | AI-04 | 16/11/202  | Lập trình | Nhờ AI viết chức năng CRUD cho Categories            | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/feat/TM-11-danh-muc) |
 | AI-05 | 21/11/202  | Lập trình | Nhờ AI viết chức năng CRUD cho Products              | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/feat/TM-12-san-pham) |
+| AI-06 | 23/11/202  | Lập trình | Nhờ AI viết chức năng tìm kiếm, lọc cho Categories   | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/feat/TM-11-danh-muc) |
 
 ## AI-01 – <Tạo ERD>
 
@@ -54,7 +55,7 @@ AI đề xuất 6 bảng với các thuộc tính thường có của các bản
 
 Link commit/PR: [...](https://github.com/ngoctramcam/ECommerce-Project/tree/docs/Database)
 
-## AI-02 – <Mô tả erd-v2>>
+## AI-02 – <Mô tả erd-v2>
 
 - **Ngày / Người dùng AI:** 11/11/2026 – TV4
 - **Công cụ AI:** Copilot
@@ -203,3 +204,54 @@ Ban đầu AI mặc định khóa chính của bảng là id thay vì cart_id, v
 ### 8. Sản phẩm cuối cùng
 
 Link commit/PR: [...](https://github.com/ngoctramcam/ECommerce-Project/tree/feat/TM-05-gio-hang)
+
+## AI-06 – Xây dựng Trang quản lý sản phẩm Admin và kiểm tra dữ liệu đầu vào
+
+- **Ngày / Người dùng AI:** 23/11/2026 – TV4
+- **Công cụ AI:** Gemini
+- **Thẻ Trello / Nhánh Git liên quan:** [TM-07] Quản lý sản phẩm
+
+### 1. Mục đích
+
+Nhờ AI hỗ trợ xây dựng chức năng Quản lý sản phẩm cho Admin sử dụng Laravel và React, bao gồm: tìm kiếm sản phẩm theo tên, lọc theo danh mục, phân trang phía server (server-side pagination) và kiểm tra tính hợp lệ dữ liệu phía server (validation: giá bán `> 0`, số lượng tồn kho `≥ 0`) khi thêm mới hoặc cập nhật sản phẩm.
+
+### 2. Prompt đã dùng
+
+Tôi đang làm Trang quản lý sản phẩm (Admin) cho website bán sách bằng Laravel và React (Tailwind CSS). Hãy giúp tôi viết API backend (`ProductController`) và giao diện React hỗ trợ:
+1. Tìm kiếm sản phẩm theo tên, lọc theo danh mục (`category_id`) và phân trang phía server (`paginate`).
+2. Kiểm tra dữ liệu đầu vào phía server (Validation) khi thêm mới và cập nhật sản phẩm đảm bảo giá bán phải lớn hơn 0 (`> 0`) và số lượng tồn kho lớn hơn hoặc bằng 0 (`>= 0`).
+
+### 3. Kết quả AI trả về (tóm tắt)
+
+AI cung cấp mã nguồn xử lý phía backend (`ProductController.php` gồm hàm `index` xử lý truy vấn lọc động theo từ khóa, danh mục kết hợp `paginate()` của Laravel và các hàm `store`/`update` có gắn luật kiểm tra dữ liệu `Request::validate`) cùng giao diện React hiển thị thanh tìm kiếm, bộ lọc danh mục, bảng danh sách sản phẩm, thanh điều hướng phân trang và hiển thị thông báo lỗi validation.
+
+### 4. Phần giữ lại
+
+- Giữ lại cách viết truy vấn điều kiện linh hoạt (`when()`) trên Eloquent Model `Product` để kết hợp đồng thời tìm kiếm theo tên sách, lọc theo danh mục và trả về cấu trúc phân trang chuẩn của Laravel (`data`, `current_page`, `last_page`, `total`).
+
+- Giữ lại bộ quy tắc kiểm tra dữ liệu phía server (`gt:0` cho giá bán và `integer|min:0` cho số lượng tồn kho) cùng thông báo lỗi tiếng Việt trả về mã `422 Unprocessable Entity` khi nhập sai.
+
+- Giữ lại cơ chế đồng bộ tham số trang (`page`), từ khóa tìm kiếm và danh mục đang chọn khi gọi API từ giao diện React.
+
+### 5. Phần loại bỏ chỉnh sửa và lý do
+
+- Sửa lại tên khóa chính (`product_id`, `category_id`) và tên các cột trong bảng `products` (`product_name`, `price`, `stock`, `author`, `image`) cho khớp chính xác với Model `Product` và cấu trúc CSDL thực tế của dự án.
+
+- Bổ sung kỹ thuật debounce (hoặc bấm nút tìm kiếm) ở ô nhập từ khóa trên React để tránh gọi API liên tục mỗi khi người dùng gõ từng ký tự, đồng thời reset trang hiện tại về `page = 1` mỗi khi thay đổi từ khóa tìm kiếm hoặc đổi danh mục lọc.
+
+### 6. AI sai hoặc chưa chắc chắn ở đâu
+
+- Ban đầu AI sử dụng tên cột mặc định là `id`, `name` và `quantity` thay vì `product_id`, `product_name` và `stock` như thiết kế bảng `products` của nhóm.
+
+- Ban đầu AI dùng luật `min:0` cho trường giá bán (`price`), cho phép nhập giá bằng `0`, nên đã được chỉnh lại thành `gt:0` (hoặc `min:1`) để đảm bảo đúng yêu cầu nghiệp vụ giá sản phẩm phải lớn hơn 0.
+
+### 7. Cách kiểm chứng
+
+- Đối chiếu tên cột và quan hệ `category()` trong file `app/Models/Product.php`, file migration `create_products_table.php` và dữ liệu thực tế trên phpMyAdmin.
+- Chạy kiểm thử thực tế trên trình duyệt (`http://127.0.0.1:8000`):
+  - Nhập tên sách vào ô tìm kiếm và chọn danh mục lọc $\rightarrow$ hệ thống gọi API kèm tham số truy vấn và trả về đúng danh sách sản phẩm khớp điều kiện.
+  - Bấm chuyển trang (`Trang 1`, `Trang 2`, ...) trên thanh phân trang $\rightarrow$ API tải đúng dữ liệu từng trang từ server và giữ nguyên điều kiện tìm kiếm/lọc đang áp dụng.
+  - Thử thêm mới hoặc sửa sản phẩm với giá `<= 0` (ví dụ `0` hoặc `-50000`) hoặc tồn kho `< 0` (ví dụ `-1`) $\rightarrow$ server chặn lưu xuống CSDL và trả về thông báo lỗi validation hiển thị rõ trên form.
+### 8. Sản phẩm cuối cùng
+
+Link commit/PR: [...](https://github.com/ngoctramcam/ECommerce-Project/tree/feat/TM-11-danh-muc)
