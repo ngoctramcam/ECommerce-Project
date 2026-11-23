@@ -92,7 +92,7 @@ export default function Header() {
             // Tính tổng số lượng các sản phẩm có trong giỏ
             const totalQty = items.reduce(
                 (sum, item) => sum + Number(item.quantity || 1),
-                0
+                0,
             );
             setCartCount(totalQty);
         } catch (error) {
@@ -124,23 +124,27 @@ export default function Header() {
     }, []);
 
     // Đăng xuất phía Client
-const handleLogout = async () => {
-    try {
-        await window.axios.post('/logout', {}, {
-            headers: { Accept: 'application/json' },
-        });
-    } catch (error) {
-        console.error('Lỗi khi đăng xuất trên server:', error);
-    } finally {
-        localStorage.removeItem('user');
-        localStorage.removeItem('token');
-        sessionStorage.removeItem('user');
-        sessionStorage.removeItem('token');
-        if (typeof setUser === 'function') setUser(null);
-        if (typeof setCartCount === 'function') setCartCount(0);
-        window.location.href = '/login';
-    }
-};
+    const handleLogout = async () => {
+        try {
+            await window.axios.post(
+                "/logout",
+                {},
+                {
+                    headers: { Accept: "application/json" },
+                },
+            );
+        } catch (error) {
+            console.error("Lỗi khi đăng xuất trên server:", error);
+        } finally {
+            localStorage.removeItem("user");
+            localStorage.removeItem("token");
+            sessionStorage.removeItem("user");
+            sessionStorage.removeItem("token");
+            if (typeof setUser === "function") setUser(null);
+            if (typeof setCartCount === "function") setCartCount(0);
+            window.location.href = "/login";
+        }
+    };
 
     // Chọn danh mục và cuộn xuống khối lọc sách ở Trang chủ
     // Chọn danh mục và cuộn xuống khối lọc sách ở Trang chủ
@@ -246,7 +250,6 @@ const handleLogout = async () => {
                                 <span>Giỏ hàng</span>
                                 <span className="bg-emerald-700 text-white text-[11px] px-1.5 py-0.5 rounded-full font-semibold leading-none">
                                     {cartCount}
-                                    {cartCount}
                                 </span>
                             </Link>
                         </div>
@@ -349,16 +352,16 @@ const handleLogout = async () => {
                                                     type="button"
                                                     onClick={() =>
                                                         handleSelectCategory(
-                                                            cat.category_id
+                                                            cat.category_id,
                                                         )
                                                     }
                                                     className={`w-full text-left px-4 py-2 text-sm transition-colors cursor-pointer ${
                                                         isHomePage &&
                                                         String(
-                                                            selectedCategory
+                                                            selectedCategory,
                                                         ) ===
                                                             String(
-                                                                cat.category_id
+                                                                cat.category_id,
                                                             )
                                                             ? "bg-emerald-50 text-emerald-700 font-semibold"
                                                             : "hover:bg-gray-50 hover:text-emerald-700"
@@ -441,14 +444,7 @@ const handleLogout = async () => {
                                     </span>
                                 )}
                             </span>
-                            <span className="text-base relative">
-                                🛒
-                                {cartCount > 0 && (
-                                    <span className="absolute -top-1 -right-2.5 bg-emerald-700 text-white text-[9px] px-1 rounded-full font-bold leading-tight">
-                                        {cartCount}
-                                    </span>
-                                )}
-                            </span>
+
                             <span>Giỏ hàng</span>
                         </Link>
                     </li>
@@ -493,7 +489,7 @@ const handleLogout = async () => {
                                         type="button"
                                         onClick={() =>
                                             handleSelectCategory(
-                                                cat.category_id
+                                                cat.category_id,
                                             )
                                         }
                                         className="px-3 py-1 rounded-full text-xs bg-gray-100 text-gray-700 hover:bg-emerald-50 hover:text-emerald-700"
