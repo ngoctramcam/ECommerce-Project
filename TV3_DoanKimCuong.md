@@ -1,6 +1,4 @@
-# AI log – TV3 – Đoàn Kim Cuong
-
-> Mỗi thành viên một tệp trong `ai-logs/`. Ghi một mục ngay sau mỗi lần dùng AI có ảnh hưởng đến sản phẩm, commit cùng thay đổi liên quan. Cả đồ án tối thiểu 6 mục có nội dung thực chất. Mã mục tăng dần: AI-01, AI-02, ...
+# AI log – TV3 – Đoàn Kim Cương
 
 | Mục             | Thông tin                      |
 | --------------- | ------------------------------ |
@@ -13,7 +11,7 @@
 
 | Mã    | Ngày         | Giai đoạn | Nội dung                                                                           | Commit / PR                                                                                                         |
 | ----- | ------------ | --------- | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| AI-01 | [10/11/2026] | []        | `<Thiết kế wireframe>`                                                             | d1fa26b5cdb9a3b26ccc8591a3b4d2a99ab7ee59                                                                            |
+| AI-01 | [10/11/2026] | []        | `<Thiết kế wireframe>`                                                             | https://github.com/ngoctramcam/ECommerce-Project/commit/8d62a3f022f2d69a9421b7a966c315170bb709559                   |
 | AI-02 | [10/11/2026] | []        | `<Hoàn thiện wireframe 6 màn hình có chú thích các thành phần.>`                   | https://www.figma.com/design/9y5SezznOTU3EHgy4bsjCg%C4%90%E1%BB%93-%C3%A1n-WEB?node-id=0-1&p=f&t=yGS0fonpJ8x85MAD-0 |
 | AI-03 | [10/11/2026] | []        | `<Dựng layout chung:>`                                                             | https://github.com/ngoctramcam/ECommerce-Project/tree/feature/resources                                             |
 | AI-04 | [10/11/2026] | []        | `<Tạo trang mẫu dùng layout để cả nhóm tái sử dụng.>`                              | https://github.com/ngoctramcam/ECommerce-Project/tree/feature/resources                                             |
