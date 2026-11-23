@@ -15,6 +15,9 @@
 | AI-02 | 11/11/2026 | Thiết kế  | Tạo test case TM-05 chức năng giỏ hàng          | [Commit](https://github.com/ngoctramcam/ECommerce-Project/blob/docs/test-case.md)   |
 | AI-03 | 12/11/2026 | Thiết kế  | Tạo test case TM-04 chức năng đăng ký/đăng nhập | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/feat/database)       |
 | AI-04 | 19/11/2026 | Lập trình | Nhờ AI viết chức năng giỏ hàng                  | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/feat/TM-05-gio-hang) |
+| AI-05 | 20/11/2026 | Lập trình | Rà soát và hoàn thiện logic Trang giỏ hàng (Cart Page)                 | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/feat/TM-05-gio-hang) |
+| AI-06 | 22/11/2026 | Lập trình | Xây dựng và hoàn thiện trang Đơn hàng của tôi (My Orders Page)| [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/feat/TM-07-don-cua-toi) |
+| AI-07 | 23/11/2026 | Lập trình | Xây dựng và hoàn thiện trang Đơn hàng của tôi (My Orders Page)| [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/feat/TM-07-don-cua-toi) 
 
 ## AI-01 – <tạo repository>
 
@@ -271,3 +274,59 @@ AI cung cấp mã nguồn xử lý phía backend (`OrderController.php` gồm h�
   - Truy cập từ trang Tài khoản (`/profile`) $\rightarrow$ bấm vào trang Đơn hàng của tôi (`/orders`) $\rightarrow$ hiển thị đúng danh sách đơn hàng của tài khoản đang đăng nhập kèm thông tin người nhận, sách, mã giảm giá và tổng tiền.
   - Bấm **Hủy đơn hàng** ở đơn _Chờ xác nhận_ $\rightarrow$ trạng thái đơn chuyển sang _Đã hủy_, nút hủy ẩn đi và số lượng tồn kho (`stock`) của các sách trong đơn được cộng hoàn lại chính xác trong bảng `products`.
   - Bấm **Đã nhận** / **Không nhận** ở đơn _Đang giao_ $\rightarrow$ trạng thái cập nhật xuống CSDL và giao diện đổi sang nút _Đánh giá_ (khi hoàn thành) hoặc _Đã hủy_ (khi không nhận).
+    
+### 8. Sản phẩm cuối cùng
+
+Link commit/PR: https://github.com/ngoctramcam/ECommerce-Project/tree/feat/TM-05-gio-hang
+
+## AI-07 – Xây dựng và hoàn thiện trang Quản lý Đơn hàng Admin (Admin Order Management)
+
+- **Ngày / Người dùng AI:** 23/11/2026 – TV5
+- **Công cụ AI:** Gemini
+- **Thẻ Trello / Nhánh Git liên quan:** [TM-13] Quản lý đơn hàng (Admin)
+
+### 1. Mục đích
+
+Nhờ AI hỗ trợ xây dựng chức năng Quản lý Đơn hàng dành cho Quản trị viên (Admin) sử dụng Laravel và React (Tailwind CSS), bao gồm: hiển thị danh sách đơn hàng từ CSDL theo giao diện responsive (bảng 7 cột trên Desktop và danh sách thẻ dọc trên Mobile), tìm kiếm theo mã đơn / tên người nhận / số điện thoại, lọc theo trạng thái đơn hàng, phân trang và kiểm soát luồng chuyển trạng thái một chiều (**Chờ xác nhận → Đang giao → Hoàn thành**, hoặc rẽ sang **Đã hủy**, cấm đi ngược và tự động hoàn lại số lượng tồn kho khi hủy đơn).
+
+### 2. Prompt đã dùng
+
+Tôi đang làm trang Quản lý Đơn hàng cho Admin (`AdminOrdersPage.jsx`) trên website bán sách bằng Laravel và React (Tailwind CSS). Dựa trên bản thiết kế Desktop & Mobile và cấu trúc bảng `orders`, `order_items`, `products`, `users`, `vouchers`, hãy giúp tôi viết API (`adminIndex`, `adminUpdateStatus`) trong `OrderController.php` và giao diện React để lọc đơn hàng theo trạng thái, tìm kiếm, phân trang và ép luồng chuyển trạng thái một chiều (*Chờ xác nhận → Đang giao → Hoàn thành* hoặc *→ Đã hủy*), không cho đi ngược.
+
+### 3. Kết quả AI trả về (tóm tắt)
+
+AI cung cấp 2 phương thức xử lý phía backend (`adminIndex` truy vấn danh sách đơn hàng có lọc theo trạng thái từ CSDL và `adminUpdateStatus` sử dụng transaction cùng mảng quy tắc chuyển trạng thái một chiều `$allowedTransitions`) kết hợp component giao diện React `AdminOrdersPage.jsx` hỗ trợ hiển thị dạng bảng trên Desktop, dạng thẻ dọc trên Mobile, tìm kiếm, lọc trạng thái, lọc phương thức thanh toán và phân trang.
+
+### 4. Phần giữ lại
+
+- Giữ lại mảng quy tắc chuyển trạng thái một chiều `$allowedTransitions` và biểu thức `match()` chuẩn hóa trạng thái ở backend để chặn tuyệt đối thao tác chuyển ngược trạng thái hoặc sửa đổi đơn hàng đã *Hoàn thành* / *Đã hủy*.
+
+- Giữ lại logic dùng `DB::transaction` và `lockForUpdate()` tự động cộng hoàn lại số lượng tồn kho (`increment('stock', $item->quantity)`) vào bảng `products` khi Admin hủy đơn.
+
+- Giữ lại bố cục giao diện responsive hai phiên bản (bảng 7 cột trên Desktop và danh sách thẻ lưới 2x2 trên Mobile) kèm bộ lọc trạng thái, thanh tìm kiếm và phân trang 6 đơn/trang.
+
+### 5. Phần loại bỏ / chỉnh sửa và lý do
+
+- Gộp sạch các hàm `adminIndex` và `adminUpdateStatus` vào chung một class `OrderController` với hàm `store` đặt hàng hiện có của nhóm, loại bỏ phần khai báo trùng lặp.
+
+- Bổ sung định dạng mã đơn hàng (`ĐHxxx`), mã người dùng (`NDxxx`), giờ đặt hàng (`H:i`), mã giảm giá (`voucher_code`) và tên phương thức thanh toán hiển thị tiếng Việt (*Thanh toán khi nhận hàng*, *Chuyển khoản*) cho khớp với dữ liệu CSDL và giao diện thiết kế.
+
+- Đặt khai báo route `/api/admin/orders` và `/api/admin/orders/{id}/status` lên phía trên route catch-all `/{any}` trong `routes/web.php` để tránh bị React Router chặn gây lỗi `404`.
+
+### 6. AI sai hoặc chưa chắc chắn ở đâu
+
+- Khi ghép code mới vào file `OrderController.php` đã có sẵn code của nhóm, việc dán nối trực tiếp gây trùng khai báo `class OrderController` và hàm `adminIndex()` dẫn đến lỗi `FatalError` trước khi được rà soát và gộp gọn lại thành một class duy nhất.
+
+- Ban đầu API `adminIndex` chưa trả về đầy đủ 3 trường phụ trợ (`user_code`, `order_time`, `voucher_code`) khiến một số cột trên giao diện phải dùng giá trị mặc định cho đến khi được bổ sung trích xuất từ CSDL.
+
+### 7. Cách kiểm chứng
+
+- Kiểm tra cú pháp `app/Http/Controllers/OrderController.php`, thứ tự khai báo route trong `routes/web.php`, chạy `php artisan route:clear` và đối chiếu dữ liệu bảng `orders` trên phpMyAdmin.
+- Chạy kiểm thử thực tế trên trình duyệt (`http://127.0.0.1:8000/admin/orders`):
+  - Chọn từng mục trong dropdown lọc trạng thái (*Chờ xác nhận*, *Đang giao*, *Hoàn thành*, *Đã hủy*) và nhập từ khóa tìm kiếm $\rightarrow$ danh sách lọc đúng các đơn hàng tương ứng và phân trang hoạt động chính xác trên cả màn hình Desktop lẫn Mobile.
+  - Bấm **Xác nhận** ở đơn *Chờ xác nhận* $\rightarrow$ đơn chuyển sang *Đang giao* (không có nút quay lại *Chờ xác nhận*).
+  - Bấm **Hoàn thành** ở đơn *Đang giao* $\rightarrow$ đơn chuyển sang *Hoàn thành* và khóa toàn bộ nút chuyển trạng thái.
+  - Bấm **Hủy** ở đơn chưa hoàn thành $\rightarrow$ đơn chuyển sang *Đã hủy*, khóa thao tác và số lượng tồn kho (`stock`) của các sản phẩm trong đơn được cộng hoàn lại trong CSDL.
+### 8. Sản phẩm cuối cùng
+
+Link commit/PR: https://github.com/ngoctramcam/ECommerce-Project/tree/feat/TM-13-quan-ly-don
