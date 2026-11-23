@@ -61,7 +61,7 @@ class OrderService
             $order = Order::create([
                 'user_id'          => $userId,
                 'total_amount'     => $totalAmount,
-                'status'           => 'pending',
+                'status'           => 'PENDING',
                 'order_date'       => now(),
                 'recipient_name'   => $orderData['recipient_name'] ?? null,
                 'recipient_phone'  => $orderData['recipient_phone'] ?? null,
