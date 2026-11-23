@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Http\Request;                 
+use Illuminate\Http\Request;
 use App\Services\ProductService;
 use App\Http\Controllers\AuthController;
 use App\Http\Middleware\AdminAuthMiddleware;
@@ -73,6 +73,10 @@ Route::middleware([AdminAuthMiddleware::class])->group(function () {
     Route::apiResource('api/products', ProductController::class)->except(['index', 'show']);
     Route::patch('api/products/{id}/toggle-status', [ProductController::class, 'toggleStatus']);
 
+    //TV5: Quan ly don hang
+    Route::get('/api/admin/orders', [OrderController::class, 'adminIndex']);
+    Route::patch('/api/admin/orders/{id}/status', [OrderController::class, 'adminUpdateStatus']);
+
     //Phần Vinh làm
     Route::get('users', [UserController::class, 'index']);
     Route::patch('/users/{id}/toggle-lock', [UserController::class, 'toggleLock']);
@@ -81,12 +85,11 @@ Route::middleware([AdminAuthMiddleware::class])->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/api/profile', [ProfileController::class, 'show']);
     Route::put('/api/profile', [ProfileController::class, 'update']);
-    Route::put('/api/profile/password',[ProfileController::class,'changePassword']);
+    Route::put('/api/profile/password', [ProfileController::class, 'changePassword']);
 });
 
 ////////////1
 // [(TV3) ]: Route hứng toàn bộ đường dẫn phía React (/login, /register...) đặt ở cuối cùng để khi bấm F5 không bị lỗi 404
 Route::get('/{any}', function () {
     return view('welcome');
-
 })->where('any', '^(?!api/).*$');

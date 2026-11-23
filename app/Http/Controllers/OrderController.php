@@ -15,9 +15,7 @@ class OrderController extends Controller
 {
     public function __construct(private readonly OrderService $orderService) {}
 
-    // =========================================================================
     // 1. ĐẶT HÀNG TỪ GIỎ HÀNG (Code của nhóm)
-    // =========================================================================
     public function store(OrderRequest $request): JsonResponse
     {
         $validated = $request->validated();
@@ -53,9 +51,7 @@ class OrderController extends Controller
         }
     }
 
-    // =========================================================================
     // 2. KHÁCH HÀNG: XEM ĐƠN HÀNG & HỦY / XÁC NHẬN NHẬN HÀNG
-    // =========================================================================
     public function index(Request $request): JsonResponse
     {
         $userId = Auth::id() ?? $request->query('user_id');
@@ -64,7 +60,6 @@ class OrderController extends Controller
             return response()->json(['message' => 'Vui lòng đăng nhập'], 401);
         }
 
-        // Eager load sẵn sản phẩm trong đơn (orderItems.product) và mã giảm giá (voucher)
         $orders = Order::with(['orderItems.product', 'voucher'])
             ->where('user_id', $userId)
             ->orderByDesc('order_id')
@@ -83,7 +78,6 @@ class OrderController extends Controller
                 ];
             });
 
-            // Tính tiền giảm giá (nếu có áp dụng voucher)
             $rawSubtotal = $items->sum('subtotal');
             $discountAmount = $order->voucher_id && $rawSubtotal > $order->total_amount
                 ? ($rawSubtotal - $order->total_amount)
@@ -110,7 +104,6 @@ class OrderController extends Controller
         return response()->json($result);
     }
 
-    // Khách hàng xác nhận "Đã nhận" (completed) hoặc "Hủy đơn / Không nhận" (cancelled)
     public function updateStatus(Request $request, $id): JsonResponse
     {
         $request->validate([
@@ -127,11 +120,9 @@ class OrderController extends Controller
                 return response()->json(['message' => 'Không tìm thấy đơn hàng'], 404);
             }
 
-            // Kiểm tra trạng thái cũ để tránh hoàn kho 2 lần nếu đơn đã hủy trước đó
             $oldStatus = mb_strtolower(trim($order->status ?? ''), 'UTF-8');
             $isAlreadyCancelled = in_array($oldStatus, ['cancelled', 'đã hủy', 'không nhận']);
 
-            // Nếu chuyển sang hủy đơn (cancelled) và trước đó chưa từng hủy -> Hoàn lại tồn kho
             if ($request->status === 'cancelled' && !$isAlreadyCancelled) {
                 foreach ($order->orderItems as $item) {
                     if ($item->product) {
@@ -150,9 +141,7 @@ class OrderController extends Controller
         });
     }
 
-    // =========================================================================
     // 3. ADMIN (TM-13): DANH SÁCH LỌC TRẠNG THÁI & CHUYỂN TRẠNG THÁI 1 CHIỀU
-    // =========================================================================
     public function adminIndex(Request $request): JsonResponse
     {
         $statusFilter = trim((string) $request->query('status', ''));
@@ -189,17 +178,22 @@ class OrderController extends Controller
                 ];
             });
 
+            $timestamp = $order->order_date
+                ? strtotime($order->order_date)
+                : ($order->created_at ? $order->created_at->timestamp : time());
+
             return [
                 'id'               => $order->order_id,
-                'order_code'       => 'DH' . str_pad($order->order_id, 3, '0', STR_PAD_LEFT),
-                'order_date'       => $order->order_date
-                    ? date('d/m/Y', strtotime($order->order_date))
-                    : ($order->created_at ? $order->created_at->format('d/m/Y') : ''),
+                'order_code'       => 'ĐH' . str_pad($order->order_id, 3, '0', STR_PAD_LEFT),
+                'user_code'        => 'ND' . str_pad($order->user_id ?? 0, 3, '0', STR_PAD_LEFT),
+                'order_date'       => date('d/m/Y', $timestamp),
+                'order_time'       => date('H:i', $timestamp),
                 'status'           => $order->status ?? 'pending',
-                'receiver_name'    => $order->recipient_name ?? ($order->user->name ?? ''),
-                'receiver_phone'   => $order->recipient_phone ?? '',
+                'receiver_name'    => $order->recipient_name ?? ($order->user->name ?? 'Khách hàng'),
+                'receiver_phone'   => $order->recipient_phone ?? ($order->user->phone ?? ''),
                 'shipping_address' => $order->shipping_address ?? '',
                 'payment_method'   => $order->payment_method ?? 'COD',
+                'voucher_code'     => $order->voucher->code ?? $order->voucher->voucher_code ?? null,
                 'total_amount'     => $order->total_amount ?? 0,
                 'items'            => $items,
             ];
