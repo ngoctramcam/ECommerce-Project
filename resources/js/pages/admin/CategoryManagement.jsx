@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Pencil, Trash2 } from 'lucide-react';
-
+/// AI-assisted [AI-04] 
 const createSlug = (text) =>
   text
     .toLowerCase()
