@@ -1,4 +1,4 @@
-# AI log – TV3 – DoanKimCuong
+# AI log – TV3 – Đoàn Kim Cuong
 
 > Mỗi thành viên một tệp trong `ai-logs/`. Ghi một mục ngay sau mỗi lần dùng AI có ảnh hưởng đến sản phẩm, commit cùng thay đổi liên quan. Cả đồ án tối thiểu 6 mục có nội dung thực chất. Mã mục tăng dần: AI-01, AI-02, ...
 
