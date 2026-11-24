@@ -18,6 +18,7 @@
 | AI-05 | 21/11/202  | Lập trình | Nhờ AI viết chức năng CRUD cho Products                              | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/feat/TM-12-san-pham) |
 | AI-06 | 23/11/202  | Lập trình | Nhờ AI viết chức năng tìm kiếm, lọc cho Categories                   | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/feat/TM-11-danh-muc) |
 | AI-07 | 24/11/202  | Lập trình | Viết Unit Test kiểm tra ràng buộc xóa danh mục trong CategoryService | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/test/TM-11)          |
+| AI-08 | 25/11/202  | Lập trình | Xây dựng Seeder dữ liệu mẫu (`DemoDataSeeder`) và xử lý ràng buộc toàn vẹn dữ liệu CSDL | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/fix/validate-admin)          |
 
 ## AI-01 – <Tạo ERD>
 
@@ -306,3 +307,44 @@ AI hướng dẫn thêm điều kiện kiểm tra `Product::where('category_id',
 ### 8. Sản phẩm cuối cùng
 
 Link commit/PR: [...](https://github.com/ngoctramcam/ECommerce-Project/tree/test/TM-11)
+
+## AI-08 – Xây dựng Seeder dữ liệu mẫu (`DemoDataSeeder`) và xử lý ràng buộc toàn vẹn dữ liệu CSDL
+
+- **Ngày / Người dùng AI:** 25/11/2026 – TV4
+- **Công cụ AI:** Gemini
+- **Thẻ Trello / Nhánh Git liên quan:** Bổ sung dữ liệu mẫu cho demo (ảnh bìa sách, đơn hàng đa trạng thái)
+
+### 1. Mục đích
+
+Nhờ AI hỗ trợ viết lớp `DemoDataSeeder` (`database/seeders/DemoDataSeeder.php`) nhằm khởi tạo nhanh bộ dữ liệu mẫu phục vụ buổi demo hệ thống (tài khoản Admin/User, danh mục sách, sản phẩm có ảnh bìa sách rõ nét, sản phẩm sắp hết hàng và các đơn hàng ở đầy đủ 5 trạng thái), đồng thời kiểm tra và xử lý các ràng buộc kiểu dữ liệu (`ENUM`, `NOT NULL`, `FOREIGN KEY`) trong MySQL.
+
+### 2. Prompt đã dùng
+
+Tôi cần viết `DemoDataSeeder.php` để nạp dữ liệu mẫu cho website bán sách gồm: tài khoản Admin và khách hàng, các danh mục sách, danh sách sách kèm URL ảnh bìa đẹp, sản phẩm có tồn kho thấp để demo cảnh báo, và các đơn hàng ở đủ 5 trạng thái (`PENDING`, `PROCESSING`, `SHIPPING`, `COMPLETED`, `CANCELLED`)[cite: 2] kèm chi tiết đơn hàng `order_items`.
+
+### 3. Kết quả AI trả về (tóm tắt)
+
+AI cung cấp trọn bộ mã nguồn `DemoDataSeeder.php` sử dụng `DB::table(...)->updateOrInsert()` để tránh trùng lặp dữ liệu khi chạy lại nhiều lần, tạo sẵn 3 tài khoản mẫu, 5 danh mục, 8 đầu sách kèm ảnh bìa từ OpenLibrary và 6 đơn hàng trải đều các trạng thái cùng bản ghi `order_items` tương ứng.
+
+### 4. Phần giữ lại
+
+- Giữ lại toàn bộ bộ dữ liệu sách mẫu (tên sách, tác giả, giá bán, mô tả, link ảnh bìa và sách có `stock = 3` để minh họa cảnh báo tồn kho thấp).
+- Giữ lại cơ chế dùng `updateOrInsert()` cho bảng `users`, `categories`, `products` để đảm bảo tính idempotent (chạy lại Seeder nhiều lần không bị lỗi trùng khóa `slug` hoặc `email`).
+
+### 5. Phần loại bỏ / chỉnh sửa và lý do
+
+- Sửa giá trị trạng thái đơn hàng thứ 2 từ `'CONFIRMED'` thành **`'PROCESSING'`** và bổ sung trường **`'is_delete' => false`** khi chèn vào bảng `orders` để tuân thủ đúng ràng buộc `ENUM('PENDING', 'PROCESSING', 'SHIPPING', 'COMPLETED', 'CANCELLED')` và cấu trúc cột trong file migration của dự án.
+- Khắc phục các lỗi môi trường và ràng buộc CSDL phát sinh trong quá trình nạp dữ liệu: bật dịch vụ MySQL trên cổng `3306` (lỗi `SQLSTATE[HY000] [2002]`), đồng bộ cấu trúc cột `ENUM` bằng `migrate:fresh` (lỗi `Warning: 1265 Data truncated for column 'status'`), và khởi tạo database `bookstore_db` (lỗi `Unknown database 'bookstore_db'`).
+
+### 6. AI sai hoặc chưa chắc chắn ở đâu
+
+- Ban đầu AI sử dụng trạng thái `'CONFIRMED'` thay vì `'PROCESSING'` và bỏ sót cột `'is_delete'` của bảng `orders` do chưa xem trước file migration `create_orders_table.php`; sau khi đối chiếu migration thực tế, AI đã sửa lại chính xác khớp 100% với schema CSDL.
+
+### 7. Cách kiểm chứng
+
+- Chạy lệnh `php artisan migrate --seed --seeder=DemoDataSeeder` và xác nhận terminal thông báo `INFO Seeding database.` thành công mà không phát sinh cảnh báo `Data truncated` hay vi phạm ràng buộc khóa ngoại.
+- Kiểm tra trực tiếp trên phpMyAdmin (`bookstore_db`) và truy cập giao diện Trang chủ, Trang chi tiết sách, Trang quản lý đơn hàng (`/admin/orders`): ảnh bìa sách hiển thị đầy đủ, bộ lọc hiển thị chính xác cả 5 trạng thái đơn hàng (`PENDING`, `PROCESSING`, `SHIPPING`, `COMPLETED`, `CANCELLED`).
+
+### 8. Sản phẩm cuối cùng
+
+Link commit/PR: [...](https://github.com/ngoctramcam/ECommerce-Project/tree/fix/validate-admin)
