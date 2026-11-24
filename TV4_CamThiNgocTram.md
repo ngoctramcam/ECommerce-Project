@@ -9,14 +9,15 @@
 
 ## Bảng tổng hợp
 
-| Mã    | Ngày       | Giai đoạn | Nội dung                                             | Commit / PR                                                                         |
-| ----- | ---------- | --------- | ---------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| AI-01 | 10/11/2026 | Thiết kế  | Nhờ AI gợi ý những thuộc tính thương có của các bảng | [commit](https://github.com/ngoctramcam/ECommerce-Project/tree/docs/Database)       |
-| AI-02 | 11/11/202  | Thiết kế  | Nhờ AI gợi ý cách trình bày mô tả erd                | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/docs/Database)       |
-| AI-03 | 12/11/202  | Lập trình | Nhờ AI tạo dữ liệu giùm                              | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/feat/database)       |
-| AI-04 | 16/11/202  | Lập trình | Nhờ AI viết chức năng CRUD cho Categories            | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/feat/TM-11-danh-muc) |
-| AI-05 | 21/11/202  | Lập trình | Nhờ AI viết chức năng CRUD cho Products              | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/feat/TM-12-san-pham) |
-| AI-06 | 23/11/202  | Lập trình | Nhờ AI viết chức năng tìm kiếm, lọc cho Categories   | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/feat/TM-11-danh-muc) |
+| Mã    | Ngày       | Giai đoạn | Nội dung                                                             | Commit / PR                                                                         |
+| ----- | ---------- | --------- | -------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| AI-01 | 10/11/2026 | Thiết kế  | Nhờ AI gợi ý những thuộc tính thương có của các bảng                 | [commit](https://github.com/ngoctramcam/ECommerce-Project/tree/docs/Database)       |
+| AI-02 | 11/11/202  | Thiết kế  | Nhờ AI gợi ý cách trình bày mô tả erd                                | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/docs/Database)       |
+| AI-03 | 12/11/202  | Lập trình | Nhờ AI tạo dữ liệu giùm                                              | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/feat/database)       |
+| AI-04 | 16/11/202  | Lập trình | Nhờ AI viết chức năng CRUD cho Categories                            | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/feat/TM-11-danh-muc) |
+| AI-05 | 21/11/202  | Lập trình | Nhờ AI viết chức năng CRUD cho Products                              | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/feat/TM-12-san-pham) |
+| AI-06 | 23/11/202  | Lập trình | Nhờ AI viết chức năng tìm kiếm, lọc cho Categories                   | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/feat/TM-11-danh-muc) |
+| AI-07 | 24/11/202  | Lập trình | Viết Unit Test kiểm tra ràng buộc xóa danh mục trong CategoryService | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/test/TM-11)          |
 
 ## AI-01 – <Tạo ERD>
 
@@ -218,6 +219,7 @@ Nhờ AI hỗ trợ xây dựng chức năng Quản lý sản phẩm cho Admin s
 ### 2. Prompt đã dùng
 
 Tôi đang làm Trang quản lý sản phẩm (Admin) cho website bán sách bằng Laravel và React (Tailwind CSS). Hãy giúp tôi viết API backend (`ProductController`) và giao diện React hỗ trợ:
+
 1. Tìm kiếm sản phẩm theo tên, lọc theo danh mục (`category_id`) và phân trang phía server (`paginate`).
 2. Kiểm tra dữ liệu đầu vào phía server (Validation) khi thêm mới và cập nhật sản phẩm đảm bảo giá bán phải lớn hơn 0 (`> 0`) và số lượng tồn kho lớn hơn hoặc bằng 0 (`>= 0`).
 
@@ -252,6 +254,55 @@ AI cung cấp mã nguồn xử lý phía backend (`ProductController.php` gồm 
   - Nhập tên sách vào ô tìm kiếm và chọn danh mục lọc $\rightarrow$ hệ thống gọi API kèm tham số truy vấn và trả về đúng danh sách sản phẩm khớp điều kiện.
   - Bấm chuyển trang (`Trang 1`, `Trang 2`, ...) trên thanh phân trang $\rightarrow$ API tải đúng dữ liệu từng trang từ server và giữ nguyên điều kiện tìm kiếm/lọc đang áp dụng.
   - Thử thêm mới hoặc sửa sản phẩm với giá `<= 0` (ví dụ `0` hoặc `-50000`) hoặc tồn kho `< 0` (ví dụ `-1`) $\rightarrow$ server chặn lưu xuống CSDL và trả về thông báo lỗi validation hiển thị rõ trên form.
+
 ### 8. Sản phẩm cuối cùng
 
 Link commit/PR: [...](https://github.com/ngoctramcam/ECommerce-Project/tree/feat/TM-11-danh-muc)
+
+## AI-07 – Viết Unit Test kiểm tra ràng buộc xóa danh mục trong CategoryService
+
+- **Ngày / Người dùng AI:** 24/11/2026 – TV4
+- **Công cụ AI:** Gemini
+- **Thẻ Trello / Nhánh Git liên quan:** test/TM-11
+
+### 1. Mục đích
+
+Nhờ AI hỗ trợ bổ sung logic kiểm tra ràng buộc nghiệp vụ trong hàm `delete()` của `CategoryService` và viết bộ kiểm thử tự động (Unit Test) bằng PHPUnit trong Laravel (`tests/Unit/CategoryServiceTest.php`) nhằm đảm bảo hệ thống chặn không cho xóa danh mục đang chứa sản phẩm, đồng thời cho phép xóa mềm thành công đối với danh mục rỗng.
+
+### 2. Prompt đã dùng
+
+Tôi có hàm `delete(int $id): array` trong `CategoryService.php` trả về mảng `['success' => bool, 'message' => string]`. Hãy giúp tôi bổ sung điều kiện chặn không cho xóa danh mục đang có sản phẩm trong `CategoryService` và viết file Unit Test `tests/Unit/CategoryServiceTest.php` (sử dụng `RefreshDatabase`) để kiểm thử cả 2 trường hợp: danh mục đang có sản phẩm (bị chặn xóa) và danh mục trống (xóa thành công).
+
+### 3. Kết quả AI trả về (tóm tắt)
+
+AI hướng dẫn thêm điều kiện kiểm tra `Product::where('category_id', $id)->exists()` vào phương thức `CategoryService::delete()` và tạo lớp kiểm thử `CategoryServiceTest` gồm 2 phương thức test (`test_khong_xoa_danh_muc_dang_co_san_pham` và `test_xoa_thanh_cong_danh_muc_khong_co_san_pham`) sử dụng SQLite `:memory:` thông qua trait `RefreshDatabase`.
+
+### 4. Phần giữ lại
+
+- Giữ lại câu lệnh kiểm tra tồn tại sản phẩm `Product::where('category_id', $id)->exists()` trong `CategoryService::delete()` để trả về `['success' => false, 'message' => 'Không thể xóa danh mục đang có sản phẩm.']` trước khi gọi `$category->delete()`.
+
+- Giữ lại cấu trúc 2 test case trong `tests/Unit/CategoryServiceTest.php` bao phủ cả nhánh thất bại (danh mục có sản phẩm) và nhánh thành công (danh mục trống).
+
+### 5. Phần loại bỏ / chỉnh sửa và lý do
+
+- Bổ sung đầy đủ các trường bắt buộc (`NOT NULL`) trong migration khi tạo dữ liệu test (`slug` cho bảng `categories`; `slug`, `author`, `image` cho bảng `products`) để khắc phục lỗi `SQLSTATE[23000]: Integrity constraint violation` trên SQLite `:memory:`.
+
+- Đổi assertion kiểm tra xóa danh mục trống từ `$this->assertDatabaseMissing(...)` sang `$this->assertSoftDeleted('categories', ...)` (và kiểm tra `'deleted_at' => null` ở case giữ lại) vì Model `Category` của dự án sử dụng cơ chế xóa mềm (`SoftDeletes`).
+
+### 6. AI sai hoặc chưa chắc chắn ở đâu
+
+- Ở lần sinh code đầu tiên, AI mặc định hàm xóa ném ra `Exception` nên viết `expectException()`, chưa khớp với kiểu trả về `array` (`['success' => ..., 'message' => ...]`) thực tế của `CategoryService::delete()`.
+
+- Do chưa có sẵn schema migration của bảng `categories` và `products`, dữ liệu khởi tạo mẫu trong test ban đầu thiếu các cột `slug`, `image` và chưa dùng `assertSoftDeleted()`, dẫn đến 2 lần chạy test báo lỗi trước khi được điều chỉnh theo thông báo lỗi thực tế của PHPUnit.
+
+### 7. Cách kiểm chứng
+
+- Chạy lệnh kiểm thử tự động trong terminal:
+  `php artisan test --filter=CategoryServiceTest`
+- Kết quả terminal hiển thị **`PASS  Tests\Unit\CategoryServiceTest`** với cả 2 test case đều đạt (`2 passed`):
+  - `test_khong_xoa_danh_muc_dang_co_san_pham`: trả về `success = false`, đúng thông báo lỗi và bản ghi danh mục trong bảng `categories` vẫn có `deleted_at = null`.
+  - `test_xoa_thanh_cong_danh_muc_khong_co_san_pham`: trả về `success = true` và bản ghi danh mục được cập nhật `deleted_at` (xóa mềm thành công).
+
+### 8. Sản phẩm cuối cùng
+
+Link commit/PR: [...](https://github.com/ngoctramcam/ECommerce-Project/tree/test/TM-11)
