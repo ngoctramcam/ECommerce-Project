@@ -37,7 +37,7 @@ export default function HomePage() {
 
                 // Chỉ hiển thị các sản phẩm đang kinh doanh (status = 1)
                 const activeProducts = productList.filter(
-                    (book) => Number(book.status) === 1
+                    (book) => Number(book.status) === 1,
                 );
 
                 setProducts(activeProducts);
@@ -52,7 +52,6 @@ export default function HomePage() {
         fetchHomeData();
     }, []);
 
-    // Khối 2: Lọc theo danh mục đang chọn
     // Khối 1: 6 cuốn sách mới phát hành nhất (API đã orderByDesc product_id)
     const newestBooks = products.slice(0, 6);
 
@@ -61,7 +60,7 @@ export default function HomePage() {
         activeCategory === "all"
             ? products
             : products.filter(
-                  (book) => String(book.category_id) === String(activeCategory)
+                  (book) => String(book.category_id) === String(activeCategory),
               );
 
     const handleTabClick = (categoryId) => {
@@ -77,17 +76,8 @@ export default function HomePage() {
         );
     }
 
-    if (loading) {
-        return (
-            <div className="py-12 text-center text-sm text-gray-500">
-                Đang tải danh sách sách...
-            </div>
-        );
-    }
-
     return (
         <div className="py-4 sm:py-6 space-y-10">
-            {/* Khối 1 - Sách Mới Phát Hành (lướt ngang) */}
             {/* Khối 1 - Sách Mới Phát Hành (lướt ngang) */}
             <section>
                 <h2 className="text-lg sm:text-xl font-bold text-gray-800 mb-4">
@@ -110,25 +100,8 @@ export default function HomePage() {
                         Chưa có sách mới phát hành.
                     </p>
                 )}
-                {newestBooks.length > 0 ? (
-                    <div className="flex gap-3 sm:gap-5 overflow-x-auto pb-3 snap-x snap-mandatory scroll-smooth">
-                        {newestBooks.map((book) => (
-                            <div
-                                key={book.product_id}
-                                className="w-[calc(50%-6px)] md:w-[calc(25%-15px)] shrink-0 snap-start"
-                            >
-                                <BookCard book={book} />
-                            </div>
-                        ))}
-                    </div>
-                ) : (
-                    <p className="text-sm text-gray-500 bg-white border border-gray-200 rounded-lg py-8 text-center">
-                        Chưa có sách mới phát hành.
-                    </p>
-                )}
             </section>
 
-            {/* Khối 2 - Sách Theo Danh Mục (lướt ngang) */}
             {/* Khối 2 - Sách Theo Danh Mục (lướt ngang) */}
             <section id="category-books-section" className="scroll-mt-28">
                 <h2 className="text-lg sm:text-xl font-bold text-gray-800 mb-3">
@@ -173,7 +146,6 @@ export default function HomePage() {
                                 key={book.product_id}
                                 className="w-[calc(50%-6px)] md:w-[calc(25%-15px)] shrink-0 snap-start"
                             >
-                                <BookCard book={book} />
                                 <BookCard book={book} />
                             </div>
                         ))}

@@ -18,10 +18,10 @@ class UserService{
     public function toggleLock(int $id, User $currentAdmin):User{
         $user=User::findOrFail($id);
         if($user->user_id===$currentAdmin->user_id){
-            throw new \DomainException('Không thể xóa tài khoản của chính mình .');
+            throw new \DomainException('Không thể khóa tài khoản của chính mình .');
         }
-        if($user->role==="Admin"){
-            throw new \DomainException('Không thể xóa tài khoản quản trị viên .');
+        if($user->role==="admin"){
+            throw new \DomainException('Không thể khóa tài khoản quản trị viên .');
         }
         $user->status=$user->status==='active'?'locked':'active';
         $user->save();

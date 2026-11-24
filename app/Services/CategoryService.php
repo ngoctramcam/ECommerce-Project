@@ -3,7 +3,9 @@
 namespace App\Services;
 
 use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Support\Str;
+
 
 class CategoryService
 {
@@ -88,6 +90,14 @@ class CategoryService
             return [
                 'success' => false,
                 'message' => 'Không tìm thấy danh mục.'
+            ];
+        }
+
+        // Chặn xóa nếu danh mục đang có sản phẩm
+        if (Product::where('category_id', $id)->exists()) {
+            return [
+                'success' => false,
+                'message' => 'Không thể xóa danh mục đang có sản phẩm.'
             ];
         }
 
