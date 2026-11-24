@@ -9,15 +9,16 @@
 
 ## Bảng tổng hợp
 
-| Mã    | Ngày       | Giai đoạn | Nội dung                                        | Commit / PR                                                                         |
-| ----- | ---------- | --------- | ----------------------------------------------- | ----------------------------------------------------------------------------------- |
-| AI-01 | 10/11/2026 | Thiết kế  | Hỏi về các lệnh Git                             | [commit](https://github.com/ngoctramcam/ECommerce-Project/tree/feature)             |
-| AI-02 | 11/11/2026 | Thiết kế  | Tạo test case TM-05 chức năng giỏ hàng          | [Commit](https://github.com/ngoctramcam/ECommerce-Project/blob/docs/test-case.md)   |
-| AI-03 | 12/11/2026 | Thiết kế  | Tạo test case TM-04 chức năng đăng ký/đăng nhập | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/feat/database)       |
-| AI-04 | 19/11/2026 | Lập trình | Nhờ AI viết chức năng giỏ hàng                  | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/feat/TM-05-gio-hang) |
-| AI-05 | 20/11/2026 | Lập trình | Rà soát và hoàn thiện logic Trang giỏ hàng (Cart Page)                 | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/feat/TM-05-gio-hang) |
-| AI-06 | 22/11/2026 | Lập trình | Xây dựng và hoàn thiện trang Đơn hàng của tôi (My Orders Page)| [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/feat/TM-07-don-cua-toi) |
-| AI-07 | 23/11/2026 | Lập trình | Xây dựng và hoàn thiện trang Đơn hàng của tôi (My Orders Page)| [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/feat/TM-07-don-cua-toi) 
+| Mã    | Ngày       | Giai đoạn | Nội dung                                                                     | Commit / PR                                                                            |
+| ----- | ---------- | --------- | ---------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| AI-01 | 10/11/2026 | Thiết kế  | Hỏi về các lệnh Git                                                          | [commit](https://github.com/ngoctramcam/ECommerce-Project/tree/feature)                |
+| AI-02 | 11/11/2026 | Thiết kế  | Tạo test case TM-05 chức năng giỏ hàng                                       | [Commit](https://github.com/ngoctramcam/ECommerce-Project/blob/docs/test-case.md)      |
+| AI-03 | 12/11/2026 | Thiết kế  | Tạo test case TM-04 chức năng đăng ký/đăng nhập                              | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/feat/database)          |
+| AI-04 | 19/11/2026 | Lập trình | Nhờ AI viết chức năng giỏ hàng                                               | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/feat/TM-05-gio-hang)    |
+| AI-05 | 20/11/2026 | Lập trình | Rà soát và hoàn thiện logic Trang giỏ hàng (Cart Page)                       | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/feat/TM-05-gio-hang)    |
+| AI-06 | 22/11/2026 | Lập trình | Xây dựng và hoàn thiện trang Đơn hàng của tôi (My Orders Page)               | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/feat/TM-07-don-cua-toi) |
+| AI-07 | 23/11/2026 | Lập trình | Xây dựng và hoàn thiện trang Quản lý Đơn hàng Admin (Admin Order Management) | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/feat/TM-07-don-cua-toi) |
+| AI-08 | 24/11/2026 | Lập trình | Viết Unit Test kiểm tra ràng buộc thêm vượt tồn kho trong CartService        | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/test/TM-05)             |
 
 ## AI-01 – <tạo repository>
 
@@ -274,7 +275,7 @@ AI cung cấp mã nguồn xử lý phía backend (`OrderController.php` gồm h�
   - Truy cập từ trang Tài khoản (`/profile`) $\rightarrow$ bấm vào trang Đơn hàng của tôi (`/orders`) $\rightarrow$ hiển thị đúng danh sách đơn hàng của tài khoản đang đăng nhập kèm thông tin người nhận, sách, mã giảm giá và tổng tiền.
   - Bấm **Hủy đơn hàng** ở đơn _Chờ xác nhận_ $\rightarrow$ trạng thái đơn chuyển sang _Đã hủy_, nút hủy ẩn đi và số lượng tồn kho (`stock`) của các sách trong đơn được cộng hoàn lại chính xác trong bảng `products`.
   - Bấm **Đã nhận** / **Không nhận** ở đơn _Đang giao_ $\rightarrow$ trạng thái cập nhật xuống CSDL và giao diện đổi sang nút _Đánh giá_ (khi hoàn thành) hoặc _Đã hủy_ (khi không nhận).
-    
+
 ### 8. Sản phẩm cuối cùng
 
 Link commit/PR: https://github.com/ngoctramcam/ECommerce-Project/tree/feat/TM-05-gio-hang
@@ -291,7 +292,7 @@ Nhờ AI hỗ trợ xây dựng chức năng Quản lý Đơn hàng dành cho Qu
 
 ### 2. Prompt đã dùng
 
-Tôi đang làm trang Quản lý Đơn hàng cho Admin (`AdminOrdersPage.jsx`) trên website bán sách bằng Laravel và React (Tailwind CSS). Dựa trên bản thiết kế Desktop & Mobile và cấu trúc bảng `orders`, `order_items`, `products`, `users`, `vouchers`, hãy giúp tôi viết API (`adminIndex`, `adminUpdateStatus`) trong `OrderController.php` và giao diện React để lọc đơn hàng theo trạng thái, tìm kiếm, phân trang và ép luồng chuyển trạng thái một chiều (*Chờ xác nhận → Đang giao → Hoàn thành* hoặc *→ Đã hủy*), không cho đi ngược.
+Tôi đang làm trang Quản lý Đơn hàng cho Admin (`AdminOrdersPage.jsx`) trên website bán sách bằng Laravel và React (Tailwind CSS). Dựa trên bản thiết kế Desktop & Mobile và cấu trúc bảng `orders`, `order_items`, `products`, `users`, `vouchers`, hãy giúp tôi viết API (`adminIndex`, `adminUpdateStatus`) trong `OrderController.php` và giao diện React để lọc đơn hàng theo trạng thái, tìm kiếm, phân trang và ép luồng chuyển trạng thái một chiều (_Chờ xác nhận → Đang giao → Hoàn thành_ hoặc _→ Đã hủy_), không cho đi ngược.
 
 ### 3. Kết quả AI trả về (tóm tắt)
 
@@ -299,7 +300,7 @@ AI cung cấp 2 phương thức xử lý phía backend (`adminIndex` truy vấn 
 
 ### 4. Phần giữ lại
 
-- Giữ lại mảng quy tắc chuyển trạng thái một chiều `$allowedTransitions` và biểu thức `match()` chuẩn hóa trạng thái ở backend để chặn tuyệt đối thao tác chuyển ngược trạng thái hoặc sửa đổi đơn hàng đã *Hoàn thành* / *Đã hủy*.
+- Giữ lại mảng quy tắc chuyển trạng thái một chiều `$allowedTransitions` và biểu thức `match()` chuẩn hóa trạng thái ở backend để chặn tuyệt đối thao tác chuyển ngược trạng thái hoặc sửa đổi đơn hàng đã _Hoàn thành_ / _Đã hủy_.
 
 - Giữ lại logic dùng `DB::transaction` và `lockForUpdate()` tự động cộng hoàn lại số lượng tồn kho (`increment('stock', $item->quantity)`) vào bảng `products` khi Admin hủy đơn.
 
@@ -309,7 +310,7 @@ AI cung cấp 2 phương thức xử lý phía backend (`adminIndex` truy vấn 
 
 - Gộp sạch các hàm `adminIndex` và `adminUpdateStatus` vào chung một class `OrderController` với hàm `store` đặt hàng hiện có của nhóm, loại bỏ phần khai báo trùng lặp.
 
-- Bổ sung định dạng mã đơn hàng (`ĐHxxx`), mã người dùng (`NDxxx`), giờ đặt hàng (`H:i`), mã giảm giá (`voucher_code`) và tên phương thức thanh toán hiển thị tiếng Việt (*Thanh toán khi nhận hàng*, *Chuyển khoản*) cho khớp với dữ liệu CSDL và giao diện thiết kế.
+- Bổ sung định dạng mã đơn hàng (`ĐHxxx`), mã người dùng (`NDxxx`), giờ đặt hàng (`H:i`), mã giảm giá (`voucher_code`) và tên phương thức thanh toán hiển thị tiếng Việt (_Thanh toán khi nhận hàng_, _Chuyển khoản_) cho khớp với dữ liệu CSDL và giao diện thiết kế.
 
 - Đặt khai báo route `/api/admin/orders` và `/api/admin/orders/{id}/status` lên phía trên route catch-all `/{any}` trong `routes/web.php` để tránh bị React Router chặn gây lỗi `404`.
 
@@ -323,10 +324,59 @@ AI cung cấp 2 phương thức xử lý phía backend (`adminIndex` truy vấn 
 
 - Kiểm tra cú pháp `app/Http/Controllers/OrderController.php`, thứ tự khai báo route trong `routes/web.php`, chạy `php artisan route:clear` và đối chiếu dữ liệu bảng `orders` trên phpMyAdmin.
 - Chạy kiểm thử thực tế trên trình duyệt (`http://127.0.0.1:8000/admin/orders`):
-  - Chọn từng mục trong dropdown lọc trạng thái (*Chờ xác nhận*, *Đang giao*, *Hoàn thành*, *Đã hủy*) và nhập từ khóa tìm kiếm $\rightarrow$ danh sách lọc đúng các đơn hàng tương ứng và phân trang hoạt động chính xác trên cả màn hình Desktop lẫn Mobile.
-  - Bấm **Xác nhận** ở đơn *Chờ xác nhận* $\rightarrow$ đơn chuyển sang *Đang giao* (không có nút quay lại *Chờ xác nhận*).
-  - Bấm **Hoàn thành** ở đơn *Đang giao* $\rightarrow$ đơn chuyển sang *Hoàn thành* và khóa toàn bộ nút chuyển trạng thái.
-  - Bấm **Hủy** ở đơn chưa hoàn thành $\rightarrow$ đơn chuyển sang *Đã hủy*, khóa thao tác và số lượng tồn kho (`stock`) của các sản phẩm trong đơn được cộng hoàn lại trong CSDL.
+  - Chọn từng mục trong dropdown lọc trạng thái (_Chờ xác nhận_, _Đang giao_, _Hoàn thành_, _Đã hủy_) và nhập từ khóa tìm kiếm $\rightarrow$ danh sách lọc đúng các đơn hàng tương ứng và phân trang hoạt động chính xác trên cả màn hình Desktop lẫn Mobile.
+  - Bấm **Xác nhận** ở đơn _Chờ xác nhận_ $\rightarrow$ đơn chuyển sang _Đang giao_ (không có nút quay lại _Chờ xác nhận_).
+  - Bấm **Hoàn thành** ở đơn _Đang giao_ $\rightarrow$ đơn chuyển sang _Hoàn thành_ và khóa toàn bộ nút chuyển trạng thái.
+  - Bấm **Hủy** ở đơn chưa hoàn thành $\rightarrow$ đơn chuyển sang _Đã hủy_, khóa thao tác và số lượng tồn kho (`stock`) của các sản phẩm trong đơn được cộng hoàn lại trong CSDL.
+
 ### 8. Sản phẩm cuối cùng
 
 Link commit/PR: https://github.com/ngoctramcam/ECommerce-Project/tree/feat/TM-13-quan-ly-don
+
+## AI-08 – Viết Unit Test kiểm tra ràng buộc thêm vượt tồn kho trong CartService
+
+- **Ngày / Người dùng AI:** 25/11/2026 – TV5
+- **Công cụ AI:** Gemini
+- **Thẻ Trello / Nhánh Git liên quan:** test/TM-05
+
+### 1. Mục đích
+
+Nhờ AI hỗ trợ xây dựng bộ kiểm thử tự động (Unit Test) bằng PHPUnit trong Laravel (`tests/Unit/CartServiceTest.php`) để xác minh rằng hệ thống từ chối thao tác thêm sản phẩm vào giỏ hàng khi số lượng yêu cầu vượt quá số lượng tồn kho (`stock`) hiện có, đồng thời đảm bảo vẫn thêm thành công khi số lượng nằm trong giới hạn tồn kho.
+
+### 2. Prompt đã dùng
+
+Tôi cần viết Unit Test cho `CartService` (`tests/Unit/CartServiceTest.php`) sử dụng `RefreshDatabase` trên SQLite `:memory:` để kiểm tra 2 trường hợp: (1) thêm sản phẩm vào giỏ hàng với số lượng vượt quá `stock` thì bị từ chối và không lưu vào bảng `cart_items`, và (2) thêm sản phẩm với số lượng hợp lệ trong giới hạn tồn kho thì lưu thành công vào CSDL.
+
+### 3. Kết quả AI trả về (tóm tắt)
+
+AI cung cấp lớp kiểm thử `CartServiceTest` gồm 2 phương thức test (`test_them_vao_gio_vuot_ton_kho_bi_tu_choi` và `test_them_vao_gio_hop_le_trong_gioi_han_ton_kho`) kèm hàm khởi tạo dữ liệu mẫu `seedUserAndProduct()` tạo bản ghi người dùng, danh mục và sản phẩm có tồn kho xác định (`stock = 5`) trên database ảo `:memory:`.
+
+### 4. Phần giữ lại
+
+- Giữ lại 2 kịch bản kiểm thử chính trong `tests/Unit/CartServiceTest.php`: kiểm tra từ chối khi `quantity > stock` (`6 > 5`) kết hợp `assertDatabaseMissing('cart_items', ...)` và kiểm tra thành công khi `quantity <= stock` (`3 <= 5`) kết hợp `assertDatabaseHas('cart_items', ...)`.
+
+- Giữ lại cơ chế hỗ trợ bắt cả hai kiểu phản hồi nghiệp vụ (ném `Exception` hoặc trả về mảng `['success' => false]`) để đảm bảo tính tương thích với logic xử lý của `CartService`.
+
+### 5. Phần loại bỏ / chỉnh sửa và lý do
+
+- Thay thế `User::factory()->create()` bằng `DB::table('users')->insertGetId([...])` sử dụng đúng tên cột `full_name` theo schema migration thực tế của dự án, khắc phục lỗi `SQLSTATE[HY000]: General error: 1 table users has no column named name`.
+
+- Bổ sung đầy đủ các trường `NOT NULL` khi khởi tạo dữ liệu test (`slug` cho bảng `categories`; `slug`, `author`, `image` cho bảng `products`) và đối chiếu chính xác chữ ký phương thức thêm giỏ hàng trong `app/Services/CartService.php`.
+
+### 6. AI sai hoặc chưa chắc chắn ở đâu
+
+- Ở lần tạo code đầu tiên, AI sử dụng `User::factory()->create()` mặc định của Laravel vốn chèn cột `name`, không khớp với cấu trúc bảng `users` dùng cột `full_name` của nhóm.
+
+- Do chưa có trước tên hàm chính xác trong `CartService.php`, AI ban đầu gọi tên mặc định `addToCart()` gây cảnh báo `Undefined method` trước khi được rà soát và chỉnh lại đúng tên hàm và tham số thực tế của `CartService`.
+
+### 7. Cách kiểm chứng
+
+- Chạy lệnh kiểm thử tự động trong terminal:
+  `php artisan test --filter=CartServiceTest`
+- Kết quả terminal hiển thị **`PASS  Tests\Unit\CartServiceTest`** với cả 2 test case đều đạt (`2 passed`):
+  - `test_them_vao_gio_vuot_ton_kho_bi_tu_choi`: hệ thống từ chối yêu cầu thêm số lượng `6` khi `stock = 5` và bảng `cart_items` không phát sinh bản ghi vượt tồn kho.
+  - `test_them_vao_gio_hop_le_trong_gioi_han_ton_kho`: hệ thống thêm thành công số lượng `3` vào bảng `cart_items`.
+
+### 8. Sản phẩm cuối cùng
+
+Link commit/PR: [...] (https://github.com/ngoctramcam/ECommerce-Project/tree/test/TM-05)
