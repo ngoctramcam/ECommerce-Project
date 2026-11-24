@@ -20,7 +20,6 @@ class OrderSeeder extends Seeder
 
         $statuses = [
             'PENDING',
-            'CONFIRMED',
             'SHIPPING',
             'COMPLETED',
             'CANCELLED'
@@ -38,7 +37,6 @@ class OrderSeeder extends Seeder
                 'shipping_address' => $user->address,
                 'order_date' => now()->subDays(rand(1, 30)),
                 'total_amount' => rand(150000, 800000),
-                'payment_method' => 'COD',
                 'status' => $statuses[array_rand($statuses)]
             ]);
         }

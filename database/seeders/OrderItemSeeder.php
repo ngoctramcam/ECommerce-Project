@@ -26,6 +26,7 @@ class OrderItemSeeder extends Seeder
                 $qty = rand(1, 3);
 
                 OrderItem::create([
+                    'order_id' => $order->order_id,
                     'user_id' => $order->user_id,
                     'product_id' => $product->product_id,
                     'quantity' => $qty,

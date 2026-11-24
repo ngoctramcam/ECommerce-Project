@@ -26,23 +26,16 @@ return new class extends Migration
 
             $table->decimal('total_amount', 10, 2);
 
-            $table->enum('payment_method', [
-                'COD',
-                'VNPAY',
-                'MOMO'
-            ]);
-
             $table->enum('status', [
                 'PENDING',
-                'CONFIRMED',
                 'SHIPPING',
                 'COMPLETED',
                 'CANCELLED'
             ])->default('PENDING');
 
-            $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
-            $table->softDeletes('deleted_at');
+            $table->timestamps(); // Tự động tạo created_at và updated_at dạng TIMESTAMP
+            $table->boolean("is_delete")->default(false);
+            $table->softDeletes(); // Tạo cột deleted_at (mặc định NULL)
 
             $table->foreign('user_id')
                 ->references('user_id')

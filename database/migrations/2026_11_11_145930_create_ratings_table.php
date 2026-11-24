@@ -21,8 +21,7 @@ return new class extends Migration
 
             $table->text('comment')->nullable();
 
-            $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
+            $table->timestamps(); // Tự động tạo created_at và updated_at dạng TIMESTAMP
 
             $table->foreign('user_id')
                 ->references('user_id')

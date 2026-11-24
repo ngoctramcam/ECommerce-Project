@@ -21,6 +21,7 @@ return new class extends Migration
             $table->enum('role', ['admin', 'user'])->default('user');
             $table->enum('status', ['active', 'locked'])->default('active');
             $table->timestamps(); // Tự động tạo created_at và updated_at dạng TIMESTAMP
+            $table->boolean("is_delete")->default(false);
             $table->softDeletes(); // Tạo cột deleted_at (mặc định NULL)
         });
     }

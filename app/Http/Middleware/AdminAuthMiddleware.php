@@ -8,17 +8,14 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AdminAuthMiddleware
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  Closure(Request): (Response)  $next
-     */
     public function handle(Request $request, Closure $next): Response
     {
         if ($request->user() && $request->user()->role === 'admin') {
             return $next($request);
-        } else {
-            return redirect()->route('home');
         }
+
+        return response()->json([
+            'message' => 'Unauthorized. Admin access required.'
+        ], 403);
     }
 }

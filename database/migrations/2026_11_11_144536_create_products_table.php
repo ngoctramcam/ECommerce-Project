@@ -18,13 +18,14 @@ return new class extends Migration
             $table->text('description')->nullable();
 
             $table->decimal('price', 10, 2)->unsigned(); // Giá không thể âm
-            $table->double('stock')->unsigned()->default(0); // Số lượng không thể âm
+            $table->integer('stock')->unsigned()->default(0); // Số lượng không thể âm
             $table->string('author', 255);
 
             $table->string('publisher')->nullable();
 
             $table->string('image', 255);
             $table->string('slug', 255)->unique();
+            $table->boolean("status")->default(true); // true: đang bán, false: ngừng bán
 
             $table->unsignedBigInteger('category_id');
 
@@ -32,10 +33,9 @@ return new class extends Migration
             $table->index('product_name');
             $table->index('category_id');
 
-            $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
-            $table->softDeletes('deleted_at');
-
+            $table->timestamps(); // Tự động tạo created_at và updated_at dạng TIMESTAMP
+            $table->boolean("is_delete")->default(false);
+            $table->softDeletes(); // Tạo cột deleted_at (mặc định NULL)
             $table->foreign('category_id')
                 ->references('category_id')
                 ->on('categories')

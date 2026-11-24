@@ -1,5 +1,5 @@
 <?php
-
+// AI-assisted [AI-03]
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
@@ -7,6 +7,7 @@ use App\Http\Requests\RegisterRequest;
 use App\Services\AuthService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Exception;
 
 class AuthController extends Controller
@@ -65,7 +66,7 @@ class AuthController extends Controller
                     'message' => $result['message'],
                 ], 401);
             }
-            
+
             return back()->withErrors(['email' => $result['message']])->withInput();
         }
 
@@ -78,7 +79,7 @@ class AuthController extends Controller
                 'success' => true,
                 'message' => 'Đăng nhập thành công.',
                 'user' => [
-                    'id' => $user->id,
+                    'id' => $user->user_id,
                     'name' => $user->full_name,
                     'email' => $user->email,
                     'role' => $user->role,
@@ -107,4 +108,25 @@ class AuthController extends Controller
         // [ (TV3) ]: Đổi từ route('login') sang '/login' vì TV2 chưa đặt tên route('login') trong web.php
         return redirect('/login');
     }
+
+    public function me(Request $request): JsonResponse
+{
+    $user = $request->user() ?? Auth::user();
+
+    if (!$user) {
+        return response()->json([
+            'success' => false,
+            'authenticated' => false,
+            'user' => null,
+        ], 401);
+    }
+
+    return response()->json([
+        'success' => true,
+        'authenticated' => true,
+        'user' => [
+            'role' => $user->role,
+        ],
+    ]);
+}
 }

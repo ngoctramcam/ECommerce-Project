@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('order_items', function (Blueprint $table) {
             $table->id('order_item_id');
 
-            $table->double('quantity')->unsigned();
+            $table->integer('quantity')->unsigned();
 
             $table->decimal('unit_price', 10, 2);
 
@@ -22,10 +22,11 @@ return new class extends Migration
 
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('product_id');
+            $table->unsignedBigInteger('order_id');
 
-            $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
-            $table->softDeletes('deleted_at');
+            $table->timestamps(); // Tự động tạo created_at và updated_at dạng TIMESTAMP
+            $table->boolean("is_delete")->default(true);
+            $table->softDeletes(); // Tạo cột deleted_at (mặc định NULL)
 
             $table->foreign('user_id')
                 ->references('user_id')
@@ -35,6 +36,11 @@ return new class extends Migration
             $table->foreign('product_id')
                 ->references('product_id')
                 ->on('products')
+                ->onDelete('cascade');
+
+            $table->foreign('order_id')
+                ->references('order_id')
+                ->on('orders')
                 ->onDelete('cascade');
         });
     }
