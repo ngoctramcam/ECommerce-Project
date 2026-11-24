@@ -19,6 +19,8 @@
 | AI-06 | 22/11/2026 | Lập trình | Xây dựng và hoàn thiện trang Đơn hàng của tôi (My Orders Page)               | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/feat/TM-07-don-cua-toi) |
 | AI-07 | 23/11/2026 | Lập trình | Xây dựng và hoàn thiện trang Quản lý Đơn hàng Admin (Admin Order Management) | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/feat/TM-07-don-cua-toi) |
 | AI-08 | 24/11/2026 | Lập trình | Viết Unit Test kiểm tra ràng buộc thêm vượt tồn kho trong CartService        | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/test/TM-05)             |
+| AI-09 | 25/11/2026 | Thiết kế | Tổng hợp bộ kịch bản kiểm thử (Test Cases) cho 12 chức năng hệ thống (`docs/test-cases.md`)       | [Commit](https://github.com/ngoctramcam/ECommerce-Project/blob/docs/test-case.md)             |
+
 
 ## AI-01 – <tạo repository>
 
@@ -380,3 +382,44 @@ AI cung cấp lớp kiểm thử `CartServiceTest` gồm 2 phương thức test 
 ### 8. Sản phẩm cuối cùng
 
 Link commit/PR: [...] (https://github.com/ngoctramcam/ECommerce-Project/tree/test/TM-05)
+
+## AI-09 – Tổng hợp bộ kịch bản kiểm thử (Test Cases) cho 12 chức năng hệ thống (`docs/test-cases.md`)
+
+- **Ngày / Người dùng AI:** 25/11/2026 – TV5
+- **Công cụ AI:** Gemini
+- **Thẻ Trello / Nhánh Git liên quan:** docs/test-cases.md
+
+### 1. Mục đích
+
+Nhờ AI hỗ trợ hệ thống hóa và biên soạn bộ tài liệu kịch bản kiểm thử chi tiết (`docs/test-cases.md`) bao phủ đầy đủ 12 chức năng cốt lõi của hệ thống từ `TM-01` đến `TM-14`, đảm bảo mỗi chức năng có ít nhất 2 test case (cả luồng thành công và luồng ngoại lệ/validation) bám sát cấu trúc CSDL và nghiệp vụ thực tế của dự án.
+
+### 2. Prompt đã dùng
+
+Tôi cần tổng hợp tài liệu `docs/test-cases.md` cho 12 chức năng bắt buộc theo danh sách mã chức năng của dự án (`TM-01` Trang chủ, `TM-02` Tìm kiếm & lọc sản phẩm, `TM-03` Xem chi tiết sản phẩm, `TM-04` Đăng ký & đăng nhập, `TM-05` Giỏ hàng, `TM-06` Đặt hàng COD, `TM-07` Đơn hàng của tôi, `TM-08` Hồ sơ cá nhân, `TM-11` Quản lý danh mục, `TM-12` Quản lý sản phẩm, `TM-13` Quản lý đơn hàng, `TM-14` Quản lý người dùng), mỗi chức năng tối thiểu 2 test case đầy đủ các cột: Mã TC, Tên Test Case, Điều kiện tiên quyết, Các bước thực hiện, Kết quả mong đợi và Trạng thái.
+
+### 3. Kết quả AI trả về (tóm tắt)
+
+AI tạo ra bộ tài liệu Markdown hoàn chỉnh gồm 24 test cases (`TC-01` đến `TC-24`) chia đều cho 12 nhóm chức năng theo đúng thứ tự mã `TM-01` – `TM-14`, trình bày dưới dạng bảng chuẩn kèm kịch bản kiểm thử giao diện lẫn kiểm thử mức dịch vụ (Unit Test cho `CartService` và `CategoryService`).
+
+### 4. Phần giữ lại
+
+- Giữ lại cấu trúc bảng 6 cột rõ ràng và toàn bộ 24 test cases trải đều cho 12 chức năng từ `TM-01` đến `TM-14`.
+- Giữ lại các kịch bản kiểm tra ràng buộc nghiệp vụ quan trọng như: từ chối thêm vào giỏ khi vượt tồn kho (`TC-10`), chặn đặt hàng COD khi thiếu thông tin nhận hàng (`TC-12`), tự động hoàn kho khi khách hủy đơn (`TC-14`), chặn xóa danh mục đang có sản phẩm (`TC-18`), và luồng chuyển trạng thái đơn hàng một chiều (`TC-22`).
+
+### 5. Phần loại bỏ / chỉnh sửa và lý do
+
+- Lược bỏ các chức năng không nằm trong danh sách 12 chức năng bắt buộc của nhóm (như quản lý mã giảm giá riêng lẻ) và thay thế bằng đúng 2 chức năng có trong bảng đặc tả của nhóm là **Hồ sơ cá nhân (`TM-08`)** và **Quản lý người dùng (`TM-14`)**.
+- Điều chỉnh tên bảng, tên cột (`full_name`, `product_id`, `cart_items`, `orders`, `is_delete`) và mã trạng thái đơn hàng (`PENDING`, `PROCESSING`, `SHIPPING`, `COMPLETED`, `CANCELLED`) trong phần *Điều kiện tiên quyết* và *Kết quả mong đợi* để khớp 100% với migration và code thực tế của nhóm.
+
+### 6. AI sai hoặc chưa chắc chắn ở đâu
+
+- Ở bản nháp đầu tiên khi chưa có bảng danh sách mã `TM-01` – `TM-14`, AI tự liệt kê 12 chức năng theo mẫu chung (có mục Voucher và Thống kê tách riêng) thay vì `TM-08` (Hồ sơ cá nhân) và `TM-14` (Quản lý người dùng); sau khi cung cấp ảnh danh sách mã chức năng của nhóm, AI đã cập nhật lại chính xác.
+
+### 7. Cách kiểm chứng
+
+- Đối chiếu chéo từng mã chức năng `TM-01` đến `TM-14` trong file `docs/test-cases.md` với bảng danh sách chức năng của nhóm (đảm bảo đủ 12 chức năng và 24 test cases).
+- Thực thi kiểm thử thủ công trên trình duyệt và chạy các bài Unit Test tự động (`CartServiceTest`, `CategoryServiceTest`) để xác nhận toàn bộ 24 test case đều cho kết quả thực tế khớp với *Kết quả mong đợi*.
+
+### 8. Sản phẩm cuối cùng
+
+Link commit/PR: [...] (https://github.com/ngoctramcam/ECommerce-Project/blob/docs/test-case.md)
