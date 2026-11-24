@@ -1,58 +1,56 @@
 # Đặc tả 3 use case chính – Website bán sách
 
-Đồ án Lập trình Web · Đề tài A: Thương mại điện tử (COD) · Khớp use case diagram bản mới nhất (TM-04a, TM-05a, TM-06, TM-07a, TM-12, TM-16a)
+Đồ án Lập trình Web · Đề tài A: Thương mại điện tử (COD)
 
 ## Quy ước chung
 
-- Mọi kiểm tra dữ liệu và kiểm tra quyền đều thực hiện ở phía server (NFR-01, NFR-05).
-- Thông báo lỗi bằng tiếng Việt, nêu rõ trường sai. Lỗi hệ thống không lộ chi tiết kỹ thuật và được ghi log phía server.
-- Số lần thử lại sau khi deadlock: 2 lần.
+- Mọi kiểm tra dữ liệu và kiểm tra quyền đều thực hiện ở phía server .
+- Thông báo lỗi bằng tiếng Việt, nêu rõ trường sai. Lỗi hệ thống không lộ chi tiết kỹ thuật.
 
-### UC-01: Đăng nhập (TM-04a)
+### UC-01: Đăng nhập
 
 #### Tác nhân: Khách vãng lai (đã có tài khoản), khách hàng, quản trị
 
-Mô tả: Xác thực bằng email và mật khẩu để truy cập vào hệ thống, điều hướng theo vai trò (customer, admin)
+Mô tả: Xác thực bằng email và mật khẩu để truy cập vào hệ thống. Hệ thống dùng session và cookie của Laravel. Điều hướng theo vai trò:admin về trang quản trị, vai trò còn lại về trang chủ.
 
 #### Tiền điều kiện:
 
 - Người dùng đã có tài khoản
-- Chưa đăng nhập (chưa có phiên hoặc token hợp lệ)
+- Chưa đăng nhập (chưa có phiên )
 
 #### Hậu điều kiện:
 
-- Thành công: tạo phiên/token, điều hướng theo vai trò (customer về trang chủ hoặc trang đang xem dở, admin về trang quản trị).
-- Thất bại: không tạo phiên, báo lỗi.
+- Thành công: hệ thống tạo phiên (cookie session, HttpOnly) và trả về thông tin người dùng; giao diện lưu thông tin hiển thị và điều hướng theo vai trò.
+- Thất bại: không tạo phiên, giao diện hiển thị thông báo lỗi.
 
 #### Luồng chính:
 
 1. Người dùng mở trang Đăng nhập.
-2. Hệ thống hiển thị form (email, mật khẩu) kèm CSRF token.
-3. Người dùng nhập thông tin và bấm “Đăng nhập”.
-4. Hệ thống kiểm tra CSRF token và dữ liệu: email đúng định dạng, mật khẩu không rỗng.
-5. Hệ thống tìm tài khoản theo email.
-6. Hệ thống so khớp mật khẩu với bản băm (bcrypt).
-7. Hệ thống kiểm tra tài khoản không bị khóa (chỉ kiểm tra sau khi mật khẩu đúng, để không lộ thông tin về tài khoản).
-8. Hệ thống tạo phiên/token.
-9. Hệ thống điều hướng theo vai trò: customer về trang chủ, admin về trang quản trị.
+2. Hệ thống trả khung trang, cấp XSRF-TOKEN để chống csrf.
+3. Người dùng nhập email,mật khẩu, bấm "Đăng nhập";giao diện gửi yêu cầu JSON kèm mã CSRF TOKEN trong header X-XSRF-TOKEN.
+4. Hệ thống kiểm tra mã CSRF.
+5. Hệ thống kiểm tra dữ liệu:email,mật khẩu.(đúng định dạng,không rỗng).
+6. Hệ thống tìm tài khoản theo email và so khớp mật khẩu với mã băm.
+7. Hệ thống kiểm tra tài khoản không bị khóa,chỉ kiểm tra sau khi mật khẩu đúng.
+8. Hệ thống đăng nhập tài khoản,tạo phiên,tạo mã phiên.
+9. Hệ thống trả về thông tin người dùng(id,name,email,role);điều hướng theo vai trò.('/admin' vai trò admin, ngược lại '/')
+10. Giao diện lưu thông tin người dùng (chỉ để hiển thị)
 
 #### Luồng phụ:
 
-- A1. Chưa có tài khoản: người dùng chọn “Đăng ký” và chuyển sang TM-04b (email duy nhất, mật khẩu từ 8 ký tự).
-- A2. Bị chuyển đến đăng nhập từ chức năng cần đăng nhập (bấm “Thêm vào giỏ” ở TM-05a, vào giỏ hàng, đặt hàng): sau khi đăng nhập thành công, quay lại đúng trang đang xem. Địa chỉ quay lại chỉ được thuộc cùng website (chống chuyển hướng độc hại).
-- A3. Đã đăng nhập mà mở lại trang Đăng nhập: chuyển thẳng đến trang theo vai trò.
-- A4. Đăng xuất (TM-04c): hủy phiên/token ở server, xóa token ở trình duyệt, chuyển về trang chủ với vai trò Khách vãng lai.
+- A1. Chưa có tài khoản: người dùng chọn "Đăng ký" chuyển sang trang Đăng ký.
+- A2. Đã đăng nhập mà mở lại trang Đăng nhập:giao diện chuyển đến theo vai trò.
+- A3. Đăng xuất:Hủy phiên,tạo lại mã CSRF.
 
 #### Luồng ngoại lệ:
 
-- E1. Bỏ trống hoặc sai định dạng (bước 4): báo lỗi tại trường sai, giữ lại email đã nhập, không giữ mật khẩu.
-- E2. Email không tồn tại hoặc sai mật khẩu (bước 5, 6): báo chung “Email hoặc mật khẩu không đúng”, quay lại bước 2. Không cho biết email có tồn tại hay không.
-- E3. Tài khoản bị khóa (bước 7): báo “Tài khoản đã bị khóa”, không tạo phiên.
-- E4. CSRF token sai hoặc hết hạn (bước 4): tải lại form, báo “Phiên làm việc đã hết hạn, vui lòng thử lại”.
-- E5. Lỗi kết nối server hoặc CSDL: báo “Hệ thống đang gặp sự cố, vui lòng thử lại sau”, không tạo phiên, ghi log.
-- E6. Tài khoản bị quản trị khóa khi đang có phiên (TM-14): ở yêu cầu kế tiếp hệ thống hủy phiên, chuyển về trang đăng nhập và báo tài khoản đã bị khóa.
+- E1. Bỏ trống hoặc sai định dạng (bước 5),hệ thống trả về HTTP 422 kèm theo lỗi từng trường.
+- E2. Email không tồn tại hoặc sai mật khẩu (bước 6):HTTP 401 ,thông báo chung"Email hoặc mật khẩu không tồn tại".
+- E3. Tài khoản bị khóa (bước 7), hệ thống trả về HTTP 401,thông báo"Tài khoản đã bị khóa vui lòng liên hệ quản trị viên".
+- E4. Mã CSRF thiếu hoặc hết hạn(bước 4):HTTP 419;người dùng tải lại trang và thử lại.
+- E5. Lỗi máy chủ or CSDL:HTTP 500,Laravel tự động ghi log, không tạo phiên.
 
-### UC-02: Quản lý sản phẩm (TM-12)
+### UC-02: Quản lý sản phẩm
 
 #### Tác nhân: Quản trị
 
@@ -101,75 +99,122 @@ Mô tả: Xác thực bằng email và mật khẩu để truy cập vào hệ t
 - E9. Lỗi CSDL sau khi đã lưu ảnh: hoàn tác, xóa ảnh vừa lưu, báo lỗi, ghi log.
 - E10. CSRF token sai hoặc hết hạn: từ chối, tải lại form, giữ dữ liệu nhập.
 
-### UC-03: Đặt hàng COD (TM-06)
+### UC-03: Đặt hàng COD
 
 #### Tác nhân: Khách hàng
 
-#### Mô tả: Đặt các sách trong giỏ hàng, nhập thông tin nhận hàng, thanh toán khi nhận hàng
+#### Mô tả: Đặt các sách trong giỏ hàng, nhập thông tin nhận hàng, thanh toán khi nhận hàng(COD)
 
 #### Tiền điều kiện:
 
-- Đã đăng nhập, tài khoản không bị khóa
-- Giỏ hàng có ít nhất 1 sản phẩm
+- Đã đăng nhập, tài khoản không bị khóa.
+- Giỏ hàng có ít nhất 1 sản phẩm và khách đã chọn ít nhất 1 sản phẩm để đặt.
 
 #### Hậu điều kiện:
 
-- Thành công: tạo đơn trạng thái "Chờ xác nhận" (lưu họ tên người nhận, số điện thoại, địa chỉ giao hàng, phương thức thanh toán COD, tổng tiền tính ở server); order_items lưu số lượng, đơn giá lúc mua và thành tiền; tồn kho các sách được trừ; giỏ hàng được xóa; tất cả nằm trong một transaction.
-- Thất bại: không tạo đơn, tồn kho và giỏ hàng giữ nguyên.
+- Thành công: trong 1 transaction duy nhất:
+  - Tạo đơn trạng thái "pending",lưu họ tên người nhận,số điện thoại,địa chỉ giao hàng,ghi chú,phương thức thanh toán COD,mã giảm giá,tổng tiền tính ở server,mã chống gửi trùng.
+  - order_items lưu số lượng, đơn giá lúc mua,thành tiền.
+  - Tồn kho các sách đã đặt bị trừ.
+  - Các dòng trong giỏ hàng đã đặt bị xóa, các dòng không được chọn giữ nguyên.
+- Thất bại: không tạo đơn, tồn kho và giỏ hàng giữ nguyên (hệ thống không được giỏ hàng khi phát hiện sách ẩn,hết hàng hoặc giá đổi).
+- Công thức: Tổng = tạm tính - giảm giá + phí vận chuyển(giảm giá không vượt quá tạm tính).
 
 #### Luồng chính:
 
-1. Khách hàng mở giỏ hàng và bấm "Đặt hàng"
-2. Hệ thống kiểm tra phiên đăng nhập và tài khoản không bị khóa
-3. Hệ thống đọc giỏ hàng từ CSDL (đọc thường, không khóa), kiểm tra sơ bộ từng sản phẩm (còn hiển thị, còn hàng) chỉ để báo sớm, tính tổng tiền tạm theo giá hiện tại, tạo mã chống gửi trùng và mã nhận diện giỏ (cartHash), rồi hiển thị trang đặt hàng kèm form
-4. Khách hàng nhập họ tên, số điện thoại, địa chỉ nhận hàng
-5. Khách hàng chọn phương thức thanh toán COD
-6. Khách hàng bấm "Xác nhận đặt hàng" (Thanh toán khi nhận hàng). Giao diện vô hiệu hóa nút sau khi bấm và gửi kèm CSRF token, mã chống gửi trùng, cartHash (không gửi giá hay tổng tiền)
-7. Hệ thống kiểm tra phía server (trước khi mở transaction): CSRF token, đăng nhập và tài khoản không bị khóa, họ tên, số điện thoại, địa chỉ, phương thức thanh toán hợp lệ; rồi kiểm tra mã chống gửi trùng lần 1 (đã có đơn với mã này thì trả về đơn đó)
-8. Hệ thống mở transaction, khóa các dòng giỏ hàng của chính khách, kiểm tra lại mã chống gửi trùng lần 2 (sau khi giữ khóa giỏ), rồi khóa các dòng sản phẩm theo thứ tự id tăng dần
-9. Hệ thống kiểm tra lại trong transaction và gom tất cả lỗi để báo một lần: giỏ không trống; giỏ và giá khớp với tóm tắt khách đã xem (so bằng cartHash); từng sản phẩm còn hiển thị, chưa xóa mềm, tồn kho đủ số lượng
-10. Hệ thống tạo đơn (trạng thái "Chờ xác nhận", thông tin nhận hàng, tổng tiền tính ở server, mã chống gửi trùng) và order_items (lưu giá lúc mua), trừ tồn kho (chỉ khi còn đủ hàng, đồng thời tăng version của sản phẩm), xóa các sản phẩm trong giỏ. Nếu mọi thao tác thành công thì commit transaction
-11. Hệ thống hiển thị "Đặt hàng thành công" kèm mã đơn hàng và liên kết đến "Đơn hàng của tôi"
+1. Khách hàng mở giỏ hàng, chọn sản phẩm, ấn "Tiến hành đặt hàng".
+2. Chuyển giao diện đến trang giỏ hàng, tạo ra 1 mã chống gửi trùng.
+3. Giao diện tải các sản phẩm đã chọn từ server (giá và tồn kho hiện tại) để hiển thị tóm tắt: tạm tính, giảm giá, phí vận chuyển, tổng. Server lấy giỏ hàng theo người đăng nhập.
+4. Khách hàng nhập họ tên,số điện thoại,địa chỉ,ghi chú(tùy chọn);thông tin có sẵn trong hồ sơ khách hàng có thể sửa.
+5. Phương thức thanh toán COD (mặc định,duy nhất).
+6. Khách bấm "Xác nhận đặt hàng". Giao diện vô hiệu hóa nút và gửi: thông tin nhận hàng, ghi chú, mã chống gửi trùng, danh sách id các dòng giỏ được chọn, mã giảm giá(nếu có). không gửi giá từng sản phẩm, không gửi định danh người dùng.
+7. Server kiểm tra transaction:CSRF, đã đăng nhập, tài khoản không bị khóa, họ tên không rỗng (max=255), số điện thoại bắt đầu từ 0 đủ 10 chữ số, địa chỉ không được rỗng(max=255), ghi chú(max=255),danh sách id sản phẩm trong giỏ không được rỗng.
+8. Server mở transaction khóa các dòng trong giỏ hàng được chọn, rồi khóa các dòng theo sản phẩm.
+9. Server kiểm tra lại và gom tất cả lỗi báo 1 lần, sản phẩm chưa xóa mềm và đang được hiển thị, số lượng hợp lệ, tồn kho đủ, mã có hiệu lực, tổng tiền server tính khớp với tổng tiền hiển thị.
+10. Server tạo đơn , order_items (đơn giá lấy từ CSDL), trừ tồn kho bằng câu lệnh có điều kiện(chỉ trừ khi còn đủ hàng), xóa các dòng giỏ hàng đã đặt.
+11. Giao diện hiển thị "Đặt hàng thành công" kèm mã đơn và liên kết với Đơn hàng của tôi, cập nhật lại số lượng trong giỏ hàng.
 
 #### Luồng phụ:
 
-- A1. Đổi số lượng hoặc xóa sách ở trang đặt hàng: quay về giỏ hàng, cập nhật lại tổng tiền.
-- A2. Áp dụng mã giảm giá: trước bước 6 khách nhập mã. Hệ thống kiểm tra mã (tồn tại, còn hạn), tính số tiền giảm và hiển thị tổng mới. Mã được kiểm tra lại trong transaction ở bước 9, mã và số tiền giảm được lưu vào đơn.
-- A3. Khách xác nhận lại giá hoặc giỏ mới: hệ thống hiển thị lại trang đặt hàng với tổng tiền mới, khi khách xác nhận thì quay lại bước 6.
-- A4. Quay lại sau khi đăng nhập lại: giỏ hàng vẫn còn, khách quay lại trang đặt hàng và nhập lại thông tin nhận hàng nếu chưa được giữ.
+A1. Đổi số lượng hoặc xóa sách: quay về giỏ hàng, sau đó đặt lại từ bước 1.
+A2. Mã giảm giá: khách nhập mã giảm giá(bước 6);giao diện gọi server kiểm tra mã(tồn tại, còn hạn), hiển thị số tiền giảm do server trả về; mã và số tiền được giảm lưu vào đơn. Giao diện không tự tính giảm giá.
+A3. Xác nhận lại giá: khi server báo tổng tiền hoặc mã giảm giá đã thay đổi,giao diện hiển thị tổng mới, khách hàng bấm "Xác nhận đơn hàng", giữ nguyên mã chống trùng vì chưa có đơn nào được tạo.
 
 #### Luồng ngoại lệ:
 
 ##### Xác thực và phiên:
 
-- E1. Chưa đăng nhập (bước 1, 2: vào thẳng đường dẫn đặt hàng, dùng bookmark hoặc không có token): từ chối 401, chuyển đến đăng nhập (UC-01, A2), sau đó quay lại giỏ hàng. Không tạo đơn.
-- E2. Phiên đăng nhập hết hạn khi đang nhập hoặc khi bấm xác nhận (bước 7): từ chối, không tạo đơn, chuyển đến đăng nhập, sau đó quay lại trang đặt hàng; giỏ hàng giữ nguyên.
-- E3. Tài khoản bị khóa (bước 2, hoặc bị quản trị khóa giữa chừng và phát hiện ở bước 7): thông báo tài khoản bị khóa, hủy phiên, từ chối đặt hàng.
-- E4. CSRF token sai hoặc hết hạn: từ chối, tải lại trang đặt hàng, giỏ hàng giữ nguyên.
+E1. Tài khoản bị khóa: từ chối, báo tài khoản bị khóa, hủy phiên, không tạo đơn.
+E2. CSRF sai hoặc hết hạn(HTTP 419): báo phiên làm việc đã hết hạn, vui lòng thử lại, giữ dữ liệu nhập.
+E3. Đổi id dòng sản phẩm giỏ hàng, đơn, sản phẩm từ URL hoặc API, hoặc gửi định danh người dùng giả: bỏ qua định dạng từ client, người đặt luôn lấy từ phiên; id không thuộc phiên thì từ chối 404, không tạo đơn.
 
 ##### Giỏ hàng:
 
-- E5. Giỏ hàng trống: chặn và báo “Giỏ hàng trống” ở bước 2, 3. Nếu giỏ trống được phát hiện ở bước 9 (giỏ đã bị làm trống hoặc đã được đặt thành đơn khác từ tab hay thiết bị khác): hoàn tác transaction, báo “Giỏ hàng trống hoặc đã thay đổi”.
-- E6. Giỏ hàng thay đổi giữa lúc hiển thị và lúc xác nhận (thêm, sửa, xóa ở nơi khác): không đặt theo giỏ cũ, hoàn tác, tải lại trang đặt hàng với giỏ mới để khách xem lại và xác nhận (A3).
-- E7. Số lượng không hợp lệ (nhỏ hơn hoặc bằng 0, không phải số nguyên, quá lớn) hoặc đổi id giỏ, đơn, sản phẩm trên URL hoặc API: từ chối 400, 403 hoặc 404, không tạo đơn.
+E4. Chưa chọn sản phẩm hoặc giỏ trống: chặn và báo lỗi. Nếu ở (bước 9 giỏ đã đổi ở tab khác hoặc đã được đặt), hoàn tác, báo "Giỏ hàng đã trống hoặc đã thay đổi",tải lại.
+E5. Số lượng không hợp lệ(<=0,không phải số nguyên), từ chối 422, không tạo đơn.
 
 ##### Hàng hóa:
 
-- E8. Hết hàng (tồn kho bằng 0, bước 9): hoàn tác, báo tất cả sách hết hàng trong một lần, quay lại giỏ hàng để khách xóa các sách đó. Không tự động đặt một phần đơn.
-- E9. Tồn kho nhỏ hơn số lượng đặt (bước 9): hoàn tác, báo từng sách “chỉ còn X cuốn”, quay lại giỏ hàng cho chỉnh số lượng.
-- E10. Hai khách cùng mua cuốn cuối cùng: khách giành được khóa dòng trước thì thành công; khách sau đọc tồn kho mới và rơi vào E8 hoặc E9. Tồn kho không bao giờ âm (có thêm ràng buộc ở CSDL).
-- E11. Sản phẩm bị ẩn hoặc xóa mềm sau khi vào giỏ: hoàn tác, báo tên sách, gỡ sách khỏi giỏ, hiển thị lại trang đặt hàng với tổng tiền mới để khách xác nhận (A3). Không tự tiếp tục tạo đơn với các sách còn lại.
-- E12. Giá sản phẩm thay đổi: hoàn tác, hiển thị tổng tiền mới, khách xác nhận lại (A3). Chỉ sau khi xác nhận mới tạo đơn.
+E6. Sách bị ẩn hoặc đã xóa mềm: báo từng sách; khách quay về giỏ để xóa.
+E7. Hết hàng hoặc không đủ:báo tên từng sách ("hết hàng" hoặc "chỉ còn X cuốn").
+E8. Hai khách cùng mua 1 cuốn: khách giữ khóa trước thành công,khách sau rơi vào E7. Tồn kho không bao giờ âm(câu lệnh trừ có điều kiện).
+E9. Giá hoặc tổng tiền thay đổi so với tổng đã hiển thị:hoàn tác, trả về tổng mới (HTTP 409),khách xác nhận lại.
 
 ##### Dữ liệu nhập và mã giảm giá:
 
-- E13. Thông tin nhận hàng không hợp lệ (bước 7): báo lỗi từng trường bằng tiếng Việt (họ tên và địa chỉ không rỗng, số điện thoại đúng định dạng 10 chữ số bắt đầu bằng 0), giữ dữ liệu đã nhập, không mở transaction. Nội dung nhập được làm sạch khi hiển thị (chống XSS).
-- E14. Mã giảm giá không hợp lệ (A2, mức C): báo rõ lý do (không tồn tại, hết hạn), giữ nguyên tổng tiền, khách bỏ mã hoặc nhập mã khác. Nếu mã mất hiệu lực lúc xác nhận (bước 9): hoàn tác và hiển thị tổng mới để khách xác nhận. Số tiền giảm không vượt quá tổng tiền.
+E10. Thông tin nhận hàng không hợp lệ: HTTP 422, báo lỗi từng trường, giữ dữ liệu đã nhập, không mở transaction, nội dung nhập luôn hiển thị dưới dạng văn bản(không chèn HTML).
+E11. Mã giảm giá không hợp lệ: báo rõ lý do; giữ nguyên tổng tiền, khách bỏ mã hoặc nhập mã khác. Nếu mã mất hiệu lực(bước 9):hoàn tác, hiển thị tổng mới.
 
-##### Gửi trùng và lỗi hệ thống:
+#### Ghi chú:
 
-- E15. Bấm “Xác nhận” hai lần, gửi lại do mạng chậm hoặc tải lại trang sau khi thành công: giao diện vô hiệu hóa nút; server chặn bằng mã chống gửi trùng duy nhất, yêu cầu thứ hai không tạo đơn mới mà trả về đơn đã tạo.
-- E16. Mất kết nối trước khi nhận phản hồi (đơn có thể đã được tạo): khi khách tải lại, hệ thống hướng dẫn kiểm tra “Đơn hàng của tôi” trước khi đặt lại; mã chống gửi trùng ngăn việc tạo đơn thứ hai.
-- E17. Lỗi CSDL hoặc mất kết nối trong transaction: hoàn tác, không tạo đơn, không đổi tồn kho, giữ nguyên giỏ hàng, hiển thị thông báo để khách thử lại, ghi log.
-- E18. Lock timeout hoặc deadlock khi khóa dòng (bước 8): hoàn tác và tự thử lại tối đa 2 lần; nếu vẫn lỗi thì báo “Hệ thống đang bận, vui lòng thử lại”. Khóa theo thứ tự id tăng dần để giảm nguy cơ deadlock.
-- E19. Khách xem hoặc đặt theo đơn, giỏ của người khác bằng cách đổi ID: chặn 403 hoặc 404 (TM-NFR4).
+- Vòng đời trạng thái đơn:
+  - PENDING (Chờ xác nhận) chuyển được sang PROCESSING hoặc CANCELLED.
+  - PROCESSING (Đang xử lý: đã xác nhận, chuẩn bị hàng) chuyển được sang
+    SHIPPING hoặc CANCELLED.
+  - SHIPPING (Đang giao) chuyển được sang COMPLETED hoặc CANCELLED (giao không
+    thành công).
+  - COMPLETED và CANCELLED là trạng thái kết thúc.
+  - Quản trị thực hiện các chuyển trạng thái. Mỗi lần chuyển sang CANCELLED, tồn kho được cộng lại đúng một lần.
+
+### UC-04: Xử lý trạng thái đơn hàng ( trang "Đơn hàng của tôi")
+
+#### Tác nhân: Quản trị, Khách hàng
+
+Mô tả: Đơn hàng đi qua các trạng thái PENDING (Chờ xác nhận), PROCESSING
+(Đang xử lý), SHIPPING (Đang giao), COMPLETED (Hoàn thành), CANCELLED (Đã hủy).
+Quản trị xác nhận và giao đơn. Khách được hủy đơn khi hàng chưa giao đi; khi hàng được giao đến, khách xác nhận đã nhận hàng hoặc không nhận hàng.
+
+#### Tiền điều kiện:
+
+- Đã đăng nhập; đơn hàng tồn tại và chưa ở trạng thái kết thúc.
+- Khách chỉ thao tác trên đơn của chính mình; quản trị thao tác trên mọi đơn.
+
+#### Hậu điều kiện:
+
+- Thành công: trạng thái đơn đổi theo bảng chuyển trạng thái; lịch sử đổi trạng thái được ghi (người đổi, thời gian, ghi chú); nếu chuyển sang Cancelled thì tồn kho được cộng lại. Tất cả nằm trong 1 transaction.
+- Thất bại: trạng thái đơn và tồn kho giữ nguyên.
+
+#### Luồng chính (đơn đi hết vòng đời):
+
+1. Khách đặt hàng, đơn hàng ở trạng thái Pending.
+2. Quản trị mở danh sách đơn (lọc theo trạng thái) và xem chi tiết đơn Pending.
+3. Quản trị bấm "Xác nhận đơn". Hệ thống khóa dòng đơn, kiểm tra đơn còn Pending, chuyển sang Processing.
+4. Quản trị kiểm tra hàng và đóng gói.
+5. Quản trị bấm "Giao cho vận chuyển" có hộp xác nhận. Hệ thống chuyển đơn sang Shipping.
+6. Khi hàng được giao đến, khách thanh toán tiền mặt và bấm "Đã nhận hàng" (có hộp xác nhận). Hệ thống chuyển sang Completed.
+
+#### Luồng phụ:
+
+- A1. Khách hủy đơn (đơn Pending hoặc Processing): khách bấm "Hủy đơn" và xác nhận trong hộp thoại. Đơn chuyển sang Cancelled, tồn kho cộng lại. Khi đơn đã sang Shipping, khách không còn chức năng "Hủy đơn".
+- A2. Khách không nhận hàng (đơn Shipping): khi hàng được giao đến mà khách không nhận hàng, khách bấm "Không nhận hàng", chọn 1 lý do(Không còn nhu cầu, Hàng không đúng đơn đặt,Khác) và xác nhận. Đơn chuyển sang Cancelled, tồn kho cộng lại.
+- A3. Quản trị từ chối hoặc hủy đơn (PENDING hoặc PROCESSING): bắt buộc nhập lý do (hết hàng, không liên lạc được...). Đơn chuyển sang CANCELLED, tồn kho cộng lại;khách xem được lý do.
+- A4. Quản trị chốt hoàn thành thay khách (đơn SHIPPING, khách chưa bấm): đơn chuyển sang COMPLETED.
+
+#### Luồng ngoại lệ:
+
+- E1. Chưa đăng nhập: 401. Người không phải quản trị gọi API quản trị: 403.
+- E2. Khách thao tác đơn không phải của mình (đổi mã đơn): 404, không tiết lộ đơn có tồn tại hay không.
+- E3. Khách thao tác cùng lúc quản trị chuyển trạng thái: bên giữ khóa trước thành công, bên sau nhận E3 với thông báo "Đơn hàng đã được cập nhật, vui lòng tải lại"; giao diện tải lại đơn.
+- E4. Khách gọi "Hủy đơn" cho đơn đang SHIPPING (qua API): từ chối 422, thông báo"Đơn đang được giao, không thể hủy. Khi nhận hàng, bạn có thể chọn Không nhận hàng."
+- E5. Sách trong đơn đã bị xóa mềm khi cộng lại tồn kho: vẫn cộng lại bình thường.
+- E6. Lỗi CSDL: hoàn tác, không đổi trạng thái và tồn kho, báo lỗi chung, ghi log.
