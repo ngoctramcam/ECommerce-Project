@@ -1,4 +1,4 @@
-// AdminRoute.jsx
+// AI-assisted [AI-08]
 import { useEffect, useState } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 
