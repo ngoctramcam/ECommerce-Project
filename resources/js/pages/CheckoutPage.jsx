@@ -125,6 +125,8 @@ export default function CheckoutPage() {
                     coupon_code: passedCoupon || null,
                     discount_amount: passedDiscount,
                     total_amount: totalAmount,
+                    product_ids: orderItems.map((item) => item.product_id ?? item.product?.product_id,
+                    ),
                 }),
             });
 

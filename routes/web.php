@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Services\ProductService;
 use App\Http\Controllers\AuthController;
 use App\Http\Middleware\AdminAuthMiddleware;
@@ -17,6 +18,9 @@ use App\Http\Controllers\VoucherController;
 use App\Http\Controllers\ProfileController;
 // Route trang chủ
 Route::get('/', function () {
+    if (Auth::check() && Auth::user()->role === 'admin') {
+        return redirect('/admin');
+    }
     return view('welcome');
 })->name('home');
 
@@ -65,9 +69,9 @@ Route::get('/api/vouchers/check', [VoucherController::class, 'check']);
 Route::post('api/orders', [OrderController::class, 'store']);
 Route::get('/api/products/{productId}/ratings', [RatingController::class, 'index']);
 Route::middleware([AdminAuthMiddleware::class])->group(function () {
-    Route::get('/admin', function () {
+    Route::get('/admin/{any?}', function () {
         return view('welcome');
-    })->name('admin.dashboard');
+    })->where('any', '.*')->name('admin.dashboard');
     //TV4: CURD Category (Chỉ thêm/sửa/xóa bên trong Admin)
     Route::apiResource('api/categories', CategoryController::class)->except(['index', 'show']);
 
@@ -103,5 +107,8 @@ Route::middleware('auth')->group(function () {
 ////////////1
 // [(TV3) ]: Route hứng toàn bộ đường dẫn phía React (/login, /register...) đặt ở cuối cùng để khi bấm F5 không bị lỗi 404
 Route::get('/{any}', function () {
+    if (Auth::check() && Auth::user()->role === 'admin') {
+        return redirect('/admin');
+    }
     return view('welcome');
 })->where('any', '^(?!api/).*$');
