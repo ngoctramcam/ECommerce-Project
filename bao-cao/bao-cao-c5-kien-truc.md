@@ -79,6 +79,91 @@
 ### Chương 6. Cài đặt
 
 - 6.1 Cấu trúc mã backend và frontend
+  **Backend**
+  - routes/: Khai báo các endpoint nhận request từ client và gắn Middleware bảo vệ route.
+  - Middleware/: Lọc request trước khi vào controller như xác thực, kiểm tra vai trò người dùng.
+  - Requests/: Chuyên trách kiểm tra tính hợp lệ và chuẩn hóa dữ liệu đầu vào trước khi đến controller.
+  - Controllers/: Tiếp nhận request đã qua kiểm duyệt, trích xuất dữ liệu hợp lệ, gọi phương thức của Service và trả về phản hồi.
+  - Services/: Tập trung logic nghiệp vụ cốt lõi như đặt hàng, xác thực, quản lý trạng thái, tính toán, giúp controller nhẹ hơn.
+  - Models/: Các lớp Eloquent Model đại diện cho bảng dữ liệu, khai báo quan hệ và các truy vấn ORM.
+  - database/ (migrations/, seeders/, factories/): Quản lý các bảng dữ liệu, dữ liệu mẫu và dữ liệu giả phục vụ phát triển/kiểm thử.
+  **Frontend**
+  - layouts/: Các khung bố cục trang dùng chung như layout chính cho người dùng và layout riêng cho admin.
+  - pages/: Các trang chức năng tương ứng từng luồng nghiệp vụ của ứng dụng như trang chủ, danh sách/chi tiết sản phẩm, giỏ hàng, thanh toán/đặt hàng, đăng nhập,...
+  - components/: Các component giao diện phục vụ cho các vai trò, giúp chia nhỏ UI và tái sử dụng.
+  - css/: Chứa stylesheet và cấu hình giao diện trực quan của ứng dụng.
 - 6.2 Hai mẫu thiết kế/nguyên lý áp dụng trở lên (Repository, Dependency Injection, Middleware…), chỉ rõ vị trí trong mã (tên tệp/lớp)
-- 6.3 Nghiệp vụ tiêu biểu: **Đặt hàng trong transaction** – ý tưởng, mã giả, độ phức tạp, cách chống bán vượt tồn kho (TM-NFR1)
-- 6.4 Bảo mật: băm mật khẩu, chống SQL Injection, XSS, CSRF, phân quyền phía server, chặn xem đơn của người khác (TM-NFR4), kiểm tra tệp tải lên theo nội dung, không đưa `.env` vào repo
+  1. Nguyên tắc đơn trách nhiệm:
+     - Tách logic nghiệp vụ khỏi Controller và Model để mỗi lớp chỉ làm một nhiệm vụ duy nhất. Controller lo điều phối, Services lo quy tắc nghiệp vụ, Models lo ánh xạ và truy vấn thực thể.
+     - Vị trí: Trong các lớp Controller, Model và Services
+  2. Dependency Injection
+     - Thay vì tự khởi tạo phụ thuộc bên trong lớp, các phụ thuộcược inject qua constructor giúp giảm sự phụ thuộc từng lớp.
+     - Vị trí: Trong các file thuộc lớp Controller.
+- 6.3 Nghiệp vụ tiêu biểu: **Đặt hàng trong transaction**
+- Ý tưởng: Khi người dùng đặt hàng, hệ thống phải thực hiện đồng thời nhiều thao tác liên quan chặt chẽ: kiểm tra tính hợp lệ của giỏ hàng/sản phẩm, kiểm tra và trừ số lượng tồn kho, tạo bản ghi đơn hàng, tạo các dòng chi tiết đơn hàng và xóa/cập nhật giỏ hàng. Nếu các bước này chạy rời rạc mà không dùng transaction, sự cố giữa chừng có thể gây lệch tồn kho.
+- Mã giả:
+```bash
+HÀM ĐặtHàng(MãNgườiDùng, ThôngTinGiaoHàng):
+BẮT ĐẦU GIAO DỊCH CƠ SỞ DỮ LIỆU (Database Transaction)
+    TRY:
+        // 1. Lấy dữ liệu giỏ hàng
+        DanhSáchGiỏHàng = Lấy tất cả sản phẩm trong giỏ hàng của MãNgườiDùng
+        NẾU DanhSáchGiỏHàng rỗng THÌ
+            NÉM LỖI "Giỏ hàng trống."
+        KẾT THÚC NẾU
+        TổngTiềnĐơnHàng = 0
+        DanhSáchChiTiếtĐơnHàng = Rỗng
+        // 2. Kiểm tra tồn kho và tính tiền
+        VÒNG LẶP qua từng Mục trong DanhSáchGiỏHàng:
+            // Lấy thông tin sản phẩm và khóa dòng dữ liệu để tránh xung đột (Lock for update)
+            SảnPhẩm = Lấy thông tin sản phẩm theo MãSảnPhẩm
+            NẾU SảnPhẩm không tồn tại HOẶC TồnKho(SảnPhẩm) < SốLượngMua(Mục) THÌ
+                NÉM LỖI "Sản phẩm không đủ hàng trong kho."
+            KẾT THÚC NẾU
+            ThànhTiền = Giá(SảnPhẩm) * SốLượngMua(Mục)
+            TổngTiềnĐơnHàng = TổngTiềnĐơnHàng + ThànhTiền
+            // Chuẩn bị dữ liệu chi tiết
+            Thêm vào DanhSáchChiTiếtĐơnHàng thông tin (MãSảnPhẩm, SốLượng, ĐơnGiá, ThànhTiền)
+            // Cập nhật lại số lượng tồn kho
+            TồnKho(SảnPhẩm) = TồnKho(SảnPhẩm) - SốLượngMua(Mục)
+            Lưu(SảnPhẩm)
+        KẾT THÚC VÒNG LẶP
+        // 3. Tạo Đơn hàng chính
+        ĐơnHàng = TẠO MỚI ĐơnHàng VỚI:
+MãNgườiDùng
+TổngTiền = TổngTiềnĐơnHàng
+Trạng thái = 'Chờ xử lý' (pending)
+Ngày đặt = Thời gian hiện tại
+Tên, SĐT, Địa chỉ, Mã giảm giá (lấy từ ThôngTinGiaoHàng)
+        // 4. Lưu chi tiết đơn hàng
+        VÒNG LẶP qua từng ChiTiết trong DanhSáchChiTiếtĐơnHàng:
+            TẠO MỚI ChiTiếtĐơnHàng VỚI:
+MãNgườiDùng
+MãĐơnHàng (từ ĐơnHàng vừa tạo)
+Thông tin chi tiết (MãSảnPhẩm, SốLượng, ĐơnGiá, ThànhTiền)
+      KẾT THÚC VÒNG LẶP
+      // 5. Làm sạch giỏ hàng
+      CácMụcCầnXóa = Lấy danh sách giỏ hàng chưa bị xóa của MãNgườiDùng
+      VÒNG LẶP qua từng Mục trong CácMụcCầnXóa:
+          Đánh dấu Mục là "đã xóa" (is_delete = true)
+          Xóa(Mục)
+      KẾT THÚC VÒNG LẶP
+      TRẢ VỀ ĐơnHàng
+  CATCH LỖI:
+      HOÀN TÁC GIAO DỊCH (Rollback) VÀ Báo Lỗi
+  XÁC NHẬN GIAO DỊCH (Commit)
+```
+- Cách chống vượt tồn kho:
+  - Khóa bản ghi sản phẩm bằng lockForUpdate() trong DB::transaction Khi duyệt qua từng CartItem `Product::where('product_id', $item->product_id)->lockForUpdate()->first()`: Buộc các request đặt hàng đồng thời khác muốn đọc/sửa cùng sản phẩm phải chờ cho đến khi transaction hiện tại commit hoặc rollback—tránh tình trạng nhiều người cùng đọc một mức stock cũ rồi cùng trừ.
+  - Kiểm tra lại tồn kho trên bản ghi đã khóa trước khi trừ `if (!$product || $product->stock < $item->quantity)`. Nhờ vậy giá trị stock được đối chiếu luôn là số lượng thực tế mới nhất, không phụ thuộc vào dữ liệu hiển thị cũ trên giao diện phía client.
+  - Trừ kho và lưu ngay trong cùng transaction
+  - Hoàn tác toàn bộ nếu bất kỳ sản phẩm nào thiếu hàng: Nếu một sản phẩm không đủ tồn kho và ném Exception, toàn bộ transaction bị hủy—các sản phẩm trước đó trong cùng đơn hàng được trừ kho tạm thời sẽ không bị ghi nhận sai lệch ra CSDL.
+  - 
+- 6.4 Bảo mật
+  - Băm mật khẩu: Mật khẩu người dùng không lưu dạng văn bản thuần mà được băm một chiều bằng thuật toán an toàn trước khi lưu xuống cơ sở dữ liệu và đối chiếu khi đăng nhập.
+  - Chống SQL Injection: Sử dụng Eloquent ORM  thay vì nối chuỗi SQL trực tiếp từ dữ liệu người dùng.
+  - Chống CSRF (Cross-Site Request Forgery): Áp dụng cơ chế bảo vệ CSRF chuẩn của Laravel cho các luồng cho các request từ trình duyệt.
+  - Phân quyền phía server: Không chỉ ẩn nút/menu trên giao diện React, mọi route và hành động nhạy cảm như thao tác quản trị, chỉnh sửa/xóa tài nguyên đều được kiểm tra xác thực và vai trò/quyền hạn ở tầng Middleware và Service phía server.
+  - Chặn xem đơn của người khác (TM-NFR4): Khi truy vấn hoặc thao tác trên một đơn hàng cụ thể, phía server luôn kiểm tra quyền sở hữu hợp lệ.
+  - Kiểm tra tệp tải: Khi người dùng tải tệp lên, không chỉ tin tưởng phần mở rộng tên file (.jpg, .png) do client gửi lên, mà còn giới hạn dung lượng, lưu tệp ra ngoài thư mục thực thi mã và đặt tên file ngẫu nhiên.
+  - Không đưa .env vào repo: File .env chứa thông tin nhạy cảm (DB_PASSWORD, APP_KEY, khóa API...) được đưa vào .gitignore để không commit lên GitHub, trên repository chỉ duy trì .env.example với giá trị mẫu/rỗng.
