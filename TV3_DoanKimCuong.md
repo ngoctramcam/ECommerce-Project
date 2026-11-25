@@ -2,7 +2,7 @@
 
 | Mục             | Thông tin                      |
 | --------------- | ------------------------------ |
-| Họ tên, MSSV    | DoanKimCuong – [0306241264]    |
+| Họ tên, MSSV    | Đoàn Kim Cương – [0306241264]  |
 | Nhóm, đề tài    | Nhóm [03] – [Website bán sách] |
 | Vai trò         | TV3                            |
 | Công cụ AI dùng | Copilot, Figma AI              |
@@ -215,8 +215,6 @@
 - Đã chỉnh sửa gì:
   - Phần giữ lại:
     Giữ lại toàn bộ
-  - Phần loại bỏ / chỉnh sửa và lý do:
-    []
 - Cách kiểm chứng:
   []
 - Tỷ lệ nội dung AI còn giữ lại (ước lượng): []
@@ -225,30 +223,186 @@
 
 ---
 
-## AI-12 – <Phân trang>
+## AI-07 – Giao diện trang Đăng ký, Đăng nhập và hiển thị tên người dùng trên Header
 
-- Ngày / Người dùng: [21/11/2026] / TV3
-- Công cụ: [Gemini]
+Ngày / Người dùng: [13/11/2026] / TV3
+
+Công cụ: [Copilot]
+
+Giai đoạn: []
+
+Task / Commit / PR: [TM-04] (phần giao diện) – feature/TM-04-giao-dien / [] / []
+
+Mục đích:
+Nhờ AI giải thích ý nghĩa yêu cầu của ngày 4 và hướng dẫn cách dựng trang Đăng ký, Đăng nhập dùng chung layout.
+
+Prompt :
+
+Cho biết ý nghĩa và hướng dẫn cách làm yêu cầu: 1. Giao diện trang đăng ký, đăng nhập theo layout chung; hiển thị lỗi kiểm tra dữ liệu từ server. 2. Hiển thị tên người dùng và nút đăng xuất trên header khi đã đăng nhập.
+
+Kết quả AI trả về (tóm tắt):
+AI giải thích ý nghĩa việc gắn form đăng ký/đăng nhập vào chung MainLayout để đồng bộ giao diện, sau đó hướng dẫn tạo 2 file LoginPage.jsx và RegisterPage.jsx, cách bắt lỗi validation từ server trả về để hiện chữ đỏ dưới từng ô nhập, và sửa Header.jsx để kiểm tra nếu đã đăng nhập thì hiện tên người dùng kèm nút Đăng xuất.
+
+Đánh giá:
+AI tự ý thêm nút "Đăng nhập bằng Google" và link "Quên mật khẩu" không có trong yêu cầu đề bài.
+
+Đã chỉnh sửa gì:
+
+Phần giữ lại:
+
+Giữ lại bố cục form Đăng ký/Đăng nhập dùng chung MainLayout, phần hiển thị lỗi từ server và đoạn code hiện tên người dùng trên Header.jsx.
+
+Loại bỏ: Xóa nút đăng nhập Google và dòng quên mật khẩu.
+
+Lý do: Chức năng TM-04 của nhóm chỉ làm đăng ký, đăng nhập cơ bản bằng email với mật khẩu.
+
+Cách kiểm chứng:
+Chạy thử trên trình duyệt, bấm gửi form trống hoặc nhập sai định dạng email xem có hiện thông báo lỗi không, đăng nhập xong kiểm tra góc phải Header có hiện đúng tên tài khoản và nút Đăng xuất không.
+
+## Link commit/PR:(https://github.com/ngoctramcam/ECommerce-Project/commit/056197be047e2cfdbb791818c8b4a190136fcd45)
+
+AI-08 – <Tạo khung trang Danh sách sách (TM-02) dùng component thẻ sản phẩm>
+
+Ngày / Người dùng: [14/11/2026] / TV3
+
+Công cụ: [Copilot]
+
+Giai đoạn: []
+
+Task / Commit / PR: [TM-02] Tìm kiếm, lọc – feature/TM-02-danh-sach / [] / []
+
+Mục đích:
+Nhờ AI giải thích ý nghĩa yêu cầu của ngày 5 và hướng dẫn cách tạo khung trang Danh sách sách tái sử dụng lại BookCard.jsx.
+
+Prompt chính :
+
+Cho biết ý nghĩa và hướng dẫn cách làm yêu cầu: Tạo khung trang danh sách sách (TM-02) dùng component thẻ sản phẩm.
+
+Kết quả AI trả về (tóm tắt):
+
+Ý nghĩa: Dựng trước khung giao diện hoàn chỉnh của trang danh sách sách (gồm cột bộ lọc bên trái, thanh sắp xếp phía trên và lưới danh sách sách bên phải) bằng cách gọi lại component BookCard.jsx đã làm trước đó để chuẩn bị sẵn giao diện trước khi gắn API thật.
+
+Hướng dẫn thực hiện: Tạo file resources/js/pages/BookListPage.jsx nằm trong MainLayout, chia 2 cột bằng Tailwind Grid (1 cột cho bộ lọc, 3 cột còn lại lặp danh sách <BookCard/> bằng dữ liệu giả).
+
+Đánh giá:
+Khung giao diện giống với wireframe, nhưng lúc mở thử trên màn hình điện thoại (360px) thì cột bộ lọc nằm ở trên đẩy danh sách sách tuốt xuống dưới.
+
+Đã chỉnh sửa gì:
+Trên màn hình điện thoại, gom phần bộ lọc vào một nút bấm "Bộ lọc" để khi nào bấm mới xổ xuống.
+
+Lý do: Để người dùng mở trên điện thoại thấy ngay danh sách sách, không phải cuộn trang quá dài.
+
+Cách kiểm chứng:
+Mở trang /books trên trình duyệt, kiểm tra hiển thị trên màn hình máy tính và thu nhỏ về 360px để bấm thử nút đóng/mở bộ lọc.
+
+Tỷ lệ nội dung AI còn giữ lại (ước lượng): [80%]
+
+Điều học được:
+Nhờ tách sẵn BookCard.jsx từ đầu nên qua làm trang danh sách sách rất nhanh, không phải ngồi code lại từng thẻ sách từ đầu.
+
+## Link commit/PR: [https://github.com/ngoctramcam/ECommerce-Project/commit/c4f308e0bb827e24c6ebc997843c34540b071e8f]
+
+---
+
+## AI-09 – <Tạo prompt thiết kế giao diện Figma theo CSDL>
+
+- Ngày / Người dùng: [17/11/2026] / TV3
+- Công cụ: [copilot]
 - Giai đoạn: []
-- Task / Commit / PR: feature/TM- 02-tim-kiem / [] / []
-- Mục đích:
-  Nhờ AI phân tích chi tiết yêu cầu.
-- Prompt chính (nguyên văn hoặc link chia sẻ hội thoại):
-  > ProductService.search(keyword, categoryId, minPrice, maxPrice, sort, page) – phân trang phía server, 12 sách/trang. Nhờ Ai gợi ý hàm tìm kiếm, sắp xếp, phân trang.
-- Kết quả AI trả về (tóm tắt):
-  - Tìm kiếm theo tên sách hoặc tác giả (Eloquent tự tham số hóa).
-  - Lọc theo danh mục.
-  - Lọc theo khoảng giá.
-  - Sắp xếp (Whitelist).
-  - Phân trang phía server: 12 sách/trang.
-- Đánh giá: []
-- Đã chỉnh sửa gì:
-  - Phần giữ lại: Giữ lại toàn bộ.
-  - Phần loại bỏ / chỉnh sửa và lý do: []
-- Cách kiểm chứng: []
-- Tỷ lệ nội dung AI còn giữ lại (ước lượng): []
+- Task / Commit / PR: Thiết kế UI/UX (Figma) / [] / []
+- Mục đích: [Chỉnh sửa lại giao diện wireframe theo đúng các bảng trong cơ sở dữ liệu]
+- Prompt chính (nguyên văn hoặc link chia sẻ hội thoại): [dua vao csdl nay goij y cau lenh cho ai figma de gen giao gom cac trang: trang chu , gio hang , chi tiet san pham,tat ca san pham, don hang cua toi, đánh gia,ho so ca nhan,quan ly san pham,quan ly don hang , quan ly nguoi dung, quan ly danh muc,quan ly voucher]
+- Kết quả AI trả về (tóm tắt): [AI đưa ra các câu lệnh gợi ý phù hợp cho từng màn hình tương ứng dựa trên cấu trúc dữ liệu của hệ thống]
+- Đánh giá: [AI tự sinh thêm banner ở trang chủ khi CSDL không có, đồng thời đưa dư trường slug lên giao diện trang quản lý danh mục]
+- Đã chỉnh sửa gì: [Giữ lại bộ câu lệnh mô tả bố cục cho đầy đủ các trang người dùng (Trang chủ, Tất cả sản phẩm, Chi tiết sản phẩm, Giỏ hàng, Đơn hàng, Hồ sơ, Đánh giá) và các trang quản trị (Sản phẩm, Đơn hàng, Người dùng, Danh mục, Voucher); loại bỏ banner thừa ở trang chủ và mục slug ở trang quản lý danh mục do CSDL không có bảng lưu banner và không cần hiển thị slug lên giao diện]
+- Cách kiểm chứng: [Đối chiếu trực tiếp các trường thông tin hiển thị trên bản thiết kế Figma sau khi tạo với sơ đồ CSDL (ERD) của nhóm để đảm bảo khớp dữ liệu]
+- Tỷ lệ nội dung AI còn giữ lại (ước lượng): [70%]
 - Điều học được: []
 - Link commit/PR: []
+
+## AI-10 – <Chỉnh sửa layout chung (Header & MainLayout)>
+
+- Ngày / Người dùng: [17/11/2026] / TV3
+- Công cụ: [Copilot]
+- Giai đoạn: []
+- Task / Commit / PR: TM-01 / feat/TM-01-trang-chu / []
+- Mục đích: [Chỉnh sửa lại layout chung và menu danh mục 1 cấp trên Header theo giao diện Figma mới]
+- Prompt chính (nguyên văn hoặc link chia sẻ hội thoại): [Giup tôi cách chỉnh sủa lại phần layout chung header danh muc bên trong 1 cấp theo giao diện mới]
+- Kết quả AI trả về (tóm tắt): [AI gợi ý các điểm thay đổi của giao diện mới, hướng dẫn cập nhật lại Header.jsx (menu danh mục 1 cấp, nút Tất cả sách) và gỡ bỏ component <BottomNav/> cũ trong MainLayout.jsx]
+- Đánh giá: [Ban đầu AI gợi ý thêm mục "Đơn hàng của tôi" lên thanh Header chưa đúng với thiết kế Figma mới nên cần lược bỏ lại]
+- Đã chỉnh sửa gì: [Giữ lại toàn bộ phần hướng dẫn chỉnh sửa Header.jsx (menu dropdown danh mục 1 cấp, hiển thị trạng thái đăng nhập, responsive mobile/desktop) và cấu trúc MainLayout.jsx sau khi gỡ <BottomNav/>; loại bỏ <BottomNav/> cũ trong MainLayout.jsx, xóa các đoạn gọi API thật trong Header.jsx và dùng mảng dữ liệu giả MOCK_CATEGORIES để tránh trùng thanh điều hướng dưới đáy trên điện thoại và chạy độc lập bằng dữ liệu giả trong Tuần 1]
+- Cách kiểm chứng: [Chạy dự án trên trình duyệt (http://127.0.0.1:8000/), kiểm tra giao diện Header trên cả màn hình máy tính và thu nhỏ về kích thước điện thoại (360px), bấm thử dropdown danh mục và các nút chuyển trang]
+- Tỷ lệ nội dung AI còn giữ lại (ước lượng): [80%]
+- Điều học được: []
+- Link commit/PR: [https://github.com/ngoctramcam/ECommerce-Project/commit/3e995c16c53ae56fa268724095aadd6498e7545d]
+
+---
+
+## AI-11 – <[TM-03] Dựng trang chi tiết sách & mục Sách cùng danh mục (4 cuốn)>
+
+- Ngày / Người dùng: [23/11/2026] / TV3
+- Công cụ: [Copilot]
+- Giai đoạn: [Phát triển (Coding)]
+- Task / Commit / PR: [TM-03] Chi tiết sản phẩm / [1aa63ab] / []
+- Mục đích: [Nhờ AI hướng dẫn dựng trang chi tiết sách hiển thị ảnh, giá định dạng 120.000 ₫, mô tả, tồn kho, nút thêm vào giỏ hàng (TM-05) và danh sách 4 cuốn sách cùng danh mục]
+- Prompt chính (nguyên văn hoặc link chia sẻ hội thoại): [Hướng dẫn làm trang chi tiết sách cho Mộc Sách dùng React + Tailwind.]
+- Kết quả AI trả về (tóm tắt): [AI gợi ý bố cục trang chi tiết sách, cách định dạng giá tiền, xử lý số lượng theo tồn kho và lấy sách cùng danh mục.]
+- Đánh giá: [AI cung cấp bộ khung giao diện và luồng xử lý cơ bản tốt, giúp tiết kiệm thời gian dựng UI, chỉ cần điều chỉnh phần kết nối dữ liệu thật cho khớp với API và schema của nhóm.]
+- Đã chỉnh sửa gì: [Vận dụng bố cục 2 cột thông tin sách, cách định dạng tiền tệ VNĐ, logic chọn số lượng theo tồn kho và tái sử dụng BookCard.jsx cho khối sách cùng danh mục; từ nền tảng đó phát triển tiếp phần gọi API thật `/api/products/{id}`, `/api/books/search?categoryId=...` (lọc bỏ sách đang xem, lấy 4 cuốn) và `/api/cart/add` (`user_id`, `product_id`, `qty`) để hoàn thiện tính năng.]
+- Cách kiểm chứng: [Mở trang chi tiết sách `/books/:id` trên trình duyệt, kiểm tra hiển thị thông tin sách, thử tăng/giảm số lượng theo tồn kho, bấm thêm vào giỏ hàng và kiểm tra 4 cuốn sách cùng danh mục.]
+- Tỷ lệ nội dung AI còn giữ lại (ước lượng): [50%]
+- Điều học được: [Tận dụng AI để dựng nhanh khung giao diện chuẩn và tập trung thời gian vào việc kết nối dữ liệu thực tế cùng xử lý các trường hợp biên như hết hàng hay lọc trùng sách.]
+- Link commit/PR: [https://github.com/ngoctramcam/ECommerce-Project/commit/1aa63ab]
+
+---
+
+## AI-12 – <Phân trang>
+
+- Ngày / Người dùng: [22/11/2026] / TV3
+- Công cụ: [Copilot]
+- Giai đoạn: [Phát triển (Coding)]
+- Task / Commit / PR: [TM-02] Tìm kiếm, lọc / [5358c8f] / []
+- Mục đích: [Nhờ AI phân tích chi tiết yêu cầu và gợi ý hàm xử lý tìm kiếm, lọc, sắp xếp, phân trang phía server (12 sách/trang).]
+- Prompt chính (nguyên văn hoặc link chia sẻ hội thoại): [ProductService.search(keyword, categoryId, minPrice, maxPrice, sort, page) – phân trang phía server, 12 sách/trang. Nhờ Ai gợi ý hàm tìm kiếm, sắp xếp, phân trang.]
+- Kết quả AI trả về (tóm tắt): [AI gợi ý logic tìm kiếm theo tên sách hoặc tác giả (Eloquent tự tham số hóa), lọc theo danh mục và khoảng giá, sắp xếp theo danh sách cho phép (Whitelist) và phân trang phía server 12 sách/trang.]
+- Đánh giá: [AI đưa ra giải pháp truy vấn động và dùng whitelist cho điều kiện sắp xếp rất hợp lý và an toàn, giúp dựng nhanh phần xử lý backend cho chức năng tìm kiếm.]
+- Đã chỉnh sửa gì: [Vận dụng cấu trúc ghép điều kiện lọc động (`when`), cơ chế whitelist sắp xếp và phân trang `paginate(12)` của AI; từ đó tinh chỉnh lại tên các cột truy vấn (`product_name`, `author`, `category_id`, `price`, `status`) và khai báo route `GET /api/books/search` trong `routes/web.php` để khớp với CSDL của nhóm.]
+- Cách kiểm chứng: [Gọi thử API `/api/books/search` với các tham số `keyword`, `categoryId`, `minPrice`, `maxPrice`, `sort`, `page` trên trình duyệt và kiểm tra dữ liệu trả về đúng 12 cuốn/trang.]
+- Tỷ lệ nội dung AI còn giữ lại (ước lượng): [75%]
+- Điều học được: [Tận dụng gợi ý về whitelist sắp xếp và truy vấn tham số hóa của Eloquent giúp xây dựng API tìm kiếm/lọc vừa nhanh vừa đảm bảo an toàn dữ liệu.]
+- Link commit/PR: https://github.com/ngoctramcam/ECommerce-Project/commit/5358c8f
+
+## AI-13 – <Đổ dữ liệu thật, tìm kiếm và bộ lọc lên trang BookListPage>
+
+- Ngày / Người dùng: [23/11/2026] / TV3
+- Công cụ: [Copilot]
+- Giai đoạn: [Phát triển (Coding)]
+- Task / Commit / PR: [TM-02] Tìm kiếm, lọc / [a74e80f5efb93badd2c7b5dc77f3adc9f6193b3b] / []
+- Mục đích: [Nhờ AI hướng dẫn cập nhật lại trang BookListPage để kết nối dữ liệu thật, bộ lọc và phân trang từ API tìm kiếm.]
+- Prompt chính (nguyên văn hoặc link chia sẻ hội thoại): [Cách cập nhật dữ liệu tù cái rout dã viet trc đó....]
+- Kết quả AI trả về (tóm tắt): [Hướng dẫn gọi API lấy danh sách sách hiển thị ra giao diện, làm phân trang trước rồi bổ sung thêm phần lọc theo danh mục, khoảng giá, sắp xếp và giữ tham số trên thanh URL khi chuyển trang.]
+- Đánh giá: [AI hướng dẫn rõ luồng đồng bộ trạng thái lọc với URL bằng `useSearchParams`, giúp tiết kiệm thời gian xử lý chuyển trang; chỉ có tên biến gửi API (`min_price`, `max_price`, `category_id`) cần đổi lại theo quy ước của backend.]
+- Đã chỉnh sửa gì: [Vận dụng luồng gọi API phân trang và đồng bộ query string trên thanh URL bằng `useSearchParams`; phát triển thêm bằng cách gộp phần sắp xếp vào chung bộ lọc cho gọn giao diện và chuẩn hóa tên tham số gửi lên API thành `categoryId`, `minPrice`, `maxPrice` cho khớp với backend.]
+- Cách kiểm chứng: [Mở trang `/books`, thử tìm kiếm theo từ khóa, lọc theo danh mục, khoảng giá, sắp xếp và bấm chuyển trang để kiểm tra kết quả hiển thị cùng các tham số được giữ trên URL.]
+- Tỷ lệ nội dung AI còn giữ lại (ước lượng): [70%]
+- Điều học được: [Kế thừa cách dùng `useSearchParams` từ AI giúp quản lý trạng thái lọc và phân trang trên URL mạch lạc, đồng thời cần thống nhất quy ước đặt tên tham số giữa frontend và backend.]
+- Link commit/PR: https://github.com/ngoctramcam/ECommerce-Project/commit/a74e80f5efb93badd2c7b5dc77f3adc9f6193b3b
+
+## AI-14 – <Thêm nút bấm tìm kiếm trên Header>
+
+- Ngày / Người dùng: [23/11/2026] / TV3
+- Công cụ: [Gemini]
+- Giai đoạn: [Phát triển (Coding)]
+- Task / Commit / PR: [TM-02] Tìm kiếm, lọc / [0055724e53c2206be40d3c719ba484d87936be26] / []
+- Mục đích: [Nhờ AI sửa thêm nút bấm tìm kiếm trên Header để người dùng trên điện thoại có thể bấm tìm kiếm thuận tiện.]
+- Prompt chính (nguyên văn hoặc link chia sẻ hội thoại): [Khhi tìm kiếm ở điện thoại không có enter nhu destop tui cần thêm cái icon kính lúp thành button]
+- Kết quả AI trả về (tóm tắt): [Hướng dẫn chuyển icon kính lúp sang bên phải ô nhập liệu và đổi thành nút `<button type="submit">` bên trong `<form>` tìm kiếm của `Header.jsx`.]
+- Đánh giá: [Gợi ý đúng trọng tâm, gọn gàng và giải quyết trực tiếp trải nghiệm thao tác tìm kiếm trên thiết bị di động.]
+- Đã chỉnh sửa gì: [Vận dụng toàn bộ cấu trúc chuyển icon kính lúp thành nút `<button type="submit">` bên phải ô tìm kiếm; tinh chỉnh thêm khoảng đệm (padding) trong ô input để nội dung nhập không bị đè lên nút bấm trên màn hình 360px.]
+- Cách kiểm chứng: [Thu nhỏ trình duyệt về kích thước điện thoại (360px), nhập từ khóa vào ô tìm kiếm trên Header và bấm trực tiếp vào nút kính lúp để kiểm tra chuyển hướng sang trang `/books?keyword=...`.]
+- Tỷ lệ nội dung AI còn giữ lại (ước lượng): [90%]
+- Điều học được: [Khi tối ưu giao diện cho điện thoại, việc chuyển các thao tác phụ thuộc bàn phím (như phím Enter) thành nút bấm rõ ràng giúp cải thiện đáng kể trải nghiệm người dùng.]
+- Link commit/PR: https://github.com/ngoctramcam/ECommerce-Project/commit/0055724e53c2206be40d3c719ba484d87936be26
 
 ---
 
@@ -257,7 +411,7 @@
 - Ngày / Người dùng: [22/11/2026] / TV3
 - Công cụ: [Copilot]
 - Giai đoạn: []
-- Task / Commit / PR: feature/TM- 02-tim-kiem / a74e80f5efb93badd2c7b5dc77f3adc9f6193b3b / [Không có PR được cung cấp]
+- Task / Commit / PR: feature/TM- 02-tim-kiem / a74e80f5efb93badd2c7b5dc77f3adc9f6193b3b /
 - Mục đích:
   Nhờ AI hướng dẫn cập nhật lại trang BookListPage gắn dữ liệu thật lên.
 - Prompt chính (nguyên văn hoặc link chia sẻ hội thoại):
@@ -279,22 +433,3 @@
 ---
 
 ## AI-14 – <Thêm nút bấm tìm kiếm trên Header>
-
-- Ngày / Người dùng: [22/11/2026] / TV3
-- Công cụ: [Gemini]
-- Giai đoạn: []
-- Task / Commit / PR: feature/TM- 02-tim-kiem / 0055724e53c2206be40d3c719ba484d87936be26 / [Không có PR được cung cấp]
-- Mục đích:
-  Nhờ AI sửa thêm nút ấn tìm kiếm ở header.
-- Prompt chính (nguyên văn hoặc link chia sẻ hội thoại):
-  > Khhi tìm kiếm ở điện thoại không có enter nhu destop tui cần thêm cái icon kính lúp thành button
-- Kết quả AI trả về (tóm tắt):
-  Hướng dẫn chuyển icon kính lúp sang bên phải ô nhập liệu và đổi thành nút `<button type="submit">`.
-- Đánh giá: []
-- Đã chỉnh sửa gì:
-  - Phần giữ lại: Giữ lại toàn bộ.
-  - Phần loại bỏ / chỉnh sửa và lý do: []
-- Cách kiểm chứng: []
-- Tỷ lệ nội dung AI còn giữ lại (ước lượng): []
-- Điều học được: []
-- Link commit/PR: https://github.com/ngoctramcam/ECommerce-Project/commit/0055724e53c2206be40d3c719ba484d87936be26
