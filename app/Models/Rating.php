@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Rating extends Model
 {
       protected $table = 'ratings'; // Tên bảng theo đúng sơ đồ ERD
-    protected $primaryKey = 'voucher_id';
+    protected $primaryKey = 'rating_id';
 
     protected $fillable = [
         'star',
