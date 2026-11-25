@@ -2,9 +2,9 @@
 | Mục | Thông tin |
 | --- | --- |
 | Họ tên, MSSV |Thạch Minh Trí - 0306241331 |
-| Nhóm, đề tài | Nhóm [số] – Xây dựng website thương mại điện tử bán sách |
+| Nhóm, đề tài | Nhóm 3 – Xây dựng website thương mại điện tử bán sách |
 | Vai trò | TV2 – BE (Backend Lead) |
-| Công cụ AI dùng | GitHub Copilot, Gemini |
+| Công cụ AI dùng | GitHub Copilot, Gemini, Claude|
 
 ## Bảng tổng hợp
 
@@ -17,6 +17,8 @@
 | AI-04 | 23/11/202 | Lập trình | Giải quyết lỗi phân quyền | [Commit](https://github.com/ngoctramcam/ECommerce-Project/commit/d0e32fa0fff5e8a1074818b4ec7146580c869ead#diff-3131098977578fa57496a8e2fd72acddd6fde5a1a3e9f89184d442728a3bc13b) |
 | AI-05 | 23/11/202 | Lập trình | Viết test & hoàn thiện OrderService | [Commit](https://github.com/ngoctramcam/ECommerce-Project/commit/d0e32fa0fff5e8a1074818b4ec7146580c869ead#diff-3131098977578fa57496a8e2fd72acddd6fde5a1a3e9f89184d442728a3bc13b) |
 | AI-06 | 23/11/202 | Lập trình | Viết mã cho OrderController và OrderRequest | [Commit](https://github.com/ngoctramcam/ECommerce-Project/commit/49b940ff6c6af68e194b677b821447c3ff726e51) |
+| AI-07 | 25/11/2026 | Lập trình | Sửa lỗi đặt hàng lưu toàn bộ giỏ hàng thay vì sản phẩm đã chọn | [Commit](https://github.com/ngoctramcam/ECommerce-Project/commit/cb7c487e4a8e7edde16d22e48991493b52364cf8)
+| AI-08 | 25/11/2026 | Lập trình | Sửa lỗi phân quyền admin/user và sửa lỗi đăng xuất của admin | [Commit](https://github.com/ngoctramcam/ECommerce-Project/commit/cb7c487e4a8e7edde16d22e48991493b52364cf8) |
 
 ## AI-01 – Hỗ trợ cấu hình Eloquent 
 - **Ngày / Người dùng AI:** 10/11/2026 – TV2
@@ -387,3 +389,88 @@ Mình có sẵn cái trang đăng ký rồi. Bạn viết cho mình cái OrderCo
 
 ### 8. Sản phẩm cuối cùng
 [Commit](https://github.com/ngoctramcam/ECommerce-Project/commit/49b940ff6c6af68e194b677b821447c3ff726e51)
+
+---
+
+## AI-07 – Sửa lỗi đặt hàng lưu toàn bộ giỏ hàng thay vì sản phẩm đã chọn
+- **Ngày / Người dùng AI:** 25/11/2026 – TV2
+- **Công cụ AI:** Claude
+- **Thẻ Trello / Nhánh Git liên quan:** fix/TM-04-TM-06
+
+### 1. Mục đích
+- Tìm nguyên nhân và sửa lỗi: giỏ hàng có nhiều sản phẩm nhưng nếu chỉ chọn mua một cuốn, db vẫn lưu tất cả sản phẩm trong giỏ
+
+### 2. Prompt đã dùng
+```bash
+//Đính kèm: OrderService.php, OrderController.php
+
+Mình có 2 file OrderService và OrderController. Mình bị một vấn đề như sau: Trong giỏ hàng của khách có nhiều hơn 1 sản phẩm (ví dụ 3 cuốn sách khác nhau), nhưng khách chỉ chọn một cuốn và mua hàng. Trên database bảng order_item vẫn lưu hết tất cả các cuốn sách có trong giỏ kể cả khi khách không chọn.
+
+Các prompt tiếp theo(tóm tắt): nhờ kiểm tra lại OrderService do Claude viết lại; hỏi OrderController có cần điều chỉnh gì không
+```
+### 3. Kết quả AI trả về (tóm tắt)
+> Claude xác định nguyên nhân: hàm placeOrder của OrderService đọc toàn bộ cart_items của user nên không biết khách chọn cuốn nào.
+>
+>  Claude đề xuất frontend gửi mảng product_ids, validate trong OrderRequest, controller truyền xuống service, service lọc giỏ bằng và xóa các sản phẩm đã mua khỏi giỏ.
+
+### 4. Phần giữ lại
+- Luồng truyền `product_ids`: CheckoutPage → OrderRequest → OrderController → OrderService
+- Lọc giỏ hàng bằng `whereIn('product_id', $selectedIds)` và chỉ xóa các sản phẩm đã mua
+- Giữ `OrderRequest`, thêm rule `product_ids` vào đó
+
+### 5. Phần loại bỏ / chỉnh sửa và lý do
+- Bỏ: Cách validate trực tiếp trong OrderController vì nhóm giữ OrderRequest cho thống nhất
+- Sửa: Khai báo lại $totalAmount = 0 và $orderItemsData = [] trong placeOrder
+
+### 6. AI sai hoặc chưa chắc chắn ở đâu
+- Không
+### 7. Cách kiểm chứng
+- Test các trường hợp: giỏ 3 cuốn chọn 1; chọn cả 3
+- Kiểm bảng orders và order_items, tồn kho sản phẩm và giỏ hàng sau mỗi lần đặt
+
+### 8. Sản phẩm cuối cùng
+[Pull Request](https://github.com/ngoctramcam/ECommerce-Project/commit/cb7c487e4a8e7edde16d22e48991493b52364cf8)
+
+---
+
+## AI-08 – Sửa lỗi phân quyền admin/user và sửa lỗi đăng xuất của admin
+- **Ngày / Người dùng AI:** 25/11/2026 – TV2
+- **Công cụ AI:** Claude
+- **Thẻ Trello / Nhánh Git liên quan:** fix/TM-04-TM-06
+
+### 1. Mục đích
+- Chỉ cho admin vào trang admin, phần còn lại vào trang khách hàng
+- Sửa lỗi: admin đăng xuất xong gõ /admin vẫn vào được; admin đăng nhập vẫn vào được trang khách hàng trực tiếp bằng url / và mua sắm
+
+### 2. Prompt đã dùng
+```bash
+ Đính kèm: AuthController.php, AuthService.php, web.php
+
+Xem giúp mình các file này và thực hiện yêu cầu sau: admin về /admin còn lại thì về trang của user /
+
+Các prompt tiếp theo (Tóm tắt): admin đăng xuất xong gõ /admin vẫn vào được và admin vẫn vào được trang khách hàng bằng url; đính kèm hàm logout trong AdminLayout hỏi: hình như hàm logout này sai đúng không? Mình dùng hàm logout bên user patse qua được chứ?
+```
+
+### 3. Kết quả AI trả về (tóm tắt)
+> AI chỉ ra route /admin chỉ bảo vệ đúng URL /admin, các trang con lọt vào route catch-all nên cần đổi thành /admin/{any?} trong nhóm AdminAuthMiddleware, kèm bản mẫu middleware kiểm tra đăng nhập và role.
+>
+> AI xác định handleLogout trong AdminLayout chỉ xóa localStorage mà không gọi POST /logout nên session server vẫn còn.
+>
+> Để chặn admin vào trang khách hàng thì Claude đề xuất thêm một file middleware nữa
+
+### 4. Phần giữ lại
+- Route /admin/{any?} trong nhóm web.php
+- Hàm handleLogout của admin mà Claude viết 
+
+### 5. Phần loại bỏ / chỉnh sửa và lý do
+- Bỏ: Cách thêm một middleware AdminAuthMiddleware
+
+### 6. AI sai hoặc chưa chắc chắn ở đâu
+Không
+
+### 7. Cách kiểm chứng
+- Chưa đăng nhập gõ /admin trên thanh địa chỉ: bị đưa về /; tài khoản khách gõ /admin: bị đưa về /
+- Admin gõ / hoặc bấm link trang chủ: bị đưa về /admin
+
+### 8. Sản phẩm cuối cùng
+[Pull Request](https://github.com/ngoctramcam/ECommerce-Project/commit/cb7c487e4a8e7edde16d22e48991493b52364cf8)
