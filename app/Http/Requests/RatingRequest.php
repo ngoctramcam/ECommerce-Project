@@ -9,11 +9,11 @@ class RatingRequest extends FormRequest{
     }
     public function rules():array{
         return[
-            'cart'=>['required','integer','min:1','max:5'],
+            'star'=>['required','integer','min:1','max:5'],
             'comment'=>['nullable','string','max:1000']
         ];
     }
-    #[Override]
+
     public function messages():array
     {
         return[

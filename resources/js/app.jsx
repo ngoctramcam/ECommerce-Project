@@ -11,7 +11,7 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import CartPage from "./pages/CartPage";
 import MyOrdersPage from "./pages/MyOrdersPage";
-
+import ProductReviewPage from "./pages/ProductReviewPage";
 // Import các trang Admin đã có trong thư mục pages/admin
 import AdminRoute from "./pages/admin/components/AdminRoute";
 import CategoryManagement from "./pages/admin/CategoryManagement";
@@ -19,7 +19,7 @@ import BookManagement from "./pages/admin/BookManagement";
 import UserList from "./pages/admin/UserList";
 import AdminLayout from "./layouts/AdminLayout";
 import axios from "axios";
-import ProfilePage from "./pages/ProfilePage";  
+import ProfilePage from "./pages/ProfilePage";
 import AdminOrdersPage from "./pages/admin/AdminOrdersPage";
 
 // [KIẾN THỨC TRỌNG TÂM - Tách lớp Client-Server & Bảo mật NFR-01]:
@@ -58,13 +58,17 @@ export default function App() {
                     <Route path="login" element={<LoginPage />} />
                     <Route path="register" element={<RegisterPage />} />
                     {/*TV4: Giao diện giỏ hàng */}
-                    <Route path="cart" element={<CartPage/>}/>
-                    <Route path= "orders" element={<MyOrdersPage/>}/>
+                    <Route path="cart" element={<CartPage />} />
+                    <Route path="orders" element={<MyOrdersPage />} />
                     <Route path="profile" element={<ProfilePage />} />
+                    <Route
+                        path="orders/:productId/review"
+                        element={<ProductReviewPage />}
+                    />
                 </Route>
 
                 {/* Giao diện Admin (tách riêng để không dính Header/Footer của trang bán hàng) */}
-                {/* Giao diện Admin (tách riêng để không dính Header/Footer của trang bán hàng) */}
+
                 <Route path="/admin" element={<AdminRoute />}>
                     <Route element={<AdminLayout />}>
                         <Route index element={<div>Tổng quan</div>} />
@@ -74,10 +78,7 @@ export default function App() {
                         />
                         <Route path="books" element={<BookManagement />} />
                         <Route path="users" element={<UserList />} />
-                        <Route
-                            path="orders"
-                            element={<AdminOrdersPage/>}
-                        />
+                        <Route path="orders" element={<AdminOrdersPage />} />
                         <Route
                             path="coupons"
                             element={<div>Mã giảm giá</div>}

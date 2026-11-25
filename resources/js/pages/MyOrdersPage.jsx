@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const STATUS_BADGE = {
@@ -13,7 +13,8 @@ const STATUS_BADGE = {
     },
     completed: {
         label: "Hoàn thành",
-        className: "bg-emerald-50 text-emerald-700 border border-emerald-200/70",
+        className:
+            "bg-emerald-50 text-emerald-700 border border-emerald-200/70",
     },
     cancelled: {
         label: "Đã hủy",
@@ -23,7 +24,9 @@ const STATUS_BADGE = {
 
 // Chuẩn hóa trạng thái từ DB (khớp cả tiếng Việt lẫn tiếng Anh)
 const normalizeStatus = (rawStatus) => {
-    const s = String(rawStatus || "").trim().toLowerCase();
+    const s = String(rawStatus || "")
+        .trim()
+        .toLowerCase();
     if (s === "pending" || s === "chờ xác nhận" || s === "chưa xác nhận") {
         return "pending";
     }
@@ -43,6 +46,7 @@ const formatCurrency = (amount) =>
     Number(amount || 0).toLocaleString("vi-VN") + "đ";
 
 export default function MyOrdersPage() {
+    const navigate = useNavigate();
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -51,7 +55,9 @@ export default function MyOrdersPage() {
         const fetchOrders = async () => {
             setLoading(true);
             try {
-                const savedUser = JSON.parse(localStorage.getItem("user") || "{}");
+                const savedUser = JSON.parse(
+                    localStorage.getItem("user") || "{}",
+                );
                 const userId = savedUser.user_id || savedUser.id || "";
 
                 const res = await axios.get("/api/orders", {
@@ -80,8 +86,10 @@ export default function MyOrdersPage() {
 
             setOrders((prev) =>
                 prev.map((order) =>
-                    order.id === orderId ? { ...order, status: newStatus } : order
-                )
+                    order.id === orderId
+                        ? { ...order, status: newStatus }
+                        : order,
+                ),
             );
         } catch (error) {
             alert("Không thể cập nhật trạng thái đơn hàng. Vui lòng thử lại!");
@@ -89,7 +97,9 @@ export default function MyOrdersPage() {
     };
 
     const handleReviewOrder = (order) => {
-        alert(`Mở khung đánh giá cho đơn hàng #${order.order_code}`);
+        navigate(`/orders/${order.id ?? order.order_id}/review`, {
+            state: { order },
+        });
     };
 
     if (loading) {
@@ -104,7 +114,10 @@ export default function MyOrdersPage() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
             {/* Breadcrumb */}
             <nav className="flex items-center gap-1.5 text-xs text-gray-400 mb-2">
-                <Link to="/" className="hover:text-emerald-700 transition-colors">
+                <Link
+                    to="/"
+                    className="hover:text-emerald-700 transition-colors"
+                >
                     Trang chủ
                 </Link>
                 <span>/</span>
@@ -231,13 +244,13 @@ export default function MyOrdersPage() {
                                                             <p className="text-gray-400">
                                                                 Đơn giá:{" "}
                                                                 {formatCurrency(
-                                                                    item.price
+                                                                    item.price,
                                                                 )}
                                                             </p>
                                                             <p className="font-semibold text-gray-800">
                                                                 Thành tiền:{" "}
                                                                 {formatCurrency(
-                                                                    subtotal
+                                                                    subtotal,
                                                                 )}
                                                             </p>
                                                         </div>
@@ -252,7 +265,7 @@ export default function MyOrdersPage() {
                                                         </p>
                                                         <p className="text-sm font-medium text-gray-800 mt-0.5">
                                                             {formatCurrency(
-                                                                item.price
+                                                                item.price,
                                                             )}
                                                         </p>
                                                     </div>
@@ -263,7 +276,7 @@ export default function MyOrdersPage() {
                                                         </p>
                                                         <p className="text-sm font-bold text-gray-900 mt-0.5">
                                                             {formatCurrency(
-                                                                subtotal
+                                                                subtotal,
                                                             )}
                                                         </p>
                                                     </div>
@@ -282,7 +295,7 @@ export default function MyOrdersPage() {
                                                     Mã giảm giá:{" "}
                                                     {order.voucher_code} (-
                                                     {formatCurrency(
-                                                        order.discount_amount
+                                                        order.discount_amount,
                                                     )}
                                                     )
                                                 </span>
@@ -295,7 +308,7 @@ export default function MyOrdersPage() {
                                             </span>
                                             <span className="text-lg sm:text-xl font-bold text-emerald-700">
                                                 {formatCurrency(
-                                                    order.total_amount
+                                                    order.total_amount,
                                                 )}
                                             </span>
                                         </div>
@@ -310,7 +323,7 @@ export default function MyOrdersPage() {
                                                     handleUpdateStatus(
                                                         order.id,
                                                         "cancelled",
-                                                        "Bạn có chắc chắn muốn hủy đơn hàng này không?"
+                                                        "Bạn có chắc chắn muốn hủy đơn hàng này không?",
                                                     )
                                                 }
                                                 className="px-5 py-1.5 sm:px-6 sm:py-2 rounded-lg text-xs font-semibold bg-stone-200/80 text-amber-900 hover:bg-stone-300 transition-colors cursor-pointer"
@@ -329,7 +342,7 @@ export default function MyOrdersPage() {
                                                     handleUpdateStatus(
                                                         order.id,
                                                         "cancelled",
-                                                        "Xác nhận từ chối / không nhận đơn hàng này?"
+                                                        "Xác nhận từ chối / không nhận đơn hàng này?",
                                                     )
                                                 }
                                                 className="px-6 py-2 rounded-lg text-xs font-semibold border border-red-400 text-red-600 bg-white hover:bg-red-50 transition-colors cursor-pointer"
@@ -343,7 +356,7 @@ export default function MyOrdersPage() {
                                                     handleUpdateStatus(
                                                         order.id,
                                                         "completed",
-                                                        "Xác nhận bạn đã nhận được đầy đủ hàng?"
+                                                        "Xác nhận bạn đã nhận được đầy đủ hàng?",
                                                     )
                                                 }
                                                 className="px-7 py-2 rounded-lg text-xs font-semibold bg-emerald-700 text-white hover:bg-emerald-800 transition-colors cursor-pointer"
