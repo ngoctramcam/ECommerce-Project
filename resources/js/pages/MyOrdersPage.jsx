@@ -9,7 +9,7 @@ const STATUS_BADGE = {
     },
     processing: {
         label: "Đang xử lý",
-        className: "bg-indigo-50 text-indigo-700 border border-indigo-200/80",
+        className: "bg-pink-100 text-pink-800 border border-pink-200/80",
     },
     shipping: {
         label: "Đang giao",
@@ -335,7 +335,7 @@ export default function MyOrdersPage() {
                                     </div>
 
                                     <span
-                                        className={`px-3 py-1 rounded-md text-xs font-semibold shrink-0 ${statusInfo.className}`}
+                                        className={`px-3.5 py-1 rounded-md text-xs font-semibold shrink-0 ${statusInfo.className}`}
                                     >
                                         {statusInfo.label}
                                     </span>
@@ -486,8 +486,9 @@ export default function MyOrdersPage() {
                                         </div>
                                     </div>
 
-                                    {/* Nút "Hủy đơn hàng" khi Chờ xác nhận */}
-                                    {currentStatus === "pending" && (
+                                    {/* Nút "Hủy đơn" màu đỏ khi Chờ xác nhận hoặc Đang xử lý */}
+                                    {(currentStatus === "pending" ||
+                                        currentStatus === "processing") && (
                                         <div className="flex justify-end pt-0.5">
                                             <button
                                                 type="button"
@@ -499,11 +500,11 @@ export default function MyOrdersPage() {
                                                         "Bạn có chắc chắn muốn hủy đơn hàng này không?"
                                                     )
                                                 }
-                                                className="px-6 py-2 rounded-lg text-xs font-semibold bg-white sm:bg-stone-200/80 border border-gray-200 sm:border-transparent text-gray-700 sm:text-amber-950 hover:bg-gray-50 sm:hover:bg-stone-300 transition-colors cursor-pointer disabled:opacity-50"
+                                                className="px-6 py-2 rounded-lg text-xs font-semibold bg-white border border-red-400 text-red-600 hover:bg-red-50 transition-colors cursor-pointer disabled:opacity-50"
                                             >
                                                 {isBusy
                                                     ? "Đang xử lý..."
-                                                    : "Hủy đơn hàng"}
+                                                    : "Hủy đơn"}
                                             </button>
                                         </div>
                                     )}
@@ -521,7 +522,7 @@ export default function MyOrdersPage() {
                                                         "Xác nhận từ chối / không nhận đơn hàng này?"
                                                     )
                                                 }
-                                                className="px-6 py-2 rounded-lg text-xs font-semibold border border-red-300 text-red-600 bg-white hover:bg-red-50 transition-colors cursor-pointer disabled:opacity-50"
+                                                className="px-6 py-2 rounded-lg text-xs font-semibold border border-red-400 text-red-600 bg-white hover:bg-red-50 transition-colors cursor-pointer disabled:opacity-50"
                                             >
                                                 Không nhận
                                             </button>
@@ -587,18 +588,19 @@ export default function MyOrdersPage() {
                     const isModalBusy = updatingId === selectedOrder.id;
                     const hasModalActions =
                         modalStatus === "pending" ||
+                        modalStatus === "processing" ||
                         modalStatus === "shipping" ||
                         modalStatus === "completed";
 
                     return (
                         <div
                             onClick={() => setSelectedOrder(null)}
-                            className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50 backdrop-blur-[1px] p-0 sm:p-4"
+                            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-[1px] p-3 sm:p-4"
                         >
                             {/* Modal Container */}
                             <div
                                 onClick={(e) => e.stopPropagation()}
-                                className="bg-white w-full sm:max-w-xl h-[94vh] sm:h-auto sm:max-h-[90vh] rounded-t-2xl sm:rounded-2xl shadow-2xl flex flex-col overflow-hidden"
+                                className="bg-white w-full sm:max-w-xl h-[94vh] sm:h-auto sm:max-h-[90vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden"
                             >
                                 {/* 1. Header Popup */}
                                 <div className="px-5 sm:px-6 pt-5 pb-3.5 border-b border-gray-100">
@@ -632,7 +634,7 @@ export default function MyOrdersPage() {
                                         </div>
 
                                         <span
-                                            className={`px-3 py-1 rounded-md text-xs font-semibold shrink-0 ${modalBadge.className}`}
+                                            className={`px-3.5 py-1 rounded-md text-xs font-semibold shrink-0 ${modalBadge.className}`}
                                         >
                                             {modalBadge.label}
                                         </span>
@@ -824,7 +826,8 @@ export default function MyOrdersPage() {
                                 {/* 3. Footer Popup (Chỉ hiện khi có nút hành động tương ứng) */}
                                 {hasModalActions && (
                                     <div className="px-5 sm:px-6 py-3.5 border-t border-gray-100 bg-white flex items-center justify-end gap-2.5">
-                                        {modalStatus === "pending" && (
+                                        {(modalStatus === "pending" ||
+                                            modalStatus === "processing") && (
                                             <button
                                                 type="button"
                                                 disabled={isModalBusy}
@@ -835,9 +838,11 @@ export default function MyOrdersPage() {
                                                         "Bạn có chắc chắn muốn hủy đơn hàng này không?"
                                                     )
                                                 }
-                                                className="w-full sm:w-auto px-6 py-2 rounded-lg border border-red-300 text-red-600 hover:bg-red-50 text-xs sm:text-sm font-semibold transition-colors cursor-pointer disabled:opacity-50"
+                                                className="w-full sm:w-auto px-6 py-2 rounded-lg bg-white border border-red-400 text-red-600 hover:bg-red-50 text-xs sm:text-sm font-semibold transition-colors cursor-pointer disabled:opacity-50"
                                             >
-                                                Hủy đơn hàng
+                                                {isModalBusy
+                                                    ? "Đang xử lý..."
+                                                    : "Hủy đơn"}
                                             </button>
                                         )}
 
@@ -853,7 +858,7 @@ export default function MyOrdersPage() {
                                                             "Xác nhận từ chối / không nhận đơn hàng này?"
                                                         )
                                                     }
-                                                    className="px-5 py-2 rounded-lg border border-red-300 text-red-600 hover:bg-red-50 text-xs sm:text-sm font-semibold transition-colors cursor-pointer disabled:opacity-50"
+                                                    className="px-5 py-2 rounded-lg border border-red-400 text-red-600 hover:bg-red-50 text-xs sm:text-sm font-semibold transition-colors cursor-pointer disabled:opacity-50"
                                                 >
                                                     Không nhận hàng
                                                 </button>
