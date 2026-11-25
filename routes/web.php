@@ -11,6 +11,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\RatingController;
 
 use App\Http\Controllers\ProfileController;
 // Route trang chủ
@@ -80,12 +81,16 @@ Route::middleware([AdminAuthMiddleware::class])->group(function () {
     //Phần Vinh làm
     Route::get('users', [UserController::class, 'index']);
     Route::patch('/users/{id}/toggle-lock', [UserController::class, 'toggleLock']);
+    
 });
 //Route cho ProfilePage
 Route::middleware('auth')->group(function () {
     Route::get('/api/profile', [ProfileController::class, 'show']);
     Route::put('/api/profile', [ProfileController::class, 'update']);
     Route::put('/api/profile/password', [ProfileController::class, 'changePassword']);
+    //Phần Vinh làm nha mấy bạn
+    Route::get('/api/products/{productId}/ratings',[RatingController::class,'index']);
+    Route::post('/api/products/{productId}/ratings',[RatingController::class,'store']);
 });
 
 ////////////1
