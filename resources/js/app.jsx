@@ -12,6 +12,8 @@ import RegisterPage from "./pages/RegisterPage";
 import CartPage from "./pages/CartPage";
 import MyOrdersPage from "./pages/MyOrdersPage";
 import ProductReviewPage from "./pages/ProductReviewPage";
+import AdminVouchersPage from "./pages/admin/AdminVouchersPage";
+
 // Import các trang Admin đã có trong thư mục pages/admin
 import AdminRoute from "./pages/admin/components/AdminRoute";
 import CategoryManagement from "./pages/admin/CategoryManagement";
@@ -21,6 +23,7 @@ import AdminLayout from "./layouts/AdminLayout";
 import axios from "axios";
 import ProfilePage from "./pages/ProfilePage";
 import AdminOrdersPage from "./pages/admin/AdminOrdersPage";
+
 
 // [KIẾN THỨC TRỌNG TÂM - Tách lớp Client-Server & Bảo mật NFR-01]:
 // Frontend React giao tiếp với Backend Laravel qua HTTP/JSON, không truy vấn trực tiếp CSDL.
@@ -78,11 +81,11 @@ export default function App() {
                         />
                         <Route path="books" element={<BookManagement />} />
                         <Route path="users" element={<UserList />} />
-                        <Route path="orders" element={<AdminOrdersPage />} />
                         <Route
-                            path="coupons"
-                            element={<div>Mã giảm giá</div>}
+                            path="orders"
+                            element={<AdminOrdersPage/>}
                         />
+                        <Route path="vouchers" element={<AdminVouchersPage />} />
                     </Route>
                 </Route>
             </Routes>

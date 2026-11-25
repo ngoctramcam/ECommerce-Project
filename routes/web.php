@@ -13,6 +13,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\RatingController;
 
+use App\Http\Controllers\VoucherController;
 use App\Http\Controllers\ProfileController;
 // Route trang chủ
 Route::get('/', function () {
@@ -82,6 +83,12 @@ Route::middleware([AdminAuthMiddleware::class])->group(function () {
     Route::get('users', [UserController::class, 'index']);
     Route::patch('/users/{id}/toggle-lock', [UserController::class, 'toggleLock']);
     
+
+    //TV5: Quản lý mã giảm giá (Voucher)
+    Route::get('/api/admin/vouchers', [VoucherController::class, 'index']);
+    Route::post('/api/admin/vouchers', [VoucherController::class, 'store']);
+    Route::put('/api/admin/vouchers/{id}', [VoucherController::class, 'update']);
+    Route::delete('/api/admin/vouchers/{id}', [VoucherController::class, 'destroy']);
 });
 //Route cho ProfilePage
 Route::middleware('auth')->group(function () {
