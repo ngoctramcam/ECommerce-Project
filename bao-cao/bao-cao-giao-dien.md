@@ -46,8 +46,8 @@ Trang chủ giúp người dùng tìm sách, xem sách mới và lọc theo ch�
 - **Khối Sách theo danh mục:** thanh chọn danh mục dạng nút bo tròn (Văn học – đang chọn, Kỹ năng sống, Thiếu nhi, Kinh tế); bên dưới là lưới thẻ sách của danh mục đang chọn, mỗi thẻ có đủ thông tin như trên.
 - **Footer:** như mục 5.4.2.
 
-  ![alt text](image-2.png)
-  ![alt text](image-3.png)
+![alt text](image.png)
+![alt text](image-1.png)
 
 ## 5.4.5. Màn hình Chi tiết sách (TM-03)
 
@@ -59,8 +59,8 @@ Màn hình cung cấp đầy đủ thông tin để người đọc cân nhắc 
 - **Đánh giá sản phẩm** _(chức năng cộng điểm TM-09)_: điểm trung bình (4,7 ★) và các đánh giá gồm tên người dùng, số sao, nhận xét.
 - **Sách cùng danh mục:** gợi ý các sách cùng chủ đề (Mùa hè năm ấy, Đi qua mùa nhớ, Gió qua hiên nhà, Bình yên ở lại), kèm nút Thêm vào giỏ.
 
-![alt text](image-6.png)
-![alt text](image-7.png)
+![alt text](image-2.png)
+![alt text](image-3.png)
 
 ## 5.4.6. Màn hình Giỏ hàng (TM-05)
 
@@ -71,8 +71,8 @@ Giỏ hàng cho phép người dùng kiểm soát sản phẩm và chi phí trư
 - **Tóm tắt đơn hàng:** ô nhập mã giảm giá và nút Áp dụng _(mã giảm giá là chức năng cộng điểm TM-16)_; các dòng Tạm tính (339.000 ₫), Giảm giá mã MOC15 (−15.000 ₫), Tổng cộng (324.000 ₫, màu xanh đậm) và nút **Tiến hành đặt hàng**.
 - **Footer:** như mục 5.4.2.
 
-![alt text](image-8.png)
-![alt text](image-9.png)
+![alt text](image-4.png)
+![alt text](image-5.png)
 
 ## 5.4.7. Màn hình Đặt hàng (TM-06)
 
@@ -83,8 +83,8 @@ Màn hình tập trung vào việc nhập thông tin nhận hàng và xác nhậ
 - **Cột trái – Phương thức thanh toán:** chỉ có Thanh toán khi nhận hàng (COD) – "Thanh toán bằng tiền mặt khi nhận sách", được làm nổi bằng viền và nền xanh nhạt.
 - **Cột phải – Tóm tắt đơn hàng:** danh sách sách đặt mua kèm số lượng (SL: 1) và giá; Tạm tính (339.000 ₫), Giảm giá MOC15 (−15.000 ₫), Phí vận chuyển (Miễn phí), Tổng cộng (324.000 ₫) và nút **Xác nhận đặt hàng**.
 - **Kết quả:** sau khi xác nhận, đơn được tạo ở trạng thái "Chờ xác nhận" và giỏ hàng được làm trống.
-  ![alt text](image-4.png)
-  ![alt text](image-5.png)
+  ![alt text](image-6.png)
+  ![alt text](image-7.png)
 
 # Quản lý đơn hàng
 
@@ -98,8 +98,8 @@ Màn hình giúp quản trị viên theo dõi vòng đời đơn hàng COD và x
 Đơn Đang xử lý có nút Hủy đơn và Giao cho vận chuyển.
 Đơn Đang giao có nút Hoàn thành (trên khung nhìn hẹp còn xuất hiện nút Hủy đơn cạnh nút Hoàn thành).
 Đơn Hoàn thành chỉ hiển thị thông tin tổng tiền mà không có nút chuyển trạng thái tiếp theo. Responsive & phân trang: trên màn hình hẹp có thanh đầu trang thu gọn kèm nút mở menu và tên quản trị viên, các tab lọc và nút thao tác tự xếp dòng gọn gàng, cùng thanh phân trang (Trước, 1, 2, 3, Sau) ở cuối trang.
-![alt text](image-10.png)
-![alt text](image-11.png)
+![alt text](image-8.png)
+![alt text](image-12.png)
 
 ## 5.4.9. Màn hình Quản lý người dùng – Quản trị (TM-14)
 
@@ -110,5 +110,5 @@ Màn hình dạng bảng giúp quản trị viên tra cứu tài khoản, xem va
 - **Bảng danh sách:** hiển thị tổng số tài khoản (846) với các cột Mã, Họ và tên, Email, Số điện thoại, Địa chỉ, Vai trò (Admin, Khách hàng), Trạng thái (Hoạt động, Bị khóa), Ngày tạo, Thao tác. Cột Thao tác có biểu tượng chỉnh sửa, khóa/mở khóa và xóa. Tài khoản bị khóa không đăng nhập được.
 - **Phân trang:** các nút Trước, 1, 2, Sau (phân trang phía server).
 
-  ![alt text](image-12.png)
-  ![alt text](image-13.png)
+![alt text](image-10.png)
+![alt text](image-11.png)
