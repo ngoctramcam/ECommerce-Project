@@ -33,6 +33,7 @@ class OrderController extends Controller
             'recipient_phone'  => preg_replace('/\s+/', '', $validated['receiver_phone']),
             'shipping_address' => trim($validated['shipping_address']),
             'voucher_id'       => $validated['voucher_id'] ?? null,
+            'product_ids'      => $validated['product_ids'],
         ];
 
         try {

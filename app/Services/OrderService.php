@@ -22,16 +22,24 @@ class OrderService
     public function placeOrder(int $userId, array $orderData = [])
     {
         return DB::transaction(function () use ($userId, $orderData) {
-            // 1. Đọc giỏ hàng của user kèm theo thông tin sản phẩm
-            $cartItems = CartItem::with('product')->where('user_id', $userId)->get();
+            // 1. Lấy danh sách sản phẩm khách đã chọn.
+            $selectedIds = array_unique($orderData['product_ids'] ?? []);
 
+            if (empty($selectedIds)) {
+                throw new Exception("Vui lòng chọn ít nhất một sản phẩm để đặt hàng.");
+            }
+
+            // Chỉ lấy các sản phẩm khách đã chọn
+            $cartItems = CartItem::with('product')
+                ->where('user_id', $userId)
+                ->whereIn('product_id', $selectedIds)
+                ->get();
             if ($cartItems->isEmpty()) {
                 throw new Exception("Giỏ hàng trống.");
             }
 
             $totalAmount = 0;
             $orderItemsData = [];
-
             // Kiểm tra tồn kho
             foreach ($cartItems as $item) {
                 $product = Product::where('product_id', $item->product_id)->lockForUpdate()->first();
@@ -82,15 +90,10 @@ class OrderService
             }
 
             // 5. Xóa giỏ hàng của user sau khi đặt thành công
-            $itemsToDelete = CartItem::where('user_id', $userId)
-                ->where('is_delete', false)
-                ->get();
-
-            foreach ($itemsToDelete as $item) {
+            foreach ($cartItems as $item) {
                 $item->update(['is_delete' => true]);
                 $item->delete();
             }
-
             return $order;
         });
     }

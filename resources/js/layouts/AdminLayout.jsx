@@ -159,10 +159,22 @@ export default function AdminLayout() {
                 (m) => pathname === m.to || pathname.startsWith(m.to + "/"),
             ) || MENU[0];
 
-    const handleLogout = () => {
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
-        navigate("/login");
+    const handleLogout = async () => {
+        try {
+            await window.axios.post(
+                "/logout",
+                {},
+                { headers: { Accept: "application/json" } },
+            );
+        } catch (error) {
+            console.error("Lỗi khi đăng xuất trên server:", error);
+        } finally {
+            localStorage.removeItem("user");
+            localStorage.removeItem("token");
+            sessionStorage.removeItem("user");
+            sessionStorage.removeItem("token");
+            window.location.href = "/login";
+        }
     };
 
     return (

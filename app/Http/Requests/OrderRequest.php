@@ -24,6 +24,8 @@ class OrderRequest extends FormRequest
     {
         return [
             'user_id'          => ['nullable', 'integer'],
+            'product_ids'   => ['required', 'array', 'min:1'],
+            'product_ids.*' => ['integer', 'distinct'],
             'receiver_name'    => ['required', 'string', 'max:150'],
             'receiver_phone'   => ['required', 'string', 'regex:/^0[0-9]{9}$/'],
             'shipping_address' => ['required', 'string', 'max:255'],
