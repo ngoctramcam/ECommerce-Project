@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Voucher;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
@@ -118,6 +119,36 @@ class VoucherController extends Controller
 
         return response()->json([
             'message' => 'Đã xóa mã giảm giá thành công!',
+        ]);
+    }
+
+    // Kiểm tra mã giảm giá từ CSDL cho khách hàng ở trang Giỏ hàng / Thanh toán
+    public function check(Request $request): JsonResponse
+    {
+        $code = strtoupper(trim((string) $request->query('code', $request->input('code', ''))));
+
+        if ($code === '') {
+            return response()->json(['message' => 'Vui lòng nhập mã giảm giá.'], 422);
+        }
+
+        $table = (new Voucher())->getTable();
+        $codeCol = Schema::hasColumn($table, 'code') ? 'code' : 'voucher_code';
+
+        $voucher = Voucher::where($codeCol, $code)->first();
+
+        if (!$voucher) {
+            return response()->json(['message' => 'Mã giảm giá không tồn tại!'], 404);
+        }
+
+        $expiry = $voucher->expired_date ?? $voucher->expiry_date ?? $voucher->expired_at ?? null;
+        if ($expiry && Carbon::parse($expiry)->endOfDay()->isPast()) {
+            return response()->json(['message' => 'Mã giảm giá này đã hết hạn sử dụng!'], 422);
+        }
+
+        return response()->json([
+            'voucher_id'      => $voucher->getKey(),
+            'code'            => $voucher->{$codeCol},
+            'discount_amount' => (int) ($voucher->discount_amount ?? 0),
         ]);
     }
 }

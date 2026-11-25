@@ -61,9 +61,9 @@ Route::get('/api/books/search', function (Request $request, ProductService $prod
         )
     );
 });
-
+Route::get('/api/vouchers/check', [VoucherController::class, 'check']);
 Route::post('api/orders', [OrderController::class, 'store']);
-Route::get('/api/products/{productId}/ratings',[RatingController::class,'index']);
+Route::get('/api/products/{productId}/ratings', [RatingController::class, 'index']);
 Route::middleware([AdminAuthMiddleware::class])->group(function () {
     Route::get('/admin', function () {
         return view('welcome');
@@ -82,7 +82,7 @@ Route::middleware([AdminAuthMiddleware::class])->group(function () {
     //Phần Vinh làm
     Route::get('users', [UserController::class, 'index']);
     Route::patch('/users/{id}/toggle-lock', [UserController::class, 'toggleLock']);
-    
+
 
     //TV5: Quản lý mã giảm giá (Voucher)
     Route::get('/api/admin/vouchers', [VoucherController::class, 'index']);
@@ -96,8 +96,8 @@ Route::middleware('auth')->group(function () {
     Route::put('/api/profile', [ProfileController::class, 'update']);
     Route::put('/api/profile/password', [ProfileController::class, 'changePassword']);
     //Phần Vinh làm nha mấy bạn
-    
-    Route::post('/api/products/{productId}/ratings',[RatingController::class,'store']);
+
+    Route::post('/api/products/{productId}/ratings', [RatingController::class, 'store']);
 });
 
 ////////////1

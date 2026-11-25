@@ -16,7 +16,7 @@ class DemoDataSeeder extends Seeder
             ['email' => 'admin@mocsach.vn'],
             [
                 'full_name'  => 'Quản Trị Viên Mộc Sách',
-                'password'   => Hash::make('123456'),
+                'password'   => Hash::make('12345678'),
                 'role'       => 'admin',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -27,7 +27,7 @@ class DemoDataSeeder extends Seeder
             ['email' => 'khachhang1@gmail.com'],
             [
                 'full_name'  => 'Nguyễn Minh Anh',
-                'password'   => Hash::make('123456'),
+                'password'   => Hash::make('12345678'),
                 'role'       => 'user',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -38,7 +38,7 @@ class DemoDataSeeder extends Seeder
             ['email' => 'khachhang2@gmail.com'],
             [
                 'full_name'  => 'Trần Hoàng Nam',
-                'password'   => Hash::make('123456'),
+                'password'   => Hash::make('12345678'),
                 'role'       => 'user',
                 'created_at' => now(),
                 'updated_at' => now(),

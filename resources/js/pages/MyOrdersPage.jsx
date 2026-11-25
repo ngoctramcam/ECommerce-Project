@@ -1,8 +1,5 @@
-
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
-
-
 import axios from "axios";
 
 const STATUS_BADGE = {
@@ -20,12 +17,7 @@ const STATUS_BADGE = {
     },
     completed: {
         label: "Hoàn thành",
-
-        className:
-            "bg-emerald-50 text-emerald-700 border border-emerald-200/70",
-
         className: "bg-emerald-50 text-emerald-700 border border-emerald-200/80",
-
     },
     cancelled: {
         label: "Đã hủy",
@@ -87,7 +79,7 @@ export default function MyOrdersPage() {
             setLoading(true);
             try {
                 const savedUser = JSON.parse(
-                    localStorage.getItem("user") || "{}",
+                    localStorage.getItem("user") || "{}"
                 );
                 const userId = savedUser.user_id || savedUser.id || "";
 
@@ -165,15 +157,9 @@ export default function MyOrdersPage() {
             setOrders((prev) =>
                 prev.map((order) =>
                     order.id === orderId
-
-                        ? { ...order, status: newStatus }
-                        : order,
-                ),
-
                         ? { ...order, status: statusValue }
                         : order
                 )
-
             );
 
             if (selectedOrder && selectedOrder.id === orderId) {
@@ -422,18 +408,6 @@ export default function MyOrdersPage() {
                                                             {item.author}
                                                         </p>
 
-
-                                                        {/* Hiển thị giá trên Mobile */}
-                                                        <div className="sm:hidden mt-1 space-y-0.5 text-xs">
-                                                            <p className="text-gray-400">
-                                                                Đơn giá:{" "}
-                                                                {formatCurrency(
-                                                                    item.price,
-                                                                )}
-                                                            </p>
-                                                            <p className="font-semibold text-gray-800">
-                                                                Thành tiền:{" "}
-
                                                         {/* Mobile: Đơn giá nằm trên, Số lượng (trái) & Thành tiền (phải) ở hàng dưới */}
                                                         <p className="sm:hidden text-xs text-gray-400 mt-1">
                                                             Đơn giá:{" "}
@@ -447,9 +421,8 @@ export default function MyOrdersPage() {
                                                                 {item.quantity}
                                                             </span>
                                                             <span className="text-sm font-bold text-gray-900">
-
                                                                 {formatCurrency(
-                                                                    subtotal,
+                                                                    subtotal
                                                                 )}
                                                             </span>
                                                         </div>
@@ -470,7 +443,7 @@ export default function MyOrdersPage() {
                                                         </p>
                                                         <p className="text-sm font-semibold text-gray-800 mt-0.5">
                                                             {formatCurrency(
-                                                                item.price,
+                                                                item.price
                                                             )}
                                                         </p>
                                                     </div>
@@ -481,7 +454,7 @@ export default function MyOrdersPage() {
                                                         </p>
                                                         <p className="text-sm font-bold text-gray-900 mt-0.5">
                                                             {formatCurrency(
-                                                                subtotal,
+                                                                subtotal
                                                             )}
                                                         </p>
                                                     </div>
@@ -503,7 +476,7 @@ export default function MyOrdersPage() {
                                                     Mã giảm giá:{" "}
                                                     {order.voucher_code} (-
                                                     {formatCurrency(
-                                                        order.discount_amount,
+                                                        order.discount_amount
                                                     )}
                                                     )
                                                 </span>
@@ -517,7 +490,7 @@ export default function MyOrdersPage() {
                                             </span>
                                             <span className="text-lg sm:text-xl font-bold text-emerald-800">
                                                 {formatCurrency(
-                                                    order.total_amount,
+                                                    order.total_amount
                                                 )}
                                             </span>
                                         </div>
@@ -534,7 +507,7 @@ export default function MyOrdersPage() {
                                                     handleUpdateStatus(
                                                         order.id,
                                                         "cancelled",
-                                                        "Bạn có chắc chắn muốn hủy đơn hàng này không?",
+                                                        "Bạn có chắc chắn muốn hủy đơn hàng này không?"
                                                     )
                                                 }
                                                 className="px-6 py-2 rounded-lg text-xs font-semibold bg-white border border-red-400 text-red-600 hover:bg-red-50 transition-colors cursor-pointer disabled:opacity-50"
@@ -556,7 +529,7 @@ export default function MyOrdersPage() {
                                                     handleUpdateStatus(
                                                         order.id,
                                                         "cancelled",
-                                                        "Xác nhận từ chối / không nhận đơn hàng này?",
+                                                        "Xác nhận từ chối / không nhận đơn hàng này?"
                                                     )
                                                 }
                                                 className="px-6 py-2 rounded-lg text-xs font-semibold border border-red-400 text-red-600 bg-white hover:bg-red-50 transition-colors cursor-pointer disabled:opacity-50"
@@ -571,7 +544,7 @@ export default function MyOrdersPage() {
                                                     handleUpdateStatus(
                                                         order.id,
                                                         "completed",
-                                                        "Xác nhận bạn đã nhận được đầy đủ hàng?",
+                                                        "Xác nhận bạn đã nhận được đầy đủ hàng?"
                                                     )
                                                 }
                                                 className="px-8 py-2 rounded-lg text-xs font-semibold bg-emerald-800 text-white hover:bg-emerald-900 transition-colors cursor-pointer disabled:opacity-50"
