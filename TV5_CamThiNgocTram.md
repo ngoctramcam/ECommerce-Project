@@ -21,6 +21,8 @@
 | AI-08 | 24/11/2026 | Lập trình | Viết Unit Test kiểm tra ràng buộc thêm vượt tồn kho trong CartService        | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/test/TM-05)             |
 | AI-09 | 25/11/2026 | Thiết kế | Tổng hợp bộ kịch bản kiểm thử (Test Cases) cho 12 chức năng hệ thống (`docs/test-cases.md`)       | [Commit](https://github.com/ngoctramcam/ECommerce-Project/blob/docs/test-case.md)             |
 | AI-10 | 25/11/2026 | Lập trình | Nâng cấp giao diện Responsive trang Đơn hàng của tôi (`MyOrdersPage.jsx`), bổ sung Popup Chi tiết đơn hàng và sửa lỗi cập nhật trạng thái       | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/fix/TM-07-don-cua-toi)             |
+| AI-11 | 25/11/2026 | Lập trình | Thiết kế lại giao diện Responsive trang Quản lý đơn hàng Admin (`AdminOrdersPage.jsx`), bổ sung Popup Chi tiết và đồng bộ luồng 5 trạng thái với `OrderController.php`
+       | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/fix/TM-13-quan-ly-don)             |
 
 
 ## AI-01 – <tạo repository>
@@ -467,3 +469,48 @@ AI cung cấp trọn bộ mã nguồn component `MyOrdersPage.jsx` tích hợp T
 ### 8. Sản phẩm cuối cùng
 
 Link commit/PR: [...] (https://github.com/ngoctramcam/ECommerce-Project/tree/fix/TM-07-don-cua-toi)
+
+## AI-11 – Thiết kế lại giao diện Responsive trang Quản lý đơn hàng Admin (`AdminOrdersPage.jsx`), bổ sung Popup Chi tiết và đồng bộ luồng 5 trạng thái với `OrderController.php`
+
+- **Ngày / Người dùng AI:** 25/11/2026 – TV5
+- **Công cụ AI:** Gemini
+- **Thẻ Trello / Nhánh Git liên quan:** fix/TM-13-quan-ly-don
+
+### 1. Mục đích
+
+Nhờ AI hỗ trợ xây dựng lại giao diện trang **Quản lý đơn hàng Admin** (`AdminOrdersPage.jsx`) bằng React và Tailwind CSS chuẩn responsive cho cả máy tính (Desktop) và điện thoại (Mobile) theo mẫu thiết kế thống nhất với trang Đơn hàng của khách hàng, bổ sung **Popup Chi tiết đơn hàng**, thanh lọc 6 tab kèm bộ đếm động, ô tìm kiếm nhanh, phân trang và đồng bộ API xử lý đủ 5 trạng thái (`pending`, `processing`, `shipping`, `completed`, `cancelled`) trong `OrderController.php`.
+
+### 2. Prompt đã dùng
+
+Tôi đang làm giao diện Quản lý đơn hàng phía Admin (`AdminOrdersPage.jsx`) kết hợp với Laravel (`OrderController.php`). Nhờ AI thiết kế lại giao diện responsive cho cả 2 màn hình Desktop và Mobile theo đúng bản thiết kế, bổ sung Popup xem chi tiết đơn hàng trên cả 2 thiết bị, tích hợp lọc theo 5 trạng thái + tìm kiếm theo mã đơn/SĐT + phân trang, đồng thời kiểm tra và đồng bộ lại endpoint API với `OrderController.php` khi trang Admin hiển thị danh sách rỗng `(0)`.
+
+### 3. Kết quả AI trả về (tóm tắt)
+
+AI cung cấp trọn bộ mã nguồn component `AdminOrdersPage.jsx` với bố cục đồng bộ hệ thống thiết kế Mộc Sách (6 tab lọc trạng thái có số đếm động, thanh tìm kiếm mã đơn `#DH...` / SĐT khách hàng, thẻ đơn hàng hiển thị thông tin người nhận – sản phẩm – nút hành động theo từng trạng thái, thanh phân trang và Modal Popup Chi tiết đơn hàng 2 cột trên Desktop / xếp dọc trên Mobile), đồng thời phát hiện nguyên nhân danh sách trống `(0)` do lệch endpoint và cập nhật hàm `adminIndex()`, `adminUpdateStatus()` trong `OrderController.php` hỗ trợ đầy đủ 5 trạng thái.
+
+### 4. Phần giữ lại
+
+- Giữ lại giao diện responsive `AdminOrdersPage.jsx` trên cả Desktop và Mobile:
+  - Thanh tab lọc trạng thái (`Tất cả`, `Chờ xác nhận`, `Đang xử lý` màu hồng phấn, `Đang giao`, `Hoàn thành`, `Đã hủy`) kèm số lượng đếm động và ô tìm kiếm mã đơn / SĐT.
+  - Các nút xử lý trạng thái 1 chiều theo từng giai đoạn: **Hủy đơn** + **Xác nhận đơn** (`pending` → `processing`), **Hủy đơn** + **Giao cho vận chuyển** (`processing` → `shipping`), **Hoàn thành** (`shipping` → `completed`).
+  - Popup Chi tiết đơn hàng hiển thị khối thông tin khách hàng & giao hàng, bảng danh sách sản phẩm, tổng kết chi phí (tạm tính, phí vận chuyển, mã giảm giá, tổng thanh toán) và cụm nút hành động ở đáy modal.
+- Giữ lại bản cập nhật mở rộng hàm `adminIndex()` và `adminUpdateStatus()` trong `OrderController.php` để hỗ trợ đầy đủ trạng thái `processing` (*Đang xử lý*), trả về thêm các trường `author`, `email`, `discount_amount` và tự động hoàn lại tồn kho (`stock`) khi Admin hủy đơn.
+
+### 5. Phần loại bỏ / chỉnh sửa và lý do
+
+- Loại bỏ lời gọi endpoint khách hàng `GET /api/orders` (không truyền `user_id` nên bị chặn `401` hoặc trả về `0` đơn) trong bản nháp đầu tiên của `AdminOrdersPage.jsx`, chuyển sang gọi đúng route dành riêng cho Admin (`/api/admin/orders` và `PATCH /api/admin/orders/{id}/status`) nối tới `adminIndex` và `adminUpdateStatus` trong `OrderController.php`.
+- Bổ sung trạng thái `processing` vào mảng `Rule::in` và ma trận chuyển trạng thái `$allowedTransitions` của `adminUpdateStatus()` trong `OrderController.php` vì code controller cũ của nhóm chỉ mới có 4 trạng thái (`pending`, `shipping`, `completed`, `cancelled`).
+
+### 6. AI sai hoặc chưa chắc chắn ở đâu
+
+- Ở lần tạo component `AdminOrdersPage.jsx` đầu tiên khi chưa đọc file `OrderController.php` của nhóm, AI mặc định gọi endpoint chung `GET /api/orders` không kèm `user_id`, dẫn đến việc trang Admin hiển thị khung giao diện nhưng toàn bộ tab đều đếm `(0)` đơn hàng. Sau khi đối chiếu với `OrderController.php`, AI đã chỉ rõ hàm `adminIndex()` có sẵn và cập nhật lại cả Frontend lẫn Backend cho khớp.
+
+### 7. Cách kiểm chứng
+
+- Truy cập `http://127.0.0.1:8000/admin/orders` bằng tài khoản quản trị viên trên trình duyệt: kiểm tra các tab hiển thị đúng tổng số đơn hàng từ CSDL, thử tìm kiếm theo mã `#DH...` hoặc số điện thoại và chuyển trang hoạt động chính xác.
+- Kiểm tra responsive trên DevTools (Desktop `1280px` và Mobile `375px`): thẻ đơn hàng và Popup Chi tiết đơn hàng co giãn đúng thiết kế, không vỡ bố cục.
+- Thử bấm chuyển trạng thái tuần tự (**Xác nhận đơn** → **Giao cho vận chuyển** → **Hoàn thành** và **Hủy đơn**): trạng thái cập nhật ngay trên giao diện và lưu đúng vào bảng `orders` trong MySQL (kèm hoàn tồn kho `stock` khi hủy đơn).
+
+### 8. Sản phẩm cuối cùng
+
+Link commit/PR: [...] (https://github.com/ngoctramcam/ECommerce-Project/tree/fix/TM-13-quan-ly-don)
