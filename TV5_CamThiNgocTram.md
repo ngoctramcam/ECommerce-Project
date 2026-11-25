@@ -20,6 +20,7 @@
 | AI-07 | 23/11/2026 | Lập trình | Xây dựng và hoàn thiện trang Quản lý Đơn hàng Admin (Admin Order Management) | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/feat/TM-07-don-cua-toi) |
 | AI-08 | 24/11/2026 | Lập trình | Viết Unit Test kiểm tra ràng buộc thêm vượt tồn kho trong CartService        | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/test/TM-05)             |
 | AI-09 | 25/11/2026 | Thiết kế | Tổng hợp bộ kịch bản kiểm thử (Test Cases) cho 12 chức năng hệ thống (`docs/test-cases.md`)       | [Commit](https://github.com/ngoctramcam/ECommerce-Project/blob/docs/test-case.md)             |
+| AI-10 | 25/11/2026 | Lập trình | Nâng cấp giao diện Responsive trang Đơn hàng của tôi (`MyOrdersPage.jsx`), bổ sung Popup Chi tiết đơn hàng và sửa lỗi cập nhật trạng thái       | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/fix/TM-07-don-cua-toi)             |
 
 
 ## AI-01 – <tạo repository>
@@ -423,3 +424,46 @@ AI tạo ra bộ tài liệu Markdown hoàn chỉnh gồm 24 test cases (`TC-01`
 ### 8. Sản phẩm cuối cùng
 
 Link commit/PR: [...] (https://github.com/ngoctramcam/ECommerce-Project/blob/docs/test-case.md)
+
+## AI-10 – Nâng cấp giao diện Responsive trang Đơn hàng của tôi (`MyOrdersPage.jsx`), bổ sung Popup Chi tiết đơn hàng và sửa lỗi cập nhật trạng thái
+
+- **Ngày / Người dùng AI:** 25/11/2026 – TV5
+- **Công cụ AI:** Gemini
+- **Thẻ Trello / Nhánh Git liên quan:** fix/TM-07-don-cua-toi
+
+### 1. Mục đích
+
+Nhờ AI hỗ trợ thiết kế lại trang **Đơn hàng của tôi** (`MyOrdersPage.jsx`) bằng React và Tailwind CSS để hiển thị chuẩn responsive trên cả máy tính (Desktop) và điện thoại (Mobile), bổ sung **Popup Chi tiết đơn hàng** kèm lịch sử trạng thái, hỗ trợ đầy đủ 5 trạng thái đơn hàng của hệ thống và khắc phục lỗi không hủy được đơn hàng (`The selected status is invalid.`).
+
+### 2. Prompt đã dùng
+
+Tôi đang làm giao diện trang Đơn hàng của tôi bằng Laravel kết hợp React (`MyOrdersPage.jsx`). Nhờ AI viết lại giao diện responsive cho cả 2 màn hình máy tính và điện thoại theo mẫu thiết kế, bổ sung đầy đủ 5 trạng thái đơn hàng (`pending`, `processing`, `shipping`, `completed`, `cancelled`), thêm Popup xem chi tiết đơn hàng trên cả 2 giao diện và sửa lỗi báo `The selected status is invalid.` khi nhấn nút Hủy đơn hàng.
+
+### 3. Kết quả AI trả về (tóm tắt)
+
+AI cung cấp trọn bộ mã nguồn component `MyOrdersPage.jsx` tích hợp Tailwind CSS chia bố cục 3 cột trên Desktop và thẻ dọc trên Mobile, bổ sung trạng thái `processing` (*Đang xử lý*), xây dựng Modal Popup Chi tiết đơn hàng (tự co giãn thành bottom-sheet trên Mobile, hiển thị thông tin người nhận, danh sách sách, tạm tính/giảm giá/tổng tiền, timeline trạng thái và các nút thao tác) đồng thời chẩn đoán và sửa lỗi gửi sai định dạng chữ hoa/thường trong hàm `handleUpdateStatus`.
+
+### 4. Phần giữ lại
+
+- Giữ lại bố cục responsive 2 màn hình: Desktop hiển thị 3 cột (*Sản phẩm – Đơn giá – Thành tiền*), Mobile xếp dọc giá dưới tên sách và chia đôi/giãn rộng các nút hành động (`Không nhận`, `Đã nhận`, `Đánh giá`) để dễ thao tác.
+- Giữ lại Modal Popup Chi tiết đơn hàng kèm timeline lịch sử trạng thái (`Chờ xác nhận` → `Đang xử lý` → `Đang giao` → `Hoàn thành` / `Đã hủy`) và cơ chế khóa cuộn trang nền, đóng nhanh bằng phím `ESC` hoặc nhấn ra ngoài vùng modal.
+- Giữ lại các endpoint API gốc của dự án (`GET /api/orders` với tham số `user_id` và `PATCH /api/orders/{id}/status`).
+
+### 5. Phần loại bỏ / chỉnh sửa và lý do
+
+- Loại bỏ đoạn code gọi endpoint giả định `GET /api/orders` và `PATCH /api/orders/{id}/cancel` từ bản nháp đầu tiên (gây lỗi `404 Not Found`), giữ nguyên đúng route `GET /api/orders` và `PATCH /api/orders/{id}/status` đang hoạt động của nhóm.
+- Sửa lại hàm `handleUpdateStatus` trong `MyOrdersPage.jsx`: đổi từ `newStatus.toUpperCase()` sang **`newStatus.toLowerCase()`** (`'cancelled'`, `'completed'`) để khớp với quy tắc Validation (`Rule::in`) của Backend Laravel, khắc phục triệt để thông báo lỗi `The selected status is invalid.` khi khách hàng bấm **Hủy đơn hàng**.
+
+### 6. AI sai hoặc chưa chắc chắn ở đâu
+
+- Ban đầu khi chưa có file `MyOrdersPage.jsx` gốc, AI viết code theo hướng Blade template và tự đặt tên endpoint `/api/my-orders` gây lỗi `404` khi ghép vào React SPA của nhóm.
+- Ở lần cập nhật đầu tiên cho React, AI chuyển chuỗi `status` gửi lên API sang chữ in hoa (`CANCELLED`) làm không khớp với rule kiểm tra chữ thường (`cancelled`) của Backend, dẫn đến lỗi validation `422` (`The selected status is invalid.`) trước khi được đối chiếu và sửa lại thành `.toLowerCase()`.
+
+### 7. Cách kiểm chứng
+
+- Kiểm tra giao diện trên trình duyệt (DevTools chuyển đổi qua lại giữa kích thước Desktop `1280px` và Mobile `375px`): danh sách đơn hàng hiển thị đủ 5 trạng thái, bấm vào thẻ đơn hoặc nút **Xem chi tiết** mở Popup mượt mà, không bị tràn khung hình.
+- Thử thao tác nhấn **Hủy đơn hàng** trên đơn ở trạng thái *Chờ xác nhận*: xác nhận **OK** không còn thông báo `The selected status is invalid.`, trạng thái đơn chuyển ngay sang badge đỏ **Đã hủy** và cập nhật đúng trong cơ sở dữ liệu.
+
+### 8. Sản phẩm cuối cùng
+
+Link commit/PR: [...] (https://github.com/ngoctramcam/ECommerce-Project/tree/fix/TM-07-don-cua-toi)
