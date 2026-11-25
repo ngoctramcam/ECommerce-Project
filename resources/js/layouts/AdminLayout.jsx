@@ -39,7 +39,7 @@ const MENU = [
     { to: "/admin/books", label: "Quản lý Sách", icon: "book" },
     { to: "/admin/orders", label: "Quản lý Đơn hàng", icon: "order" },
     { to: "/admin/users", label: "Quản lý Người dùng", icon: "users" },
-    { to: "/admin/coupons", label: "Mã giảm giá", icon: "coupon" },
+    { to: "/admin/vouchers", label: "Mã giảm giá", icon: "coupon" },
 ];
 
 /* ---------- Lấy thông tin admin đang đăng nhập ---------- */
