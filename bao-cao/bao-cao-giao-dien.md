@@ -90,13 +90,14 @@ Màn hình tập trung vào việc nhập thông tin nhận hàng và xác nhậ
 
 ## 5.4.8. Màn hình Quản lý đơn hàng – Quản trị (TM-13)
 
-Màn hình giúp quản trị viên theo dõi trạng thái từng đơn COD và xử lý ngay trên thẻ đơn.
-
-- **Sidebar và tiêu đề:** sidebar như mục 5.4.2 với mục Quản lý Đơn hàng đang chọn; breadcrumb Admin / Quản lý đơn hàng.
-- **Bộ lọc:** các tab theo trạng thái (Tất cả (24), Chờ xác nhận (5), Đang giao (8), Hoàn thành (9), Đã hủy (2)) và ô tìm kiếm theo mã đơn hoặc SĐT khách hàng.
-- **Thẻ đơn hàng:** mỗi đơn gồm mã đơn, ngày đặt, huy hiệu trạng thái, thông tin người nhận và địa chỉ, hình thức thanh toán (COD), danh sách sách (ảnh, tên, tác giả, số lượng, đơn giá, thành tiền) và tổng tiền.
-- **Nút thao tác theo trạng thái:** đơn _Chờ xác nhận_ có **Hủy đơn** và **Xác nhận & Giao hàng**; đơn _Đang giao_ có **Hoàn thành**; đơn đã xong hoặc đã hủy chỉ có **Xem chi tiết**. Trạng thái chỉ đi theo chiều Chờ xác nhận → Đang giao → Hoàn thành (hoặc Đã hủy), không đi ngược.
-
+Màn hình giúp quản trị viên theo dõi vòng đời đơn hàng COD và xử lý trực tiếp trên từng thẻ đơn ở cả giao diện desktop lẫn điện thoại.  
+ Đầu trang và bộ lọc: có breadcrumb Admin / Quản lý đơn hàng, tiêu đề Quản lý đơn hàng, các tab trạng thái gồm Tất cả (24), Chờ xác nhận (5), Đang xử lý (1), Đang giao (8), Hoàn thành (9), Đã hủy (2) và ô tìm kiếm theo mã đơn hoặc SĐT khách hàng.  
+ Thẻ đơn hàng: mỗi thẻ hiển thị mã đơn (#DH001, #DH002, #DH003), ngày đặt, huy hiệu trạng thái, thông tin người nhận/địa chỉ, hình thức Thanh toán: COD, danh sách sách (ảnh bìa, tên sách, tác giả, số lượng, đơn giá, thành tiền), thông tin mã giảm giá nếu có (như MOC15 (-15.000₫)) và tổng tiền.  
+ Nút thao tác theo trạng thái:
+Đơn Chờ xác nhận có nút Hủy đơn và Xác nhận đơn.
+Đơn Đang xử lý có nút Hủy đơn và Giao cho vận chuyển.
+Đơn Đang giao có nút Hoàn thành (trên khung nhìn hẹp còn xuất hiện nút Hủy đơn cạnh nút Hoàn thành).
+Đơn Hoàn thành chỉ hiển thị thông tin tổng tiền mà không có nút chuyển trạng thái tiếp theo. Responsive & phân trang: trên màn hình hẹp có thanh đầu trang thu gọn kèm nút mở menu và tên quản trị viên, các tab lọc và nút thao tác tự xếp dòng gọn gàng, cùng thanh phân trang (Trước, 1, 2, 3, Sau) ở cuối trang.
 ![alt text](image-10.png)
 ![alt text](image-11.png)
 
