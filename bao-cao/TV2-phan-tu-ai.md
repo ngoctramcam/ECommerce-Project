@@ -1,4 +1,4 @@
-# Phản tư về việc dùng AI – TV1 - Thạch Minh Trí
+# Phản tư về việc dùng AI – TV2 - Thạch Minh Trí
 ## 1. Thống kê của tôi
 - **Tổng số mục AI log:** 9 mục (từ `AI-01` đến `AI-08`).
 - **Công cụ đã dùng:** Copilot, Gemini, Claude.
