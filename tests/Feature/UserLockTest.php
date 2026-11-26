@@ -30,7 +30,7 @@ class UserLockTest extends TestCase
         // $user->createToken("test");
 
         Sanctum::actingAs($admin);
-        $res=$this->patchJson("/admin/users/{$user->user_id}/toggle-lock");
+        $res=$this->patchJson("/users/{$user->user_id}/toggle-lock");
         $res->assertOk();
         $this->assertSame('locked',$user->fresh()->status);
        
@@ -38,7 +38,7 @@ class UserLockTest extends TestCase
     public function test_admin_khong_the_tu_xoa_chinh_minh():void{
         $admin=$this->makeUser(['role'=>'admin']);
         Sanctum::actingAs($admin);
-        $res=$this->patchJson("/admin/users/{$admin->user_id}/toggle-lock");
+        $res=$this->patchJson("/users/{$admin->user_id}/toggle-lock");
         $res->assertStatus(422);
         $this->assertSame('active',$admin->fresh()->status);
     }
@@ -46,7 +46,7 @@ class UserLockTest extends TestCase
         $admin=$this->makeUser(['role'=>'admin']);
         $user=$this->makeUser(['status'=>'locked']);
         Sanctum::actingAs($admin);
-        $this->patchJson("/admin/users/{$user->user_id}/toggle-lock")->assertOk();
+        $this->patchJson("/users/{$user->user_id}/toggle-lock")->assertOk();
         $this->assertSame('active',$user->fresh()->status);
     }
 }
