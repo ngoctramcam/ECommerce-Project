@@ -3,7 +3,7 @@
 | Mục             | Thông tin                                                |
 | --------------- | -------------------------------------------------------- |
 | Họ tên, MSSV    | Cam Thị Ngọc Trâm - 0306241330                           |
-| Nhóm, đề tài    | Nhóm [số] – Xây dựng website thương mại điện tử bán sách |
+| Nhóm, đề tài    | Nhóm 3 – Xây dựng website thương mại điện tử bán sách |
 | Vai trò         | TV4 – BE (Backend)                                       |
 | Công cụ AI dùng | GitHub Copilot                                           |
 
@@ -13,12 +13,13 @@
 | ----- | ---------- | --------- | -------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
 | AI-01 | 10/11/2026 | Thiết kế  | Nhờ AI gợi ý những thuộc tính thương có của các bảng                 | [commit](https://github.com/ngoctramcam/ECommerce-Project/tree/docs/Database)       |
 | AI-02 | 11/11/202  | Thiết kế  | Nhờ AI gợi ý cách trình bày mô tả erd                                | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/docs/Database)       |
-| AI-03 | 12/11/202  | Lập trình | Nhờ AI tạo dữ liệu giùm                                              | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/feat/database)       |
-| AI-04 | 16/11/202  | Lập trình | Nhờ AI viết chức năng CRUD cho Categories                            | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/feat/TM-11-danh-muc) |
-| AI-05 | 21/11/202  | Lập trình | Nhờ AI viết chức năng CRUD cho Products                              | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/feat/TM-12-san-pham) |
-| AI-06 | 23/11/202  | Lập trình | Nhờ AI viết chức năng tìm kiếm, lọc cho Categories                   | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/feat/TM-11-danh-muc) |
-| AI-07 | 24/11/202  | Lập trình | Viết Unit Test kiểm tra ràng buộc xóa danh mục trong CategoryService | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/test/TM-11)          |
-| AI-08 | 25/11/202  | Lập trình | Xây dựng Seeder dữ liệu mẫu (`DemoDataSeeder`) và xử lý ràng buộc toàn vẹn dữ liệu CSDL | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/fix/validate-admin)          |
+| AI-03 | 12/11/2026  | Lập trình | Nhờ AI tạo dữ liệu giùm                                              | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/feat/database)       |
+| AI-04 | 16/11/2026  | Lập trình | Nhờ AI viết chức năng CRUD cho Categories                            | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/feat/TM-11-danh-muc) |
+| AI-05 | 21/11/2026  | Lập trình | Nhờ AI viết chức năng CRUD cho Products                              | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/feat/TM-12-san-pham) |
+| AI-06 | 23/11/2026  | Lập trình | Nhờ AI viết chức năng tìm kiếm, lọc cho Categories                   | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/feat/TM-11-danh-muc) |
+| AI-07 | 24/11/2026  | Lập trình | Viết Unit Test kiểm tra ràng buộc xóa danh mục trong CategoryService | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/test/TM-11)          |
+| AI-08 | 25/11/2026  | Lập trình | Xây dựng Seeder dữ liệu mẫu (`DemoDataSeeder`) và xử lý ràng buộc toàn vẹn dữ liệu CSDL | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/fix/validate-admin)          |
+| AI-09 | 27/11/2026  | Lập trình | Xây dựng chức năng Quản lý Mã giảm giá (Admin CRUD) | [Commit](https://github.com/ngoctramcam/ECommerce-Project/tree/feat/TM-16-quan-ly-giam-gia)          |
 
 ## AI-01 – <Tạo ERD>
 
@@ -348,3 +349,45 @@ AI cung cấp trọn bộ mã nguồn `DemoDataSeeder.php` sử dụng `DB::tabl
 ### 8. Sản phẩm cuối cùng
 
 Link commit/PR: [...](https://github.com/ngoctramcam/ECommerce-Project/tree/fix/validate-admin)
+
+## AI-09 – Xây dựng chức năng Quản lý Mã giảm giá (Admin CRUD)
+
+- **Ngày / Người dùng AI:** 26/11/2026 – TV4
+- **Công cụ AI:** Gemini
+- **Thẻ Trello / Nhánh Git liên quan:** feat
+
+### 1. Mục đích
+
+Nhờ AI hỗ trợ sinh khung code xử lý nghiệp vụ Thêm, Xem, Sửa, Xóa (CRUD) mã giảm giá cho trang quản trị (Admin) và các quy tắc kiểm tra dữ liệu đầu vào (validation).
+
+### 2. Prompt đã dùng
+
+Tôi đang làm chức năng quản lý mã giảm giá (voucher) phía Admin cho web bán sách Mộc Sách dùng Laravel và React với bảng vouchers (gồm các cột id, code, discount_amount, expired_date, description, is_delete). Hãy viết VoucherController và FormRequest validation để Admin thêm mới, cập nhật, liệt kê và xóa mềm mã giảm giá.
+
+### 3. Kết quả AI trả về (tóm tắt)
+
+AI tạo khung `AdminVoucherController` với các phương thức `index`, `store`, `update`, `destroy`, kèm quy tắc validation (kiểm tra trùng `code`, `discount_amount > 0`, `expired_date` hợp lệ) và giao diện bảng danh sách voucher phía Admin.
+
+### 4. Phần giữ lại
+
+- Cấu trúc RESTful Controller (`index`, `store`, `update`, `destroy`) và các thông báo phản hồi JSON/Flash message khi thao tác thành công hoặc thất bại.
+- Quy tắc kiểm tra dữ liệu đầu vào: bắt buộc nhập mã (`required`), không trùng lặp (`unique`), số tiền giảm phải là số dương (`numeric|min:1000`).
+
+### 5. Phần loại bỏ / chỉnh sửa và lý do
+
+- **Bỏ:** Lệnh xóa cứng `$voucher->delete()` mà AI gợi ý mặc định trong hàm `destroy()`, vì sẽ làm mất khóa ngoại `voucher_id` của các đơn hàng cũ đã từng áp dụng mã này.
+- **Sửa:**
+  - Chuyển sang xóa mềm bằng cách cập nhật cờ `$voucher->update(['is_delete' => 1])` và lọc `where('is_delete', 0)` ở trang danh sách Admin.
+  - Bổ sung quy tắc `unique:vouchers,code,' . $id . ',id,is_delete,0` khi cập nhật để Admin có thể lưu lại mã đang sửa mà không bị báo lỗi trùng mã của chính nó, đồng thời cho phép tạo lại mã trùng tên với mã đã xóa mềm.
+  - Chuẩn hóa tự động viết hoa mã voucher (`strtoupper($request->code)`) trước khi lưu vào CSDL.
+
+### 6. AI sai hoặc chưa chắc chắn ở đâu
+
+- AI mặc định dùng cơ chế xóa cứng (`delete()`) thay vì xóa mềm theo cột `is_delete` của dự án, và chưa xử lý ngoại lệ `unique` theo ID khi Admin chỉnh sửa thông tin voucher.
+
+### 7. Cách kiểm chứng
+
+- Đăng nhập bằng tài khoản Admin (`admin@mocsach.vn`), thực hiện đủ 4 thao tác trên giao diện quản trị: tạo mã mới (kiểm tra báo lỗi nếu nhập trùng mã hoặc số tiền âm), sửa ngày hết hạn của mã `MOCSACH20`, xóa mềm một mã và kiểm tra trong phpMyAdmin xác nhận cột `is_delete` chuyển thành `1` nhưng dữ liệu đơn hàng cũ vẫn nguyên vẹn.
+### 8. Sản phẩm cuối cùng
+
+Link commit/PR: [...](https://github.com/ngoctramcam/ECommerce-Project/tree/feat/TM-16-quan-ly-giam-gia)
