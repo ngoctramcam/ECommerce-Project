@@ -54,7 +54,7 @@ export default function BookCard({ book, onAddToCart }) {
                 return;
             }
 
-            alert(`Đã thêm "${book.product_name}" vào giỏ hàng!`);
+
             window.dispatchEvent(new Event("cartUpdated"));
         } catch (error) {
             console.error("Lỗi khi thêm giỏ hàng:", error);

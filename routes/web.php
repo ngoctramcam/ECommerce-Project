@@ -24,15 +24,17 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-Route::get('/test-db', function () {
-    try {
-        DB::connection()->getPdo();
-        $dbName = DB::connection()->getDatabaseName();
-        return 'Kết nối CSDL thành công: ' . $dbName;
-    } catch (Exception $e) {
-        return 'Kết nối thất bại: ' . $e->getMessage();
-    }
-});
+
+// Test kết nối csdl đơn giản
+// Route::get('/test-db', function () {
+//     try {
+//         DB::connection()->getPdo();
+//         $dbName = DB::connection()->getDatabaseName();
+//         return 'Kết nối CSDL thành công: ' . $dbName;
+//     } catch (Exception $e) {
+//         return 'Kết nối thất bại: ' . $e->getMessage();
+//     }
+// });
 
 // [(TV3)]: Bổ sung route POST /register vì TV2 đã viết sẵn hàm register() trong AuthController nhưng chưa khai báo đường dẫn ở đây
 Route::post('/register', [AuthController::class, 'register']);
