@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom"; //CheckoutPage
-// import { Link } from "react-router-dom";
-import { Trash2, Ticket, Check, ArrowLeft } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { Trash2, Ticket, Check, ArrowLeft, X } from "lucide-react";
 
 const formatVND = (amount) => Number(amount || 0).toLocaleString("vi-VN") + "đ";
 
@@ -11,14 +10,15 @@ const getCsrfToken = () => {
 };
 
 export default function CartPage() {
-    const navigate = useNavigate(); //CheckoutPage
+    const navigate = useNavigate();
     const [items, setItems] = useState([]);
     const [loading, setLoading] = useState(true);
+
+    // State mã giảm giá (không gán cứng dữ liệu mẫu, đợi người dùng nhập)
     const [promoInput, setPromoInput] = useState("");
-    const [appliedPromo, setAppliedPromo] = useState({
-        code: "MOC15",
-        discount: 15000,
-    });
+    const [appliedPromo, setAppliedPromo] = useState(null);
+    const [promoError, setPromoError] = useState("");
+    const [checkingPromo, setCheckingPromo] = useState(false);
 
     // 1. Lấy dữ liệu giỏ hàng từ CSDL khi vào trang
     const fetchCartItems = async () => {
@@ -46,11 +46,10 @@ export default function CartPage() {
             const data = await res.json();
             const list = Array.isArray(data) ? data : data.data || [];
 
-            // Chuẩn hóa dữ liệu từ cart_items + product sang format giao diện
             const mapped = list.map((row) => {
                 const prod = row.product || {};
                 return {
-                    id: row.cart_id, // ID của dòng cart_items
+                    id: row.cart_id,
                     product_id: row.product_id,
                     title:
                         prod.title ||
@@ -166,28 +165,78 @@ export default function CartPage() {
         }
     };
 
-    const handleApplyPromo = (e) => {
+    // 4. Kiểm tra mã giảm giá dưới CSDL khi người dùng bấm Áp dụng
+    const handleApplyPromo = async (e) => {
         e.preventDefault();
+        setPromoError("");
         const code = promoInput.trim().toUpperCase();
-        if (!code) return;
-        if (code === "MOC15") {
-            setAppliedPromo({ code: "MOC15", discount: 15000 });
+        if (!code) {
+            setPromoError("Vui lòng nhập mã giảm giá.");
+            return;
+        }
+
+        setCheckingPromo(true);
+        try {
+            const res = await fetch(
+                `/api/vouchers/check?code=${encodeURIComponent(code)}`,
+                {
+                    credentials: "same-origin",
+                    headers: { Accept: "application/json" },
+                },
+            );
+            const data = await res.json();
+
+            if (!res.ok) {
+                setAppliedPromo(null);
+                setPromoError(data.message || "Mã giảm giá không hợp lệ!");
+                return;
+            }
+
+            setAppliedPromo({
+                voucher_id: data.voucher_id,
+                code: data.code,
+                discount: Number(data.discount_amount || 0),
+            });
             setPromoInput("");
-        } else {
-            alert("Mã thử nghiệm hợp lệ là: MOC15");
+        } catch (error) {
+            console.error("Lỗi kiểm tra mã giảm giá:", error);
+            setPromoError("Không thể kiểm tra mã giảm giá. Vui lòng thử lại!");
+        } finally {
+            setCheckingPromo(false);
         }
     };
 
+    const handleRemovePromo = () => {
+        setAppliedPromo(null);
+        setPromoError("");
+    };
+
+    // Chỉ lấy các sản phẩm người dùng đã check để tính toán
     const selectedItems = items.filter((item) => item.selected);
+
+    // Tổng số lượng của tất cả sản phẩm được check (VD: SP A sl 2 + SP B sl 1 = 3)
+    const selectedTotalQuantity = selectedItems.reduce(
+        (sum, item) => sum + item.quantity,
+        0,
+    );
+
+    // Tổng số lượng toàn bộ giỏ hàng
+    const totalCartQuantity = items.reduce(
+        (sum, item) => sum + item.quantity,
+        0,
+    );
+
     const subtotal = selectedItems.reduce(
         (sum, item) => sum + item.price * item.quantity,
         0,
     );
     const discountAmount =
-        subtotal > 0 && appliedPromo ? appliedPromo.discount : 0;
+        subtotal > 0 && appliedPromo
+            ? Math.min(subtotal, appliedPromo.discount)
+            : 0;
     const finalTotal = Math.max(0, subtotal - discountAmount);
 
-    //f3-xử lý sự kiện khi người dùng bấm nút Tiến hành đặt hàng
+    // 5. Chuyển sang trang thanh toán chỉ với các sản phẩm đã check
     const handleProceedToCheckout = () => {
         if (selectedItems.length === 0) return;
 
@@ -198,6 +247,7 @@ export default function CartPage() {
                     product_name: item.title,
                     image: item.cover,
                 })),
+                voucherId: discountAmount > 0 ? appliedPromo?.voucher_id : null,
                 couponCode: discountAmount > 0 ? appliedPromo?.code : "",
                 discount: discountAmount,
             },
@@ -220,7 +270,7 @@ export default function CartPage() {
                         <span className="text-gray-500">Giỏ hàng</span>
                     </div>
                     <h1 className="text-xl sm:text-2xl lg:text-[26px] font-bold text-[#1e293b] tracking-tight">
-                        Giỏ hàng của bạn ({items.length} sản phẩm)
+                        Giỏ hàng của bạn ({totalCartQuantity} sản phẩm)
                     </h1>
                 </div>
 
@@ -284,7 +334,11 @@ export default function CartPage() {
                                             {items.map((item) => (
                                                 <tr
                                                     key={item.id}
-                                                    className="hover:bg-gray-50/50 transition-colors"
+                                                    className={`transition-colors ${
+                                                        item.selected
+                                                            ? "hover:bg-gray-50/50"
+                                                            : "bg-gray-50/40 opacity-75"
+                                                    }`}
                                                 >
                                                     <td className="py-5 pl-6 pr-3">
                                                         <input
@@ -391,7 +445,7 @@ export default function CartPage() {
                                 {/* Footer Bảng Desktop */}
                                 <div className="px-6 py-4 bg-white border-t border-gray-100 flex items-center justify-between text-xs">
                                     <span className="text-gray-500">
-                                        Đã chọn {selectedItems.length} sản phẩm
+                                        Đã chọn {selectedTotalQuantity} sản phẩm
                                     </span>
                                     <Link
                                         to="/"
@@ -414,7 +468,7 @@ export default function CartPage() {
                                             className="w-4 h-4 rounded border-gray-300 accent-emerald-700"
                                         />
                                         <span>
-                                            Chọn tất cả ({items.length})
+                                            Chọn tất cả ({totalCartQuantity})
                                         </span>
                                     </label>
                                     <Link
@@ -428,7 +482,9 @@ export default function CartPage() {
                                 {items.map((item) => (
                                     <div
                                         key={item.id}
-                                        className="bg-white rounded-xl border border-gray-200/80 shadow-xs p-3.5"
+                                        className={`bg-white rounded-xl border border-gray-200/80 shadow-xs p-3.5 transition-opacity ${
+                                            item.selected ? "" : "opacity-75"
+                                        }`}
                                     >
                                         <div className="flex items-start gap-3">
                                             <input
@@ -533,19 +589,31 @@ export default function CartPage() {
                                     <input
                                         type="text"
                                         value={promoInput}
-                                        onChange={(e) =>
-                                            setPromoInput(e.target.value)
-                                        }
+                                        onChange={(e) => {
+                                            setPromoInput(
+                                                e.target.value.toUpperCase(),
+                                            );
+                                            if (promoError) setPromoError("");
+                                        }}
                                         placeholder="Nhập mã giảm giá"
-                                        className="flex-1 min-w-0 px-3 py-2 bg-white border border-gray-200 rounded-lg text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-600/20 focus:border-emerald-600"
+                                        className="flex-1 min-w-0 px-3 py-2 bg-white border border-gray-200 rounded-lg text-xs sm:text-sm uppercase focus:outline-none focus:ring-2 focus:ring-emerald-600/20 focus:border-emerald-600"
                                     />
                                     <button
                                         type="submit"
-                                        className="px-3.5 py-2 bg-emerald-700 hover:bg-emerald-800 text-white text-xs sm:text-sm font-medium rounded-lg transition-colors shrink-0 cursor-pointer"
+                                        disabled={checkingPromo}
+                                        className="px-3.5 py-2 bg-emerald-700 hover:bg-emerald-800 disabled:opacity-50 text-white text-xs sm:text-sm font-medium rounded-lg transition-colors shrink-0 cursor-pointer"
                                     >
-                                        Áp dụng
+                                        {checkingPromo
+                                            ? "Đang kiểm..."
+                                            : "Áp dụng"}
                                     </button>
                                 </form>
+
+                                {promoError && (
+                                    <p className="mt-2 text-xs text-red-600 font-medium">
+                                        {promoError}
+                                    </p>
+                                )}
 
                                 {appliedPromo && (
                                     <div className="mt-2.5 px-3 py-2 bg-emerald-50 rounded-lg flex items-center justify-between text-xs font-semibold text-emerald-700">
@@ -553,9 +621,22 @@ export default function CartPage() {
                                             <Check className="w-3.5 h-3.5" />
                                             <span>{appliedPromo.code}</span>
                                         </div>
-                                        <span>
-                                            −{formatVND(appliedPromo.discount)}
-                                        </span>
+                                        <div className="flex items-center gap-2">
+                                            <span>
+                                                −
+                                                {formatVND(
+                                                    appliedPromo.discount,
+                                                )}
+                                            </span>
+                                            <button
+                                                type="button"
+                                                onClick={handleRemovePromo}
+                                                title="Bỏ mã giảm giá"
+                                                className="text-emerald-700/70 hover:text-red-600 cursor-pointer"
+                                            >
+                                                <X className="w-3.5 h-3.5" />
+                                            </button>
+                                        </div>
                                     </div>
                                 )}
                             </div>
@@ -563,7 +644,7 @@ export default function CartPage() {
                             <div className="border-t border-gray-100 pt-4 space-y-2.5 text-xs sm:text-sm">
                                 <div className="flex items-center justify-between text-gray-500">
                                     <span>
-                                        Tạm tính ({selectedItems.length} sản
+                                        Tạm tính ({selectedTotalQuantity} sản
                                         phẩm)
                                     </span>
                                     <span className="font-semibold text-gray-800">
@@ -587,27 +668,13 @@ export default function CartPage() {
                                 </span>
                             </div>
 
-                            {/* <button
-                type="button"
-                onClick={() =>
-                  alert(`Tiến hành đặt hàng: ${formatVND(finalTotal)}`)
-                }
-                disabled={selectedItems.length === 0}
-                className="hidden lg:block w-full mt-5 py-3 bg-emerald-700 hover:bg-emerald-800 disabled:bg-gray-300 disabled:cursor-not-allowed text-white text-sm font-semibold rounded-lg transition-colors shadow-xs cursor-pointer"
-              >
-                Tiến hành đặt hàng ({selectedItems.length})
-              </button>
-            </div>
-          </div>
-        )}
-      </div> */}
                             <button
                                 type="button"
                                 onClick={handleProceedToCheckout}
-                                disabled={selectedItems.length === 0}
+                                disabled={selectedTotalQuantity === 0}
                                 className="hidden lg:block w-full mt-5 py-3 bg-emerald-700 hover:bg-emerald-800 disabled:bg-gray-300 disabled:cursor-not-allowed text-white text-sm font-semibold rounded-lg transition-colors shadow-xs cursor-pointer"
                             >
-                                Tiến hành đặt hàng ({selectedItems.length})
+                                Tiến hành đặt hàng ({selectedTotalQuantity})
                             </button>
                         </div>
                     </div>
@@ -619,7 +686,7 @@ export default function CartPage() {
                 <div className="lg:hidden fixed bottom-14 inset-x-0 bg-white border-t border-gray-200 px-4 py-2.5 flex items-center justify-between z-40 shadow-[0_-2px_10px_rgba(0,0,0,0.03)]">
                     <div>
                         <p className="text-[11px] text-gray-400">
-                            Tổng cộng ({selectedItems.length} SP)
+                            Tổng cộng ({selectedTotalQuantity} SP)
                         </p>
                         <p className="text-base sm:text-lg font-bold text-emerald-700">
                             {formatVND(finalTotal)}
@@ -628,10 +695,10 @@ export default function CartPage() {
                     <button
                         type="button"
                         onClick={handleProceedToCheckout}
-                        disabled={selectedItems.length === 0}
+                        disabled={selectedTotalQuantity === 0}
                         className="px-6 sm:px-8 py-2.5 bg-emerald-700 active:bg-emerald-800 disabled:bg-gray-300 text-white text-sm font-semibold rounded-lg cursor-pointer"
                     >
-                        Đặt hàng ({selectedItems.length})
+                        Đặt hàng ({selectedTotalQuantity})
                     </button>
                 </div>
             )}

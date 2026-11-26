@@ -33,6 +33,7 @@ class OrderController extends Controller
             'recipient_phone'  => preg_replace('/\s+/', '', $validated['receiver_phone']),
             'shipping_address' => trim($validated['shipping_address']),
             'voucher_id'       => $validated['voucher_id'] ?? null,
+            'product_ids'      => $validated['product_ids'],
         ];
 
         try {
@@ -142,6 +143,7 @@ class OrderController extends Controller
     }
 
     // 3. ADMIN (TM-13): DANH SÁCH LỌC TRẠNG THÁI & CHUYỂN TRẠNG THÁI 1 CHIỀU
+    // 3. ADMIN (TM-13): DANH SÁCH LỌC TRẠNG THÁI & CHUYỂN TRẠNG THÁI 1 CHIỀU
     public function adminIndex(Request $request): JsonResponse
     {
         $statusFilter = trim((string) $request->query('status', ''));
@@ -151,10 +153,11 @@ class OrderController extends Controller
 
         if ($statusFilter !== '' && $statusFilter !== 'all') {
             $statusMap = [
-                'pending'   => ['pending', 'Chờ xác nhận', 'Chưa xác nhận'],
-                'shipping'  => ['shipping', 'Đang giao', 'Đang giao hàng'],
-                'completed' => ['completed', 'Hoàn thành', 'Đã giao'],
-                'cancelled' => ['cancelled', 'Đã hủy', 'Không nhận'],
+                'pending'    => ['pending', 'Chờ xác nhận', 'Chưa xác nhận'],
+                'processing' => ['processing', 'Đang xử lý', 'Đã xác nhận'],
+                'shipping'   => ['shipping', 'Đang giao', 'Đang giao hàng'],
+                'completed'  => ['completed', 'Hoàn thành', 'Đã giao'],
+                'cancelled'  => ['cancelled', 'Đã hủy', 'Không nhận'],
             ];
 
             if (isset($statusMap[$statusFilter])) {
@@ -171,6 +174,7 @@ class OrderController extends Controller
                 return [
                     'product_id'   => $item->product_id,
                     'product_name' => $item->product->product_name ?? 'Sản phẩm không còn tồn tại',
+                    'author'       => $item->product->author ?? '',
                     'image'        => $item->product->image ?? '',
                     'quantity'     => $item->quantity,
                     'price'        => $item->unit_price,
@@ -178,22 +182,28 @@ class OrderController extends Controller
                 ];
             });
 
+            $rawSubtotal = $items->sum('subtotal');
+            $discountAmount = $order->voucher_id && $rawSubtotal > $order->total_amount
+                ? ($rawSubtotal - $order->total_amount)
+                : ($order->voucher->discount_amount ?? 0);
+
             $timestamp = $order->order_date
                 ? strtotime($order->order_date)
                 : ($order->created_at ? $order->created_at->timestamp : time());
 
             return [
                 'id'               => $order->order_id,
-                'order_code'       => 'ĐH' . str_pad($order->order_id, 3, '0', STR_PAD_LEFT),
+                'order_code'       => 'DH' . str_pad($order->order_id, 3, '0', STR_PAD_LEFT),
                 'user_code'        => 'ND' . str_pad($order->user_id ?? 0, 3, '0', STR_PAD_LEFT),
-                'order_date'       => date('d/m/Y', $timestamp),
-                'order_time'       => date('H:i', $timestamp),
+                'order_date'       => date('d/m/Y - H:i', $timestamp),
                 'status'           => $order->status ?? 'pending',
                 'receiver_name'    => $order->recipient_name ?? ($order->user->name ?? 'Khách hàng'),
                 'receiver_phone'   => $order->recipient_phone ?? ($order->user->phone ?? ''),
+                'email'            => $order->user->email ?? '',
                 'shipping_address' => $order->shipping_address ?? '',
                 'payment_method'   => $order->payment_method ?? 'COD',
                 'voucher_code'     => $order->voucher->code ?? $order->voucher->voucher_code ?? null,
+                'discount_amount'  => $discountAmount,
                 'total_amount'     => $order->total_amount ?? 0,
                 'items'            => $items,
             ];
@@ -205,7 +215,7 @@ class OrderController extends Controller
     public function adminUpdateStatus(Request $request, $id): JsonResponse
     {
         $request->validate([
-            'status' => 'required|in:pending,shipping,completed,cancelled',
+            'status' => 'required|in:pending,processing,shipping,completed,cancelled',
         ]);
 
         return DB::transaction(function () use ($request, $id) {
@@ -220,21 +230,23 @@ class OrderController extends Controller
 
             $rawCurrent = mb_strtolower(trim($order->status ?? 'pending'), 'UTF-8');
             $currentStatus = match (true) {
-                in_array($rawCurrent, ['pending', 'chờ xác nhận', 'chưa xác nhận']) => 'pending',
-                in_array($rawCurrent, ['shipping', 'đang giao', 'đang giao hàng'])   => 'shipping',
-                in_array($rawCurrent, ['completed', 'hoàn thành', 'đã giao'])       => 'completed',
-                in_array($rawCurrent, ['cancelled', 'đã hủy', 'không nhận'])        => 'cancelled',
+                in_array($rawCurrent, ['pending', 'chờ xác nhận', 'chưa xác nhận'])    => 'pending',
+                in_array($rawCurrent, ['processing', 'đang xử lý', 'đã xác nhận'])     => 'processing',
+                in_array($rawCurrent, ['shipping', 'đang giao', 'đang giao hàng'])     => 'shipping',
+                in_array($rawCurrent, ['completed', 'hoàn thành', 'đã giao'])         => 'completed',
+                in_array($rawCurrent, ['cancelled', 'đã hủy', 'không nhận'])          => 'cancelled',
                 default => 'pending',
             };
 
             $nextStatus = $request->status;
 
-            // Luồng một chiều: Chờ xác nhận -> Đang giao -> Hoàn thành (hoặc -> Đã hủy)
+            // Luồng 1 chiều: Chờ xác nhận -> Đang xử lý -> Đang giao -> Hoàn thành (hoặc -> Đã hủy)
             $allowedTransitions = [
-                'pending'   => ['shipping', 'cancelled'],
-                'shipping'  => ['completed', 'cancelled'],
-                'completed' => [],
-                'cancelled' => [],
+                'pending'    => ['processing', 'shipping', 'cancelled'],
+                'processing' => ['shipping', 'cancelled'],
+                'shipping'   => ['completed', 'cancelled'],
+                'completed'  => [],
+                'cancelled'  => [],
             ];
 
             if (!in_array($nextStatus, $allowedTransitions[$currentStatus])) {

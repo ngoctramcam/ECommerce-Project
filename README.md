@@ -66,3 +66,25 @@ php artisan migrate:fresh --seed
 admin@gmail.com - admin123
 
 user1@gmail.com - 12345678
+
+## Database sau khi validate
+
+### Tạo database bookstore_db trong MySQL
+
+Mở trình duyệt và truy cập http://localhost/phpmyadmin.
+
+Nhấn New (hoặc Mới) ở cột menu bên trái.
+
+Nhập tên cơ sở dữ liệu là bookstore_db, chọn bảng mã utf8mb4_unicode_ci, rồi nhấn Create (Tạo).
+
+### Chạy tạo bảng và nạp dữ liệu mẫu từ terminal:
+
+Quay lại terminal của dự án và chạy lệnh:
+
+```bash
+php artisan migrate --seed --seeder=DemoDataSeeder
+```
+
+## Demo video
+
+https://youtu.be/w5qRfu9MVvE
