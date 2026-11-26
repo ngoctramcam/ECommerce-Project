@@ -74,7 +74,7 @@ export default function App() {
 
                 <Route path="/admin" element={<AdminRoute />}>
                     <Route element={<AdminLayout />}>
-                        <Route index element={<div>Tổng quan</div>} />
+                        <Route index element={<AdminOrdersPage />} />
                         <Route
                             path="categories"
                             element={<CategoryManagement />}

@@ -3,7 +3,6 @@ import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 
 /* ---------- Icon (SVG inline, không cần cài thêm thư viện) ---------- */
 const icons = {
-    overview: "M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z",
     category: "M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01",
     book: "M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5zM4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5",
     order: "M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4zM3 6h18M16 10a4 4 0 0 1-8 0",
@@ -34,10 +33,9 @@ function Icon({ name, className = "h-[18px] w-[18px]" }) {
 
 /* ---------- Cấu hình menu (sửa đường dẫn cho khớp app.jsx của bạn) ---------- */
 const MENU = [
-    { to: "/admin", label: "Tổng quan", icon: "overview", end: true },
+    { to: "/admin/orders", label: "Quản lý Đơn hàng", icon: "order" },
     { to: "/admin/categories", label: "Quản lý Danh mục", icon: "category" },
     { to: "/admin/books", label: "Quản lý Sách", icon: "book" },
-    { to: "/admin/orders", label: "Quản lý Đơn hàng", icon: "order" },
     { to: "/admin/users", label: "Quản lý Người dùng", icon: "users" },
     { to: "/admin/vouchers", label: "Mã giảm giá", icon: "coupon" },
 ];
