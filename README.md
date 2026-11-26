@@ -84,3 +84,7 @@ Quay lại terminal của dự án và chạy lệnh:
 ```bash
 php artisan migrate --seed --seeder=DemoDataSeeder
 ```
+
+## Demo video
+
+https://youtu.be/w5qRfu9MVvE
